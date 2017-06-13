@@ -24,7 +24,7 @@ router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 router.get('/', function(request, response, next) {
   //addNewGift();
-  //  addNewGift2();
+    addNewGift2();
     //AddUrlToGift();
     interest.find({},function(err,orders) {
         if (err) throw err;
