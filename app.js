@@ -38,7 +38,7 @@ app.use('/stroes',stroes);
 //connect to DB
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/sadna11');
+mongoose.connect('mongodb://michal:123456@ds121212.mlab.com:21212/heroku_whwjpt2s');
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
