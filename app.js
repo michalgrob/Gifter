@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 
-var index = require('./routes/index');
+var index = require('./routes/index');//test!
 var users = require('./routes/users');
 var searchingOpt = require('./routes/searchingOpt');
 var searchingResult = require('./routes/searchingResult');
