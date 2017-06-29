@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
-
+var passport = require('passport');
 
 ////////////////////////////////////////////////////////////
 var bodyParser = require('body-parser')
@@ -43,7 +43,11 @@ router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 /////////////////////////////////try
 
+
 module.exports = router;
+
+
+
 function insertdb(lname, fname){
     MongoClient.connect("mongodb://localhost:27017/test", function(err, db) {
         if(err) { return console.dir(err); } //handling errors
@@ -63,3 +67,4 @@ function insertdb(lname, fname){
 
     });
 }
+

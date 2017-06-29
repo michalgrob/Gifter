@@ -7,9 +7,39 @@ var parser = require('json-parser');
 var interest=require('./models/interest');
 var inGiftInter=require('./models/inGiftInter');
 var User=require('./models/User');
+var passport = require('passport');
+router.get('/login', function(req, res, next) {
+    res.render('login.ejs', { message:"cf" });// req.flash('loginMessage')
+});
+
+router.get('/signup', function(req, res) {
+    res.render('signup.ejs', { message:"fdf"  });//req.flash('signupMessage')
+});
+
+router.get('/profile', isLoggedIn, function(req, res) {
+    res.render('profile.ejs', { user: req.user });
+});
+
+router.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+});
+router.post('/signUpUser', passport.authenticate('local-signup', {//signup
+    successRedirect: '/profile',
+    failureRedirect: '/signup',
+    failureFlash: true,
+}));
+
+router.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+    failureFlash: true,
+}));
+//////////////////////////////try
+
 
 /* GET users listing. */
-router.get('/login', function(req, res, next) {
+router.get('/login1', function(req, res, next) {
  var psw=req.query.psw;
  var uName=req.query.uname;
 
@@ -72,3 +102,9 @@ newUser.save(function(err) {
 });
 
 module.exports = router;
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/');
+}

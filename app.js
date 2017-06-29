@@ -7,6 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 var searchingOpt = require('./routes/searchingOpt');
@@ -16,6 +19,10 @@ var stroes = require('./routes/stroes');
 var app = express();
 
 app.engine('ejs',engine);
+
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,6 +53,8 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+require('./config/passport')(passport);
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -67,6 +76,7 @@ fs.readdir(".", function (err, filenames) {
         console.log(filenames[i]);
     }
 });
+
 
 processId = process.cwd();
 console.log(processId);

@@ -2,7 +2,7 @@
  * Created by michal on 26/03/2017.
  */
 var mongoose = require('mongoose');
-
+var bcrypt   = require('bcrypt-nodejs');
 //mongoose.connect('mongodb://localhost/sadna1');
 var Schema = mongoose.Schema;
 
@@ -17,7 +17,8 @@ var userSchema = new Schema({
     created_at: Date,
     updated_at: Date,
     events:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
-    gender: String
+    gender: String,
+
 });
 // on every save, add the date
 userSchema.pre('save', function(next) {
@@ -33,6 +34,13 @@ userSchema.pre('save', function(next) {
 
     next();
 });
+
+userSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+userSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+};
 
 var User = mongoose.model('User', userSchema);
 module.exports = User;
