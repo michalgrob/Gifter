@@ -8,12 +8,13 @@ var interest=require('./models/interest');
 var inGiftInter=require('./models/inGiftInter');
 var User=require('./models/User');
 var passport = require('passport');
+
 router.get('/login', function(req, res, next) {
-    res.render('login.ejs', { message:"cf" });// req.flash('loginMessage')
+    res.render('login.ejs', { message:req.flash('loginMessage') });// req.flash('loginMessage')
 });
 
 router.get('/signup', function(req, res) {
-    res.render('signup.ejs', { message:"fdf"  });//req.flash('signupMessage')
+    res.render('signup.ejs', { message:req.flash('signupMessage')  });//
 });
 
 router.get('/profile', isLoggedIn, function(req, res) {
@@ -24,7 +25,7 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-router.post('/signUpUser', passport.authenticate('local-signup', {//signup
+router.post('/signup', passport.authenticate('local-signup', {//signup
     successRedirect: '/profile',
     failureRedirect: '/signup',
     failureFlash: true,
@@ -43,8 +44,8 @@ router.get('/login1', function(req, res, next) {
  var psw=req.query.psw;
  var uName=req.query.uname;
 
-  res.render('userLogin');
-   // response.render('giftsPage', {orders: orders_json,etitle : "present"});
+  //res.render('userLogin');
+    res.render('giftsPage');//, {orders: orders_json,etitle : "present"});
 });
 
 router.get('/signin', function(req, res, next) {
@@ -72,34 +73,34 @@ router.get('/signin', function(req, res, next) {
     // response.render('giftsPage', {orders: orders_json,etitle : "present"});
 });
 
-router.post('/signUpUser', function(req, res, next) {
-
-
-    var newUser;
-    newUser = new User();
-    newUser.name= req.body.name;
-    newUser.username= req.body.username;
-    newUser.password= req.body.password;
-    newUser.admin= false;
-    newUser.age=req.body.age;
-    newUser.email=req.body.email;
-    newUser.interests=req.body.hobbies;
-    newUser.gender=req.body.gender;
-
-
-// save the user
-newUser.save(function(err) {
-    if (err) throw err;
-
-   console.log('User created!');
-    res.render('mainPage', {etitle : "present",LogedInUser: req.body.username});
-});
-
-    // response.send('giftsPage', {orders: orders_json});
-    //res.render('signUpPage');//, {orders: orders_json,etitle : "sign Up Page"});
-    // res.render('signUpPage');
-    // response.render('giftsPage', {orders: orders_json,etitle : "present"});
-});
+// router.post('/signUpUser', function(req, res, next) {
+//
+//
+//     var newUser;
+//     newUser = new User();
+//     newUser.name= req.body.name;
+//     newUser.username= req.body.username;
+//     newUser.password= req.body.password;
+//     newUser.admin= false;
+//     newUser.age=req.body.age;
+//     newUser.email=req.body.email;
+//     newUser.interests=req.body.hobbies;
+//     newUser.gender=req.body.gender;
+//
+//
+// // save the user
+// newUser.save(function(err) {
+//     if (err) throw err;
+//
+//    console.log('User created!');
+//     res.render('mainPage', {etitle : "present",LogedInUser: req.body.username});
+// });
+//
+//     // response.send('giftsPage', {orders: orders_json});
+//     //res.render('signUpPage');//, {orders: orders_json,etitle : "sign Up Page"});
+//     // res.render('signUpPage');
+//     // response.render('giftsPage', {orders: orders_json,etitle : "present"});
+// });
 
 module.exports = router;
 

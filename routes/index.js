@@ -17,6 +17,7 @@ router.get('/', function(req, res, next) {
   res.render('mainPage', {etitle : "present",LogedInUser: "Guest"});
 });
 
+
 /* GET home page. */
 router.post('/', function(req, res, next) {
 
@@ -29,6 +30,9 @@ router.post('/', function(req, res, next) {
     res.send('POST to Hello World!');
     res.render('index', {etitle : "present"});
 
+});
+router.get('/profile', isLoggedIn, function(req, res) {
+    res.render('profile.ejs', { user: req.user });
 });
 
 //////////////////////////////////////////////////try
@@ -66,5 +70,10 @@ function insertdb(lname, fname){
         });
 
     });
+}
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/');
 }
 
