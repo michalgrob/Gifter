@@ -6,22 +6,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var searchingOpt = require('./routes/searchingOpt');
 var searchingResult = require('./routes/searchingResult');
 var stroes = require('./routes/stroes');
-
 var app = express();
 
 app.engine('ejs',engine);
-
-
-
 
 
 // view engine setup
@@ -68,7 +62,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-console.log("Hey");
 
 fs.readdir(".", function (err, filenames) {
     var i;
