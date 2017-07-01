@@ -6,16 +6,29 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+
 var passport = require('passport');
+var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 var searchingOpt = require('./routes/searchingOpt');
 var searchingResult = require('./routes/searchingResult');
 var stroes = require('./routes/stroes');
+
 var app = express();
 
 app.engine('ejs',engine);
+
+
+
+var router = express.Router();
+router.use(passport.initialize());
+router.use(passport.session()); // persistent login sessions
+
+
+
 
 
 // view engine setup
@@ -29,6 +42,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash());
 
 app.use('/', index);
 app.use('/users', users);
