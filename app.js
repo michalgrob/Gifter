@@ -59,7 +59,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-console.log("Hey");
 
 fs.readdir(".", function (err, filenames) {
     var i;
