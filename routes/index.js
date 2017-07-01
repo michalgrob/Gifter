@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
+var passport = require('passport');
 
-
-////////////////sapir////////////////////////////////////////////
-var bodyParser = require('body-parser')
+////////////////////////////////////////////////////////////
+var bodyParser = require('body-parser');
 router.use( bodyParser.json() );       // to support JSON-encoded bodies
 router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
@@ -16,6 +16,7 @@ router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 router.get('/', function(req, res, next) {
   res.render('mainPage', {etitle : "present",LogedInUser: "Guest"});
 });
+
 
 /* GET home page. */
 router.post('/', function(req, res, next) {
@@ -30,6 +31,9 @@ router.post('/', function(req, res, next) {
     res.render('index', {etitle : "present"});
 
 });
+router.get('/profile', isLoggedIn, function(req, res) {
+    res.render('profile.ejs', { user: req.user });
+});
 
 //////////////////////////////////////////////////try
 var bodyParser = require('body-parser')
@@ -37,13 +41,14 @@ router.use( bodyParser.json() );       // to support JSON-encoded bodies
 router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
-//router.use(express.json());
-// or       POST: {"name":"foo","color":"red"}  <— JSON encoding
 
 
-/////////////////////////////////try
+
 
 module.exports = router;
+
+
+
 function insertdb(lname, fname){
     MongoClient.connect("mongodb://localhost:27017/test", function(err, db) {
         if(err) { return console.dir(err); } //handling errors
@@ -63,3 +68,9 @@ function insertdb(lname, fname){
 
     });
 }
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/');
+}
+

@@ -25,6 +25,14 @@ router.get('/login', function(req, res, next) {
         res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
 
 });
+router.get('/storeAddGift', function(req, res, next) {
+
+    var x=0;
+    var uName=req.query.sname;
+
+    res.render('storeAddGiftPage', {etitle : "Stroe Page",LogedInUser:uName});
+
+});
 
 
 
