@@ -4,7 +4,7 @@ var MongoClient = require('mongodb').MongoClient;
 var passport = require('passport');
 
 ////////////////////////////////////////////////////////////
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 router.use( bodyParser.json() );       // to support JSON-encoded bodies
 router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
@@ -41,11 +41,8 @@ router.use( bodyParser.json() );       // to support JSON-encoded bodies
 router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
-//router.use(express.json());
-// or       POST: {"name":"foo","color":"red"}  <— JSON encoding
 
 
-/////////////////////////////////try
 
 
 module.exports = router;

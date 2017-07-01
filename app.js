@@ -15,7 +15,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var searchingOpt = require('./routes/searchingOpt');
 var searchingResult = require('./routes/searchingResult');
-var stroes = require('./routes/stroes');
+var stores = require('./routes/stores');
 
 var app = express();
 
@@ -50,7 +50,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/searchingOpt', searchingOpt);
 app.use('/searchingResult',searchingResult);
-app.use('/stroes',stroes);
+app.use('/stores',stores);
 
 //connect to DB
 
