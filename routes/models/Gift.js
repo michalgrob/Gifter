@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Interest = require('./interest');
 var Schema = mongoose.Schema;
 var InGiftInter = require('./inGiftInter');
+var Store= require('./Store');
 
 var giftSchema = new Schema({
     name: String,
@@ -42,8 +43,11 @@ giftSchema.pre('save', function (next) {
 
         this.interests[i].interestRef = Inter._id;
     }
+
     next();
 });
+
+
 var Gift = mongoose.model('Gift', giftSchema);
 module.exports = Gift;
 
