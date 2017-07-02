@@ -1,16 +1,7 @@
-<!--<!DOCTYPE html>-->
 
-
-<!--<html>-->
-<!--<head>-->
 <title><%=etitle %></title>
- <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
- <!--<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">-->
- <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
- <!--<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>-->
-<!--</head>-->
-<!--<body>-->
-<% layout('boilerplate') -%>
+
+<% layout('boilerplate') %>
 <h1>giftsPage</h1>
 
 
@@ -26,7 +17,7 @@
             $(this + 'input[type=checkbox]:not(:checked)').each(function () {
                 // set value 0 and check it
                 $(this).attr('checked', true).val(0);
-               // $('input[name=gender][value=3]').attr('checked', true);
+                // $('input[name=gender][value=3]').attr('checked', true);
                 var gender = document.querySelector('input[name = "gender"]:checked').value;
                 $("#gender").val(gender);
 //                $(this + 'input[type=radio]:not(:checked)').each(function () {
@@ -46,95 +37,64 @@
         })
     })
 
-    function openInfo(InfoId) {
-        var i;
-        var x = document.getElementsByClassName("Info");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-        }
-        if(InfoId=='Search')
-        {
-            findApresent();
-        }
-        else
-        {
-            document.getElementById(InfoId).style.display = "block";
-        }
-
-    }
 </script>
 <!-- -->
 
 <form name="AppForm" method="post" action="/searchingResult" >
- <!--<ul class="w3-navbar w3-white">-->
-  <!--<li><a href="javascript:void(0)" onclick="openInfo('gender')">Gender</a></li>-->
-  <!--<li><a href="javascript:void(0)" onclick="openInfo('Choose price')">Price</a></li>-->
-  <!--<li><a href="javascript:void(0)" onclick="openInfo('age')">Age</a></li>-->
-  <!--<li><a href="javascript:void(0)" onclick="openInfo('hobbis')">Hobbis</a></li>-->
-  <!--<li><a href="javascript:void(0)" onclick="openInfo('Search')" class="glyphicon glyphicon-search" >Search</a></li>-->
-  <!--&lt;!&ndash;<input type="submit" value="Submit">&ndash;&gt;-->
- <!--</ul>-->
+    <div class="form-group" >
+        <div id="gender"  class="Info">
+            <h4>Choose gender:</h4>
+            <input type="radio" id="male" name="gender" value = 'male'/>Male <br />
+            <input type="radio" id="female" name="gender" value = 'female'/>Female  <br />
+            <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter <br />
+        </div>
+        <div id="Choose price" class="Info">
+            <h4>Choose price:</h4>
+            <!--min: <input type="text" name="minPricText"><br>-->
+
+            <!--max: <input type="text" name="maxPricText"><br>-->
+
+            <div data-role="rangeslider">
+                <label for="price-min">Price:</label>
+                <input type="range" name="minPrice" id="minPrice" value="50" min="0" max="1000">
+                <label for="price-max">Price:</label>
+                <input type="range" name="maxPrice" id="maxPrice" value="800" min="0" max="1000">
+            </div>
+        </div>
+        <div id="age" class="Info">
+            <h4>Choose age:</h4>
+
+            <div data-role="rangeslider">
+                <label for="age">age:</label>
+                <input type="range" name="age" id="age" value="2" min="2" max="130">
+
+            </div>
+            <!--<input type="checkbox" name="age_0_12" value = '1'/>0 - 12<br />-->
+            <!--<input type="checkbox" name="age_12_18" value = '1'/>12 - 18<br />-->
+            <!--<input type="checkbox" name="age_18_30" value = '1'/>18 - 30<br />-->
+            <!--<input type="text" name="ageText"><br>-->
+        </div>
+        <div id="hobbis" class="Info">
+            <h4>Choose hobbis:</h4>
+            <% for(var i=0; i<orders.length; i++) {%>
+            <tr>
+                <td></td>
+                <input type="checkbox" value = <%= orders[i].interest.toString() %> name="hobbies"/>  <%= orders[i].interest %><br />
+            </tr>
+            <% } %>
 
 
-
- <div class="form-group" >
-  <!--<h1>Lets Find A Preset: </h1> -->
+        </div>
 
 
-
-  <div id="gender"  class="Info">
-   <h4>Choose gender:</h4>
-   <input type="radio" id="male" name="gender" value = 'male'/>Male <br />
-   <input type="radio" id="female" name="gender" value = 'female'/>Female  <br />
-   <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter <br />
-  </div>
-  <div id="Choose price" class="Info">
-   <h4>Choose price:</h4>
-   <!--min: <input type="text" name="minPricText"><br>-->
-
-   <!--max: <input type="text" name="maxPricText"><br>-->
-
-   <div data-role="rangeslider">
-    <label for="price-min">Price:</label>
-    <input type="range" name="minPrice" id="minPrice" value="50" min="0" max="1000">
-    <label for="price-max">Price:</label>
-    <input type="range" name="maxPrice" id="maxPrice" value="800" min="0" max="1000">
-   </div>
-  </div>
-  <div id="age" class="Info">
-   <h4>Choose age:</h4>
-
-   <div data-role="rangeslider">
-    <label for="age">age:</label>
-    <input type="range" name="age" id="age" value="2" min="2" max="130">
-
-   </div>
-   <!--<input type="checkbox" name="age_0_12" value = '1'/>0 - 12<br />-->
-   <!--<input type="checkbox" name="age_12_18" value = '1'/>12 - 18<br />-->
-   <!--<input type="checkbox" name="age_18_30" value = '1'/>18 - 30<br />-->
-   <!--<input type="text" name="ageText"><br>-->
-  </div>
-  <div id="hobbis" class="Info">
-   <h4>Choose hobbis:</h4>
-      <% for(var i=0; i<orders.length; i++) {%>
-   <tr>
-    <td></td>
-    <input type="checkbox" value = <%= orders[i].interest.toString() %> name="hobbies"/>  <%= orders[i].interest %><br />
-   </tr>
-      <% } %>
+        <br>
+        <!--<div id="Search" class="Info">
+        <input type="button" name="submit" value="Let's Find It" onclick="findApresent()"   class="btn btn-success"	/><br />
+        </div>-->
+    </div>
 
 
-  </div>
-
-
-  <br>
-  <!--<div id="Search" class="Info">
-  <input type="button" name="submit" value="Let's Find It" onclick="findApresent()"   class="btn btn-success"	/><br />
-  </div>-->
- </div>
-
-
- <input type="submit" value = 'Save Changes' />
+    <input type="submit" value = 'Save Changes' />
 
 </form>
 

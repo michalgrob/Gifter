@@ -32,15 +32,6 @@ router.get('/', function(request, response, next) {
         orders.forEach(function(order) {
                 orders_json.push({ interest: order.name});
         });
-    /*Gift.find({},function(err,orders) {
-        if (err) throw err;
-        var orders_json = [];
-        orders.forEach(function(order) {
-            for(var i=0;i<order.interest.length;i++){
-                orders_json.push({ interest: order.interest[i]});
-            }
-        });*/
-        // Uses views/orders.ejs
 
         response.render('giftsPage', {orders: orders_json,etitle : "present",LogedInUser: "Guest"});
        // response.send('giftsPage', {orders: orders_json});
@@ -113,26 +104,6 @@ function AddInteretToArray(val,name,InterestsArray)
 }
 
 
-
-function insertdbInterest(lname, fname){
-    MongoClient.connect("mongodb://localhost:27017/test", function(err, db) {
-        if(err) { return console.dir(err); } //handling errors
-        console.log('connecting');
-        var collection = db.collection('clients'); //selecting the collection
-       var a = parseInt(lname);
-        var doc = {"x" : a, "name" : fname }; //valid JSON ibject
-
-        collection.insert(doc,function(err, result) {
-            if(err) throw Error;
-            console.log(result); //we are getting back the object inserted
-        });
-
-        collection.find({"x":555}).toArray(function(err, items) { //foreach
-            console.log(items);
-        });
-
-    });
-}
 
 function findAllInterests(){
     Gift.find({},{_id:0,interest: true}, function(err, interest) {
