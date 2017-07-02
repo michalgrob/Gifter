@@ -6,16 +6,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-
 var passport = require('passport');
 var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var searchingOpt = require('./routes/searchingOpt');
 var searchingResult = require('./routes/searchingResult');
 var stores = require('./routes/stores');
+var importCSV = require('./routes/importCSV');
+
 
 var app = express();
 
@@ -51,6 +51,8 @@ app.use('/users', users);
 app.use('/searchingOpt', searchingOpt);
 app.use('/searchingResult',searchingResult);
 app.use('/stores',stores);
+app.use('/importCSV',importCSV);
+
 
 //connect to DB
 
