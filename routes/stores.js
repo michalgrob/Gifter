@@ -48,7 +48,7 @@ router.post('/addGift', function(req, res, next) {
     var  giftId =req.body.giftId;
     var storeId=req.body.storeId;
     //
-    addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId,next," ");
+    addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId," ",res);
     // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
     // res.render('resultPage');
 
@@ -79,7 +79,7 @@ function addNewStore(storeName,location,gifts){
     })
 }
 
-function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,next,imgURL) {
+function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,res) {
 
     interest.find({},function (err,interests) {
         if(err) throw err;
@@ -111,16 +111,17 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
 
             console.log('Gift saved successfully!');
             var giftMongoId=newGift._id;
-            relateGiftToStore(giftMongoId,store_id,storeName,next);
+            relateGiftToStore(giftMongoId,store_id,storeName,res);
         });
 
 
     })
 }
 
-function relateGiftToStore(newGiftId,store_id,storeName,next) {
+function relateGiftToStore(newGiftId,store_id,storeName,res) {
     Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},function (err,store) {
         if(err ){ throw err;}
-        
+        res.render('storeInfoPage');//
+
     })
 }
