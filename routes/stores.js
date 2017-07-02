@@ -48,9 +48,19 @@ router.post('/addGift', function(req, res, next) {
     var  giftId =req.body.giftId;
     var storeId=req.body.storeId;
     //
-    addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId," ",res);
-    // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
+    addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId," ",function(){
+        res.redirect('/stores/storeInfo');});
+
+        // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
     // res.render('resultPage');
+
+});
+router.get('/storeInfo', function(req, res, next) {
+
+    var x=0;
+    var uName=req.query.sname;
+
+    res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
 
 });
 
@@ -79,7 +89,7 @@ function addNewStore(storeName,location,gifts){
     })
 }
 
-function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,res) {
+function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,next) {
 
     interest.find({},function (err,interests) {
         if(err) throw err;
@@ -111,17 +121,20 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
 
             console.log('Gift saved successfully!');
             var giftMongoId=newGift._id;
-            relateGiftToStore(giftMongoId,store_id,storeName,res);
+            relateGiftToStore(giftMongoId,store_id,storeName,next);
         });
 
 
     })
 }
 
-function relateGiftToStore(newGiftId,store_id,storeName,res) {
-    Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},function (err,store) {
+function relateGiftToStore(newGiftId,store_id,storeName,next) {
+    Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},{new:true},function (err,store) {
         if(err ){ throw err;}
-        res.render('storeInfoPage');//
+        //res.render('storeInfoPage');//
+       // res.redirect('/stores/storeInfo');
+        next();
 
     })
 }
+
