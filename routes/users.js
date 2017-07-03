@@ -35,7 +35,7 @@ router.get('/signin', function(req, res, next) {
          });*/
         // Uses views/orders.ejs
 
-        res.render('signup', {orders: orders_json,etitle : "sign Up Page",LogedInUser:"Guest"});
+        res.render('signUpPage', {orders: orders_json,etitle : "sign Up Page",LogedInUser:"Guest"});
         // response.send('giftsPage', {orders: orders_json});
     });
    // res.render('signUpPage');

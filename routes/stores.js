@@ -16,7 +16,7 @@ router.get('/login', function(req, res, next) {
     var x=0;
     var uName=req.query.sname;
     var gifts = [];
-    addNewStore("zara","azrieli tlv",gifts);
+   // addNewStore("zara","azrieli tlv",gifts);
     res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
 
 });
