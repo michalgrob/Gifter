@@ -35,14 +35,14 @@ router.get('/signin', function(req, res, next) {
          });*/
         // Uses views/orders.ejs
 
-        res.render('signUpPage', {orders: orders_json,etitle : "sign Up Page",LogedInUser:"Guest"});
+        res.render('signup', {orders: orders_json,etitle : "sign Up Page",LogedInUser:"Guest"});
         // response.send('giftsPage', {orders: orders_json});
     });
    // res.render('signUpPage');
     // response.render('giftsPage', {orders: orders_json,etitle : "present"});
 });
 
-router.post('/signUpUser', function(req, res, next) {
+router.post('/signup', function(req, res, next) {
 
 
     var newUser;
