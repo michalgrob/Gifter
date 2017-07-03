@@ -40,12 +40,116 @@
 <!--</script>-->
 
 
+    <script type="text/javascript">
+        function ValidationAppForm()
+        {
+            var gender=document.getElementsByName("gender");
+            var hobbies=document.getElementsByName("hobbies");
+            var storeName=document.Form.storeName;
+            var storeId=document.Form.storeId;
+            var giftName=document.Form.giftName;
+            var giftId=document.Form.giftId;
+            var maxAge=document.Form.maxAge;
+            var minAge=document.Form.minAge;
+            var price=document.Form.price;
+
+            var okayGender=false;
+            var okayHobbies=false;
+            if (storeName.value=="")
+            {
+                alert("store name  please");
+                document.Form.storeName.focus() ;
+                return false;
+            }
+            if (isNaN(storeId.value)||storeId.value=="")
+            {
+                alert("store id please - must be a number");
+                document.Form.storeId.focus() ;
+                return false;
+            }
+
+            if (giftName.value=="")
+            {
+                alert("gift name  please");
+                document.Form.giftName.focus() ;
+                return false;
+            }
+
+            if (isNaN(giftId.value)||(giftId.value==""))
+            {
+                alert("prod id  please - must be a number");
+                document.Form.giftId.focus() ;
+                return false;
+            }
+
+
+            if (isNaN(maxAge.value)||isNaN(minAge.value)||minAge.value==""||maxAge.value=="")
+            {
+                alert("enter ages please - must be a number");
+                document.Form.minAge.focus() ;
+                document.Form.maxAge.focus() ;
+                return false;
+            }
+            if(maxAge.value<=0||minAge.value<=0)
+            {
+                alert("age is positive numbers, fix it")
+                document.Form.minAge.focus() ;
+                document.Form.maxAge.focus() ;
+                return false;
+            }
+            if (maxAge.value<minAge.value)
+            {
+                alert("max age mase be bigger then min age");
+                document.Form.minAge.focus() ;
+                document.Form.maxAge.focus() ;
+                return false;
+            }
+            if(isNaN(price.value)||price.value=="")
+            {
+                alert("price must be number");
+                document.Form.price.focus() ;
+                return false;
+            }
+
+            for(var j=0,l=hobbies.length;j<l;j++)
+            {
+                if(hobbies[j].checked)
+                {
+                    okayHobbies=true;
+                    break;
+                }
+            }
+            for(var i=0,l=gender.length;i<l;i++)
+            {
+                if(gender[i].checked)
+                {
+                    okayGender=true;
+                    break;
+                }
+            }
+            if(!okayHobbies)
+            {
+                alert("hobbies please!");
+                return false;
+            }
+            if(!okayGender)
+            {
+                alert("gender please");
+                return false;
+            }
+
+        }
+
+</script>
+
+
+
 <form name="Form" method="post" action="/stores/addGift" >
     <div class="form-group" >
         <div id="store_name" class="Info">
             <h4>Enter store information:</h4>
             <label> store name:</label>
-            <input type="text" name="storeName" id="storeName" >
+            <input type="text" name="storeName" id="storeName" value="">
             <label> store id:</label>
             <input type="text" name="storeId" id="storeId" >
         </div>
@@ -95,7 +199,7 @@
     </div>
 
 
-    <input type="submit" value = 'Save Changes' />
+    <input type="submit" value = 'Save Changes' name="submit" onclick="return ValidationAppForm()"/>
 
 </form>
 

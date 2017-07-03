@@ -6,39 +6,93 @@
 
 
 <script type="text/javascript">
-    var MainInterets=new Array (4);
+    function ValidationAppForm()
+    {
+        var gender=document.getElementsByName("gender");
+        var hobbies=document.getElementsByName("hobbies");
 
-    // when page is ready
-    $(document).ready(function() {
-        // on form submit
-        $("#form").submit(function() {
+        var okayGender=false;
+        var okayHobbies=false;
+        for(var i=0,l=gender.length;i<l;i++)
+        {
+            if(gender[i].checked)
+            {
+                okayGender=true;
+                break;
+            }
+        }
+        for(var j=0,l=hobbies.length;j<l;j++)
+        {
+            if(hobbies[j].checked)
+            {
+                okayHobbies=true;
+                break;
+            }
+        }
+        if(!okayHobbies)
+        {
+            alert("hobbies please!");
+            return false;
+        }
+        if(!okayGender)
+        {
+            alert("gender please");
+            return false;
+        }
 
-            // to each unchecked checkbox
-            $(this + 'input[type=checkbox]:not(:checked)').each(function () {
-                // set value 0 and check it
-                $(this).attr('checked', true).val(0);
-                // $('input[name=gender][value=3]').attr('checked', true);
-                var gender = document.querySelector('input[name = "gender"]:checked').value;
-                $("#gender").val(gender);
-//                $(this + 'input[type=radio]:not(:checked)').each(function () {
-//                    // set value 0 and check it
-//                    $(this).attr('checked', true).val(0);
+    //    if (okayGender&&okayHobbies) return true;
 
-                var ageTextBox = $("#ageText_range").val();
-                $("#age").val(ageTextRange);
-                var minPriceRange = $("#price_min_range").val();
-                $("#minPrice").val(minPriceRange);
-                var maxPriceRange = $("#price_max_range").val();
-                $("#maxPrice").val(maxPriceRange);
-            });
+    }
 
-
-
-        })
-    })
+//
+//        if (gender.checked == false)
+//        {
+//            alert("Please tell us how we can help you.");
+//            return false;
+//        }
+//        if (hobbies.cheked==false)
+//        {
+//            alert("error1");
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//
+//
+//
+//    var MainInterets=new Array (4);
+//
+//    // when page is ready
+//    $(document).ready(function() {
+//        // on form submit
+//        $("#form").submit(function() {
+//
+//            // to each unchecked checkbox
+//            $(this + 'input[type=checkbox]:not(:checked)').each(function () {
+//                // set value 0 and check it
+//                $(this).attr('checked', true).val(0);
+//                // $('input[name=gender][value=3]').attr('checked', true);
+//                var gender = document.querySelector('input[name = "gender"]:checked').value;
+//                $("#gender").val(gender);
+////                $(this + 'input[type=radio]:not(:checked)').each(function () {
+////                    // set value 0 and check it
+////                    $(this).attr('checked', true).val(0);
+//
+//                var ageTextBox = $("#ageText_range").val();
+//                $("#age").val(ageTextRange);
+//                var minPriceRange = $("#price_min_range").val();
+//                $("#minPrice").val(minPriceRange);
+//                var maxPriceRange = $("#price_max_range").val();
+//                $("#maxPrice").val(maxPriceRange);
+//            });
+//
+//
+//
+//        })
+//    })
 
 </script>
-<!-- -->
 
 <form name="AppForm" method="post" action="/searchingResult" >
     <div class="form-group" >
@@ -93,9 +147,8 @@
         </div>-->
     </div>
 
-
-    <input type="submit" value = 'Save Changes' />
-
+    <!--<input type="submit" value="Send" name="submit">-->
+    <input type="submit" value = 'Save Changes' name="submit"onclick="return ValidationAppForm()">
 </form>
 
 

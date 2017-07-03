@@ -2,82 +2,86 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<style>
-    /*
-/* Created by Filipe Pina
- * Specific styles of signin, register, component
- */
-    /*
-     * General styles
-     */
 
-    body, html{
-        height: 100%;
-        background-repeat: no-repeat;
-        background-color: #d3d3d3;
-        font-family: 'Oxygen', sans-serif;
-    }
-
-    .main{
-        margin-top: 70px;
-    }
-
-    h1.title {
-        font-size: 50px;
-        font-family: 'Passion One', cursive;
-        font-weight: 400;
-    }
-
-    hr{
-        width: 10%;
-        color: #fff;
-    }
-
-    .form-group{
-        margin-bottom: 15px;
-    }
-
-    label{
-        margin-bottom: 15px;
-    }
-
-    input,
-    input::-webkit-input-placeholder {
-        font-size: 11px;
-        padding-top: 3px;
-    }
-
-    .main-login{
-        background-color: #fff;
-        /* shadows and rounded borders */
-        -moz-border-radius: 2px;
-        -webkit-border-radius: 2px;
-        border-radius: 2px;
-        -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-
-    }
-
-    .main-center{
-        margin-top: 30px;
-        margin: 0 auto;
-        max-width: 330px;
-        padding: 40px 40px;
-
-    }
-
-    .login-button{
-        margin-top: 5px;
-    }
-
-    .login-register{
-        font-size: 11px;
-        text-align: center;
-    }
-
-</style>
 <head>
+    <style>
+        /*
+    /* Created by Filipe Pina
+     * Specific styles of signin, register, component
+     */
+        /*
+         * General styles
+         */
+
+        body, html{
+            height: 100%;
+            background-repeat: no-repeat;
+            background-color: #d3d3d3;
+            font-family: 'Oxygen', sans-serif;
+        }
+
+        .main{
+            margin-top: 70px;
+        }
+
+        h1.title {
+            font-size: 50px;
+            font-family: 'Passion One', cursive;
+            font-weight: 400;
+        }
+
+        hr{
+            width: 10%;
+            color: #fff;
+        }
+
+        .form-group{
+            margin-bottom: 15px;
+        }
+
+        label{
+            margin-bottom: 15px;
+        }
+
+        input,
+        input::-webkit-input-placeholder {
+            font-size: 11px;
+            padding-top: 3px;
+        }
+
+        .main-login{
+            background-color: #fff;
+            /* shadows and rounded borders */
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            border-radius: 2px;
+            -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+
+        }
+
+        .main-center{
+            margin-top: 30px;
+            margin: 0 auto;
+            max-width: 330px;
+            padding: 40px 40px;
+
+        }
+
+        .login-button{
+            margin-top: 5px;
+        }
+
+        .login-register{
+            font-size: 11px;
+            text-align: center;
+        }
+
+    </style>
+    <!--<script type="text/javascript">-->
+    <!--//</script>-->
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
@@ -109,11 +113,11 @@
             <form class="form-horizontal" method="post" action="/users/signup">
 
                 <div class="form-group">
-                    <label for="name" class="cols-sm-2 control-label">Your Name</label>
+                    <label for="name" class="cols-sm-2 control-label" >Your Name</label>
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name"/>
+                            <input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name"/>//required
                         </div>
                     </div>
                 </div>
@@ -198,14 +202,14 @@
                             <% } %>
                         </div>
                     </div>
-                    </div>
+                </div>
 
 
                 <!--<div class="login-register">-->
-                    <!--&lt;!&ndash;<a href="index.php">Login</a>&ndash;&gt;-->
+                <!--&lt;!&ndash;<a href="index.php">Login</a>&ndash;&gt;-->
                 <!--</div>-->
                 <div class="form-group ">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Register</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button" onclick="return validationUserInput()">Register</button>
                 </div>
             </form>
         </div>
@@ -214,6 +218,72 @@
 <a href="/login" class="btn btn-default"><span class="fa fa-sign-in"></span> Login</a>
 <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Signup</a>
 
-<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.js">
+    function validationUserInput()
+    {
+        //  var name = document.ContactForm.Name;
+        var email = document.email;
+        var age =document.age;
+        var gender=document.getElementsByName("gender");
+        var hobbies=document.getElementsByName("hobbies");
+        var password=document.password;
+        var confirm=document.confirm;
+
+        if (email.value.indexOf("@", 0) < 0||email.value.indexOf(".", 0) < 0)
+        {
+            alert("Please enter a valid e-mail address.");
+            email.focus();
+            return false;
+        }
+        if (isNaN(age.value)||age.value==""||age.value<0)
+        {
+            alert("Please enter valid age");
+            age.focus();
+            return false;
+        }
+
+        var okayGender=false;
+        var okayHobbies=false;
+        for(var i=0,l=gender.length;i<l;i++)
+        {
+            if(gender[i].checked)
+            {
+                okayGender=true;
+                break;
+            }
+        }
+        if(!okayGender)
+        {
+            alert("gender please");
+            return false;
+        }
+        if (password.value==confirm.value)
+        {
+            password.focus;
+        }
+        for(var j=0,l=hobbies.length;j<l;j++)
+        {
+            if(hobbies[j].checked)
+            {
+                okayHobbies=true;
+                break;
+            }
+        }
+        if(!okayHobbies)
+        {
+            alert("hobbies please!");
+            return false;
+        }
+
+
+        if (name.value == "")
+        {
+            window.alert("Please enter your name.");
+            name.focus();
+            return false;
+        }
+    }
+
+</script>
 </body>
 </html>
