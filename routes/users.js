@@ -10,11 +10,11 @@ var User=require('./models/User');
 
 /* GET users listing. */
 router.get('/login', function(req, res, next) {
- var psw=req.query.psw;
- var uName=req.query.uname;
+    var psw=req.query.psw;
+    var uName=req.query.uname;
 
-  res.render('userLogin');
-   // response.render('giftsPage', {orders: orders_json,etitle : "present"});
+    res.render('userLogin');
+    // response.render('giftsPage', {orders: orders_json,etitle : "present"});
 });
 
 router.get('/signin', function(req, res, next) {
@@ -38,7 +38,7 @@ router.get('/signin', function(req, res, next) {
         res.render('signUpPage', {orders: orders_json,etitle : "sign Up Page",LogedInUser:"Guest"});
         // response.send('giftsPage', {orders: orders_json});
     });
-   // res.render('signUpPage');
+    // res.render('signUpPage');
     // response.render('giftsPage', {orders: orders_json,etitle : "present"});
 });
 
@@ -58,12 +58,28 @@ router.post('/signup', function(req, res, next) {
 
 
 // save the user
-newUser.save(function(err) {
-    if (err) throw err;
+    User.find({email:req.body.email}, function(err,user)
+    {
+        if (err)  throw err;
 
-   console.log('User created!');
-    res.render('mainPage', {etitle : "present",LogedInUser: req.body.username});
-});
+        if(user.length)
+        {
+            console.log('User exiss!!!');
+            alert("this mail is already exist");
+
+        }
+        else
+        {
+            newUser.save(function(err) {
+                if (err) throw err;
+
+                console.log('User created!');
+                res.render('mainPage', {etitle : "present",LogedInUser: req.body.username});
+            });
+
+        }
+    });
+
 
     // response.send('giftsPage', {orders: orders_json});
     //res.render('signUpPage');//, {orders: orders_json,etitle : "sign Up Page"});
