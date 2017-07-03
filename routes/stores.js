@@ -16,7 +16,7 @@ router.get('/login', function(req, res, next) {
     var x=0;
     var uName=req.query.sname;
     var gifts = [];
-   // addNewStore("zara","azrieli tlv",gifts);
+    addNewStore("castro","azrieli tlv",gifts);
     res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
 
 });
@@ -52,7 +52,7 @@ router.post('/addGift', function(req, res, next) {
     addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId," ",function(){
         res.redirect('/stores/storeInfo');});
 
-        // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
+    // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
     // res.render('resultPage');
 
 });
@@ -96,23 +96,30 @@ module.exports = router;
 
 function addNewStore(storeName,location,gifts){
 
-    Store.find({}).exec(function(err,stores) {
-
-        var newStore = new Store();
-        newStore.name=storeName;
-        newStore.store_id=stores.length+1;
-        newStore.location=location;
-
-        for(var i=0;i<gifts.length;i++)// interest for
-        {
-            newStore.gifts.push(gifts[i]._id);
+    Store.find({name:storeName,location:location},(function(err,stores) {
+        if (err) throw err;
+        if (stores.length) {
+            console.log('Store exiss!!!');
+           // alert("the store id is already exist");
         }
-        newStore.save(function(err) {
-            if (err) throw err;
+        else {
 
-            console.log('store saved successfully!');
-        });
-    })
+            var newStore = new Store();
+            newStore.name = storeName;
+            newStore.store_id = stores.length + 1;
+            newStore.location = location;
+
+            for (var i = 0; i < gifts.length; i++)// interest for
+            {
+                newStore.gifts.push(gifts[i]._id);
+            }
+            newStore.save(function (err) {
+                if (err) throw err;
+
+                console.log('store saved successfully!');
+            });
+        }
+    }))
 }
 
 function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,next) {
@@ -167,7 +174,7 @@ function relateGiftToStore(newGiftId,store_id,storeName,next) {
     Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},{new:true},function (err,store) {
         if(err ){ throw err;}
         //res.render('storeInfoPage');//
-       // res.redirect('/stores/storeInfo');
+        // res.redirect('/stores/storeInfo');
         next();
 
     })
