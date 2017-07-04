@@ -34,6 +34,8 @@ router.get('/storeAddGift', function(req, res, next) {
         });
 
         res.render('storeAddGiftPage', {orders: orders_json, etitle: "add gift ", LogedInUser: "Guest"});
+
+
     });
 });
 
@@ -52,7 +54,7 @@ router.post('/addGift', function(req, res, next) {
     addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId," ",function(){
         res.redirect('/stores/storeInfo');});
 
-    // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
+        // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
     // res.render('resultPage');
 
 });
@@ -106,7 +108,7 @@ function addNewStore(storeName,location,gifts){
 
             var newStore = new Store();
             newStore.name = storeName;
-            newStore.store_id = stores.length + 1;
+            newStore.store_id = stores.length;
             newStore.location = location;
 
             for (var i = 0; i < gifts.length; i++)// interest for
@@ -137,26 +139,17 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
         newGift.maxAge=maxAge;
         newGift.ImageUrl=imgURL;
 
-        var interestsWithScore0 = [];
-        var interestsWithScore1 = storeInterests;
-
-        for(var i=0;i<interests.length;i++){
-            interestsWithScore0.push(interests[i]._doc.name.trim());
-        }
-
-        for(var i=0;i<interestsWithScore1.length;i++){
-            interestsWithScore0 = interestsWithScore0.filter(function (e) {
-                return e != interestsWithScore1[i];
-            })
-        }
-
-        for(var i=0;i<interestsWithScore0.length;i++){
-            newGift.interests.push({interest: interestsWithScore0[i].trim(), dynamicScore: 0});
-        }
-
-        for(var i=0;i<interestsWithScore1.length;i++){
-            newGift.interests.push({interest: interestsWithScore1[i].trim(), dynamicScore: 1});
-        }
+        interests.forEach(function (interest) {
+            for(var i=0;i<storeInterests.length;i++)
+            {
+                if(interest.name==storeInterests[i])
+                {
+                    newGift.interests.push({interest: interest.name, dynamicScore: 1});
+                    break;
+                }
+                newGift.interests.push({interest: interest.name, dynamicScore: 0});
+            }
+        })
 
         newGift.save(function(err) {
             if (err) throw err;
@@ -174,13 +167,9 @@ function relateGiftToStore(newGiftId,store_id,storeName,next) {
     Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},{new:true},function (err,store) {
         if(err ){ throw err;}
         //res.render('storeInfoPage');//
-        // res.redirect('/stores/storeInfo');
+       // res.redirect('/stores/storeInfo');
         next();
 
     })
 }
-
-
-
-
 
