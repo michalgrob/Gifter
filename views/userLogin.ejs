@@ -3,12 +3,14 @@
 <style>
     /* Full-width input fields */
     input[type=text], input[type=password] {
-        width: 100%;
+        width: 65%;
         padding: 12px 20px;
         margin: 8px 0;
         display: inline-block;
         border: 1px solid #ccc;
         box-sizing: border-box;
+
+
     }
 
     /* Set a style for all buttons */
@@ -19,7 +21,7 @@
         margin: 8px 0;
         border: none;
         cursor: pointer;
-        width: 100%;
+        width: 65%;
     }
 
     button:hover {
@@ -39,10 +41,15 @@
         margin: 24px 0 12px 0;
         position: relative;
     }
+    .img-circle {
+
+        height: 200px;
+        width: 260px;
+    }
 
     img.avatar {
-        width: 40%;
-        border-radius: 50%;
+        width: 30%;
+        border-radius: 40%;
     }
 
     .container {
@@ -74,7 +81,7 @@
         background-color: #fefefe;
         margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
         border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
+        width: 60%; /* Could be more or less, depending on screen size */
     }
 
     /* The Close Button (x) */
@@ -129,18 +136,17 @@
     <div class="modal-content animate" >
         <div class="imgcontainer">
             <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img src="img_avatar2.png" alt="Avatar" class="avatar">
+            <img class="img-circle" src="img/gifter.jpg" alt="Avatar" class="avatar">
         </div>
 <form action='/users/login'  method="post" >
         <div class="container">
-            <label><b>Email</b></label>
-            <input type="text" placeholder="Enter Username" name="email" required>
-
-            <label><b>Password</b></label>
+            <label><b>Email</b></label><br>
+            <input type="text" placeholder="Enter Username" name="email" required><br>
+            <label><b>Password</b></label><br>
             <input type="password" placeholder="Enter Password" name="password" required>
 
             <button type="submit">Login</button>
-
+            <br>
             <input type="checkbox" checked="checked"> Remember me
             <br>
             <a class="psw" href="#">Forgot  password?</a>
@@ -151,10 +157,7 @@
                 <button type="submit">Sign up</button>
             </div>
         </form>
-        <div class="container" style="background-color:#f1f1f1">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-        </div>
-    </div>
+
     <!--<form class="modal-content animate" action='/users/signin'  method="post">-->
         <!--<div class="container">-->
         <!--<button type="submit">Sign In</button>-->
