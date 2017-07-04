@@ -65,7 +65,7 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-//require('./config/passport')(passport);
+require('./config/passport')(passport);
 
 // error handler
 app.use(function(err, req, res, next) {

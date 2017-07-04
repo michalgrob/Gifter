@@ -106,7 +106,7 @@ function addNewStore(storeName,location,gifts){
 
             var newStore = new Store();
             newStore.name = storeName;
-            newStore.store_id = stores.length + 1;
+            newStore.store_id = stores.length;
             newStore.location = location;
 
             for (var i = 0; i < gifts.length; i++)// interest for
