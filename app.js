@@ -87,7 +87,7 @@ fs.readdir(".", function (err, filenames) {
         console.log(filenames[i]);
     }
 });
-
+//
 
 processId = process.cwd();
 console.log(processId);
