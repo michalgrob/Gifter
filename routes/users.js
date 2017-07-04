@@ -10,7 +10,7 @@ var User=require('./models/User');
 var passport = require('passport');
 
 router.get('/login', function(req, res, next) {
-    res.render('login.ejs', { message:req.flash('loginMessage') });// req.flash('loginMessage')
+    res.render('login.ejs', { message:req.flash('loginMessage') });// req.flash('loginMessage')//
 });
 
 router.get('/signup', function(req, res) {
@@ -32,8 +32,8 @@ router.post('/signup', passport.authenticate('local-signup', {//signup
 }));
 
 router.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/profile',
-    failureRedirect: '/login',
+    successRedirect: '/',//'/profile',
+    failureRedirect: '/users/login',
     failureFlash: true,
 }));
 //////////////////////////////try

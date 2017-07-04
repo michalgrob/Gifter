@@ -14,7 +14,7 @@ router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('mainPage', {etitle : "present",LogedInUser: "Guest"});
+  res.render('mainPage', {etitle : "present", LogedInUser: req.user ? req.user.username : 'guest' });//userName
 });
 
 
@@ -32,7 +32,7 @@ router.post('/', function(req, res, next) {
 
 });
 router.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.ejs', { user: req.user });
+    res.redirect('/');//res.render('profile.ejs', { user: req.user });
 });
 
 //////////////////////////////////////////////////try
