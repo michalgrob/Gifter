@@ -1,0 +1,33 @@
+<% layout('boilerplate') %>
+
+<body>
+<section class="bg-primary">
+
+    <div class="container">
+        <h2 class="section-heading"> incorrect log in details...</h2>
+        <div class="modal-content animate" >
+
+            <form action='/users/login'  method="post" >
+                <div class="container">
+                    <label><b>Email</b></label>
+                    <input type="text" placeholder="Enter Username" name="email" required>
+
+                    <label><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+
+                    <button type="submit">Login</button>
+
+                    <input type="checkbox" checked="checked"> Remember me
+                    <br>
+                    <a class="psw" href="#">Forgot  password?</a>
+                </div>
+            </form>
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" class="cancelbtn">Cancel</button>
+            </div>
+            <span class="fa fa-sign-in"> Don't have an account?<a href='/users/signin'> Signup</a></span>
+            <p>Or go <a href="/">home</a>.</p>
+        </div>
+    </div>
+</section>
+</body>

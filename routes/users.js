@@ -10,7 +10,7 @@ var User=require('./models/User');
 var passport = require('passport');
 
 router.get('/login', function(req, res, next) {
-    res.render('login.ejs', { message:req.flash('loginMessage') });// req.flash('loginMessage')//
+    res.render('reLogin.ejs', { LogedInUser: req.user ? req.user.username : 'guest' } );// req.flash('loginMessage')//
 });
 
 router.get('/signup', function(req, res) {
@@ -18,7 +18,7 @@ router.get('/signup', function(req, res) {
 });
 
 router.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.ejs', { user: req.user });
+    res.redirect('/');//res.render('profile.ejs', { user: req.user });
 });
 
 router.get('/logout', function(req, res) {
@@ -27,7 +27,7 @@ router.get('/logout', function(req, res) {
 });
 router.post('/signup', passport.authenticate('local-signup', {//signup
     successRedirect: '/profile',
-    failureRedirect: '/signup',
+    failureRedirect: 'users/signup',
     failureFlash: true,
 }));
 
