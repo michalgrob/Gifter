@@ -19,7 +19,7 @@ module.exports = function(passport) {
         },
         function(req, email, password, done) {
             process.nextTick(function() {
-                User.findOne({ 'local.email':  email }, function(err, user) {
+                User.findOne({ email:  email }, function(err, user) {
                     if (err)
                         return done(err);
                     if (user) {
@@ -56,15 +56,13 @@ module.exports = function(passport) {
                 if (err)
                     return done(err);
                 if (!user)
-<<<<<<< Updated upstream
+
                     return done(null, false,req.flash('loginMessage', 'No user found.') );//
                 if (!user.validPassword(password))
                     return done(null, false, req.flash('loginMessage', 'Wrong password.'));//
-=======
                     return done(null, false,"req.flash" );//req.flash('loginMessage', 'No user found.')
                 if (!user.validPassword(password))
                     return done(null, false, "req.flash");//req.flash('loginMessage', 'Wrong password.')
->>>>>>> Stashed changes
                 return done(null, user);
             });
         }));
