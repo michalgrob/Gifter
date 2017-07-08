@@ -1,3 +1,11 @@
+
+<style>
+    img{
+        height: 205px;
+        width: 205px;
+    }
+</style>
+
 <% layout('boilerplate') %>
 <!--<div id="navigate buttons">-->
 
@@ -7,7 +15,7 @@
     <br>
     <br>
     <br>
-<h4>gifts list:</h4>
+    <h4>gifts list:</h4>
 
 
 
@@ -15,64 +23,103 @@
 </div>
 <section class="no-padding" id="portfolio">
     <div class="container-fluid">
+
+
         <div class="row no-gutter popup-gallery">
             <!--<ol>gifts:-->
-
+            <div role="tabpanel" class="tab-pane fade in active" id="expeditions" aria-labelledby="expeditions-tab" style="line-height: 1.428">
                 <% for(var i=0; i<gifts.length; i++) {%>
-                <!--<li>-->
 
-                <!--</li>-->
-
-            <div class="col-lg-4 col-sm-6">
-                <a href=<%=gifts[i].ImageUrl %>class="portfolio-box">
-                    <img src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
+                <div class="col-lg-4 col-sm-6">
+                    <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
+                    <!--<img src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">-->
                     <div class="portfolio-box-caption">
                         <div class="portfolio-box-caption-content">
                             <div class="project-category text-faded">
-                                <%= gifts[i].name.toString() %>
+                                <figure>
+                                    <p style="color:blue;"> <%= gifts[i].name.toString() %></p>
+                                    <!---->
+                                    <div class="hover14 column">
+                                        <div class="agile_top_brand_left_grid">
+                                            <div class="agile_top_brand_left_grid_pos">
+                                            </div>
+                                            <div class="agile_top_brand_left_grid1">
+                                                <figure>
+                                                    <div class="snipcart-item block">
+                                                        <div class="snipcart-thumb">
+                                                            <!--<img src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">-->
+
+                                                            <a href="products.html"><img src=<%=gifts[i].ImageUrl %> class="img-responsive" alt=""></a>
+
+                                                        </div>
+                                                        <div class="snipcart-details top_brand_home_details">
+                                                            <form action="#" method="post">
+                                                                <fieldset>
+                                                                    <input type="hidden" name="cmd" value="_cart">
+                                                                    <input type="hidden" name="add" value="1">
+                                                                    <input type="hidden" name="business" value=" ">
+                                                                    <input type="hidden" name="item_name" value="Fortune Sunflower Oil">
+                                                                    <input type="hidden" name="amount" value="20.99">
+                                                                    <input type="hidden" name="discount_amount" value="1.00">
+                                                                    <input type="hidden" name="currency_code" value="USD">
+                                                                    <input type="hidden" name="return" value=" ">
+                                                                    <input type="hidden" name="cancel_return" value=" ">
+                                                                    <!--<input type="submit" name="submit" value="Add to cart" class="button">-->
+                                                                    <input type="submit"  id='b<%= gifts[i].name.toString() %>'style="display: none;" value = 'Like' class="button"/>
+                                                                </fieldset>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </figure>
+                                <!---->
                                 <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
                                 <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
-                                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="display: none;"></p>
+                                    <p  id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color:black;"></p>
 
                                     <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                                    <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'I like It' />
+                                    <!--<input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'I like It' />-->
                                 </form>
                                 <br>
                             </div>
                             <!--<div class="project-name">-->
-                                <!--Project Name-->
+                            <!--Project Name-->
                             <!--</div>-->
                         </div>
                     </div>
-                </a>
-            </div>
+                    </a>
+                </div>
                 <% } %>
 
-            <!--</ol>-->
+                <!--</ol>-->
+            </div>
         </div>
     </div>
 </section>
 
 <script>
-  function  viewGiftDetails(giftName,giftPrice,giftStore)
-  {
-      var moreDetailsP=document.getElementById(giftName);
-      moreDetailsP.innerHTML=giftName+' '+giftPrice+' '+giftStore;
-      var iLikeButton = document.getElementById('b'+giftName);
-    //  iLikeButton.style.display = "block";
-      if (moreDetailsP.style.display === 'none') {
-          moreDetailsP.style.display = 'block';
-      } else {
-          moreDetailsP.style.display = 'none';
-      }
-      if ( iLikeButton.style.display === 'none') {
-          iLikeButton.style.display = 'block';
-      } else {
-          iLikeButton.style.display = 'none';
-      }
-  }
+    function  viewGiftDetails(giftName,giftPrice,giftStore)
+    {
+        var moreDetailsP=document.getElementById(giftName);
+        moreDetailsP.innerHTML=giftName+' '+giftPrice+' '+giftStore;
+        var iLikeButton = document.getElementById('b'+giftName);
+        //  iLikeButton.style.display = "block";
+        if (moreDetailsP.style.display === 'none') {
+            moreDetailsP.style.display = 'block';
+        } else {
+            moreDetailsP.style.display = 'none';
+        }
+        if ( iLikeButton.style.display === 'none') {
+            iLikeButton.style.display = 'block';
+        } else {
+            iLikeButton.style.display = 'none';
+        }
+    }
 
 
 
- </script>
+</script>
 
