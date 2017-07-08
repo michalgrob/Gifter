@@ -37,7 +37,7 @@
                         <div class="portfolio-box-caption-content">
                             <div class="project-category text-faded">
                                 <figure>
-                                    <p style="color:blue;"> <%= gifts[i].name.toString() %></p>
+                                    <p style="color:black;"> <%= gifts[i].name.toString() %></p>
                                     <!---->
                                     <div class="hover14 column">
                                         <div class="agile_top_brand_left_grid">
@@ -66,6 +66,10 @@
                                                                     <input type="hidden" name="cancel_return" value=" ">
                                                                     <!--<input type="submit" name="submit" value="Add to cart" class="button">-->
                                                                     <input type="submit"  id='b<%= gifts[i].name.toString() %>'style="display: none;" value = 'Like' class="button"/>
+                                                                    <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
+                                                                    <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
+                                                                        <p  id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color:black;"></p>
+                                                                    </form>
                                                                 </fieldset>
                                                             </form>
                                                         </div>
@@ -76,12 +80,9 @@
                                     </div>
                                 </figure>
                                 <!---->
-                                <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
-                                <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
-                                    <p  id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color:black;"></p>
 
-                                    <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                                    <!--<input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'I like It' />-->
+                                <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
+                                <!--<input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'I like It' />-->
                                 </form>
                                 <br>
                             </div>
