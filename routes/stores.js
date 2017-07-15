@@ -34,7 +34,7 @@ router.get('/storeDeleteGift', function(req, res, next) {
                 price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
         }
 
-   //     res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: "Guest"});
+        res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: "Guest"});
 
     });
 
@@ -48,8 +48,8 @@ router.post('/DelGift', function(req, res, next) {
     var giftId=req.query.giftId;
     deleteGiftFromStoreCollection(giftId,giftName);
     deleteGiftFromGiftCollection(giftId,giftName);
-    res.render('storeDeleteGiftPage', {etitle: "delete gift",LogedInUser: "Guest"});
-
+    // res.render('storeDeleteGiftPage', {etitle: "delete gift",LogedInUser: "Guest"});
+var x=8;
 
 });
 router.get('/storeAddGift', function(req, res, next) {
