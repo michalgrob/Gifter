@@ -34,7 +34,7 @@ router.get('/storeDeleteGift', function(req, res, next) {
                 price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
         }
 
-        res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: "Guest"});
+   //     res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: "Guest"});
 
     });
 
