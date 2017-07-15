@@ -22,7 +22,7 @@ router.get('/login', function(req, res, next) {
 });
 
 router.get('/storeDeleteGift', function(req, res, next) {
-    var storeName="zara";
+    var storeName="zara";//
 
     Gift.find({store_name:storeName}).populate('interests').exec(function(err,gifts) {
 
