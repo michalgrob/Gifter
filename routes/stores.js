@@ -21,7 +21,37 @@ router.get('/login', function(req, res, next) {
 
 });
 
+router.get('/storeDeleteGift', function(req, res, next) {
+    var storeName="zara";
 
+    Gift.find({store_name:storeName}).populate('interests').exec(function(err,gifts) {
+
+        var giftsTotalScore=[];
+        for(var i=0;i<gifts.length;i++)// interest for
+        {
+            // var currTotal=0;
+            giftsTotalScore.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,
+                price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
+        }
+
+        res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: "Guest"});
+
+    });
+
+     var x = 0;
+
+});
+router.post('/DelGift', function(req, res, next) {
+
+    // var searchInterests = req.query.searchInterest.split(',');
+    var giftName=req.query.giftName;
+    var giftId=req.query.giftId;
+    deleteGiftFromStoreCollection(giftId,giftName);
+    deleteGiftFromGiftCollection(giftId,giftName);
+    res.render('storeDeleteGiftPage', {etitle: "delete gift",LogedInUser: "Guest"});
+
+
+});
 router.get('/storeAddGift', function(req, res, next) {
 
     var x = 0;
@@ -166,10 +196,28 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
 function relateGiftToStore(newGiftId,store_id,storeName,next) {
     Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},{new:true},function (err,store) {
         if(err ){ throw err;}
-        //res.render('storeInfoPage');//
-       // res.redirect('/stores/storeInfo');
+
         next();
 
     })
 }
+function deleteGiftFromGiftCollection(giftId,giftName) {
+    Gift.find({_id: giftId}).remove().exec(function (err, data) {
+        if (err) {
+            throw err;
+        }
 
+        next();
+
+    });
+}
+function deleteGiftFromStoreCollection(giftId,giftName)
+{
+
+    Store.findOneAndUpdate({name: {$in:"zara"}},{$pull:{gifts:giftId}},function (err,store) {
+        if(err ){ throw err;}
+
+        next();
+
+    });
+}
