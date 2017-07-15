@@ -17,6 +17,7 @@
     <div class="container-fluid">
         <div class="row no-gutter popup-gallery">
             <!--<ol>gifts:-->
+            <% if(gifts.length){%>
 
             <% for(var i=0; i<gifts.length; i++) {%>
             <!--<li>-->
@@ -51,6 +52,13 @@
             </div>
             <% } %>
 
+
+            <%}%>
+            <%if(!gifts.length){%>
+            <h4>your gift collection is empty.</h4>
+            <a href="/stores/storeAddGift" class="btn btn-default btn-xl sr-button">Add gift</a>
+
+            <%}%>
             <!--</ol>-->
         </div>
     </div>
