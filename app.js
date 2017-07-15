@@ -38,6 +38,7 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,7 +52,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash());
-
+//sapir
+app.use(function(req, res, next) {
+    res.locals.messages = req.flash();
+    next();
+});
+//sapir
 app.use('/', index);
 app.use('/users', users);
 app.use('/searchingOpt', searchingOpt);

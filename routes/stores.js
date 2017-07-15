@@ -48,8 +48,13 @@ router.post('/DelGift', function(req, res, next) {
     var giftId=req.query.giftId;
     deleteGiftFromStoreCollection(giftId,giftName);
     deleteGiftFromGiftCollection(giftId,giftName);
-    // res.render('storeDeleteGiftPage', {etitle: "delete gift",LogedInUser: "Guest"});
-var x=8;
+    //req.flash('gift Deleted');
+    req.flash("messages", { "success" : "Gift Deleted Success" });//sapir
+    res.redirect('/stores/storeDeleteGift');
+
+
+
+    var x=8;
 
 });
 router.get('/storeAddGift', function(req, res, next) {
@@ -207,7 +212,6 @@ function deleteGiftFromGiftCollection(giftId,giftName) {
             throw err;
         }
 
-        next();
 
     });
 }
@@ -217,7 +221,7 @@ function deleteGiftFromStoreCollection(giftId,giftName)
     Store.findOneAndUpdate({name: {$in:"zara"}},{$pull:{gifts:giftId}},function (err,store) {
         if(err ){ throw err;}
 
-        next();
+        //next();
 
     });
 }
