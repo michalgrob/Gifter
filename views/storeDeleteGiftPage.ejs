@@ -34,10 +34,11 @@
 
                             <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
                             <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/stores/DelGift?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>" >
-                                <p id='<%= gifts[i].name.toString() %>' name='gift' style="display: none;"></p>
+                                <p id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color: #0b0b0b"></p>
+
 
                                 <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                                <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'I like It' />
+                                <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'DELETE GIFT' />
                             </form>
                             <br>
                         </div>
