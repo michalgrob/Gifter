@@ -175,14 +175,20 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
         newGift.ImageUrl=imgURL;
 
         interests.forEach(function (interest) {
+                var isfound=false;
             for(var i=0;i<storeInterests.length;i++)
             {
                 if(interest.name==storeInterests[i])
                 {
+                    isfound=true;
                     newGift.interests.push({interest: interest.name, dynamicScore: 1});
                     break;
                 }
+            }
+            if(!isfound)
+            {
                 newGift.interests.push({interest: interest.name, dynamicScore: 0});
+
             }
         })
 
