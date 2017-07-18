@@ -1,5 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 var User=require('./../routes/models/User');
+var StoreManager=require('./../routes/models/StoreManager');
+var Client=require('./../routes/models/Client');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 module.exports = function(passport) {
@@ -12,7 +14,8 @@ module.exports = function(passport) {
         });
     });
 
-    passport.use('local-signup', new LocalStrategy({
+
+    passport.use('local-client-signup', new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true
@@ -25,7 +28,7 @@ module.exports = function(passport) {
                     if (user) {
                         return done(null, false, req.flash('signupMessage', 'That email is already in use.'));
                     } else {
-                        var newUser = new User();
+                        var newUser = new Client();
                         newUser.email = email;
                         newUser.password = newUser.generateHash(password);
                         newUser.name= req.body.name;
@@ -67,4 +70,41 @@ module.exports = function(passport) {
                 return done(null, user);
             });
         }));
+///michal 18.7.17
+    passport.use('local-storeManager-signup', new LocalStrategy({
+            usernameField: 'email',
+            passwordField: 'password',
+            passReqToCallback: true
+        },
+        function(req, email, password,store_id, done) {
+            process.nextTick(function() {
+                User.findOne({ email:  email }, function(err, user) {
+                    if (err)
+                        return done(err);
+                    if (user) {
+                        return done(null, false, req.flash('signupMessage', 'That email is already in use.'));
+                    } else {
+                        var storeManager = new StoreManager();
+                        storeManager .email = email;
+                        storeManager .password = newUser.generateHash(password);
+                        storeManager .name= req.body.name;
+                        storeManager .username= req.body.username;
+                        //   newUser.password= req.body.password;
+                        storeManager .admin= false;
+                        storeManager.store_id=store_id;
+                        //storeManager .age=req.body.age;
+                        // newUser.email=req.body.email;
+                        //newUser.interests=req.body.hobbies;
+                        //newUser.gender=req.body.gender;
+                        storeManager .save(function(err) {
+                            if (err)
+                                throw err;
+                            return done(null, newUser);
+                        });
+                    }
+                });
+            });
+        }));
+
+
 };

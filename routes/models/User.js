@@ -7,19 +7,15 @@ var bcrypt   = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    name: String,
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    admin: Boolean,
-    age: Number,
-    email: { type: String, unique: true, required: true },
-    interests: [String],
-    created_at: Date,
-    updated_at: Date,
-    events:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
-    gender: String,
-
-});
+        name: String,
+        email: { type: String, unique: true, required: true },
+        username: { type: String, required: true, unique: true },
+        password: { type: String, required: true },
+        created_at: Date,
+        updated_at: Date,
+        admin: Boolean,
+    },
+    { discriminatorKey: 'role' });
 // on every save, add the date
 userSchema.pre('save', function(next) {
     // get the current date

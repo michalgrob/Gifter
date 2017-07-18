@@ -10,16 +10,43 @@ var User=require('./models/User');
 var Store=require('./models/Store');
 var fs = require('fs');
 var csv = require('fast-csv');
+var passport = require('passport');
 
-router.get('/login', function(req, res, next) {
 
-    var x=0;
-    var uName=req.query.sname;
-    var gifts = [];
-    addNewStore("castro","azrieli tlv",gifts);//
-    res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
+//michal 17/7/17
 
+router.get('/storeManager-sign-up', function (req, res, next) {
+    res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
 });
+
+// process the signup form
+router.post('/storeManagerSignUp', passport.authenticate('local-storeManager-signup', {
+    successRedirect: '/storeInfo', // redirect to the secure profile section
+    failureRedirect: '/storeManager-sign-up', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+}));
+
+
+// router.post('/login', passport.authenticate('local-login', {
+//     successRedirect: '/',//'/profile',
+//     failureRedirect: '/stores/login',
+//     failureFlash: true,
+// }));
+
+// router.get('/login', function(req, res, next) {
+//     res.render('storeInfoPage', { LogedInUser: req.store ? req.store.name : 'guest' } );// req.flash('loginMessage')//
+// });
+
+
+// router.get('/login', function(req, res, next) {
+//
+//     var x=0;
+//     var uName=req.query.sname;
+//  //   var gifts = [];
+//  //   addNewStore("castro","azrieli tlv",gifts);//
+//     res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
+//
+// });
 
 router.get('/storeDeleteGift', function(req, res, next) {
     var storeName="zara";//
@@ -98,7 +125,7 @@ router.get('/storeInfo', function(req, res, next) {
     var x=0;
     var uName=req.query.sname;
 
-    res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
+    res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser: req.user ? req.user.username : 'guest'});
 
 });
 
@@ -131,7 +158,7 @@ router.post('/importCSV', function(req, res, next) {
 
 module.exports = router;
 
-function addNewStore(storeName,location,gifts){
+function addNewStore(storeName,location,gifts,password){
 
     Store.find({name:storeName,location:location},(function(err,stores) {
         if (err) throw err;
@@ -145,6 +172,7 @@ function addNewStore(storeName,location,gifts){
             newStore.name = storeName;
             newStore.store_id = stores.length;
             newStore.location = location;
+            newStore.password = newStore.generateHash(password);
 
             for (var i = 0; i < gifts.length; i++)// interest for
             {

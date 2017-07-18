@@ -130,13 +130,14 @@
             <!--<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>-->
             <img src="img_avatar2.png" alt="Avatar" class="avatar">
         </div>
-<form action='/stores/login'  method="get" >
+<form action='/stores/login'  method="post" >
         <div class="container">
-            <label><b>Store name</b></label>
-            <input type="text" placeholder="Enter Username" name="sname" required>
-
-            <label><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
+            <label><b>Email</b></label><br>
+            <input type="text" placeholder="Enter Username" name="email" required><br>
+            <label><b>Store ID</b></label><br>
+            <input type="text" placeholder="Enter Username" name="store_id" required><br>
+            <label><b>Password</b></label><br>
+            <input type="password" placeholder="Enter Password" name="password" required>
 
             <button type="submit">Login</button>
 
@@ -145,6 +146,11 @@
             <a class="psw" href="#">Forgot  password?</a>
         </div>
 </form>
+        <form  style="background-color:#f1f1f1" method="get" action='/stores/storeManager-sign-up'>
+            <div class="container">
+                <button type="submit">Sign up</button>
+            </div>
+        </form>
         <!--<form  style="background-color:#f1f1f1" method="get" action='/users/signin'>-->
             <!--<div class="container">-->
                 <!--<button type="submit">Sign In</button>-->
@@ -160,6 +166,7 @@
     <!--</div>-->
     <!--</form>-->
 </div>
+
 
 <!--<script>-->
     <!--// Get the modal-->

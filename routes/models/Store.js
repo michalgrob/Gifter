@@ -3,17 +3,27 @@
  */
 var mongoose = require('mongoose');
 var Gift = require('./Gift');
-//mongoose.connect('mongodb://localhost/sadna1');
-var Schema = mongoose.Schema;
+var bcrypt   = require('bcrypt-nodejs');
 
+var Schema = mongoose.Schema;
 var storeSchema = new Schema({
     name: String,
     store_id :String,
+    password: { type: String, required: true },
     location: String,
     gifts: [{
          type: mongoose.Schema.Types.ObjectId, ref: 'Gift'
     }]
 
 });
+
+storeSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+storeSchema .methods.validPassword = function(password) {
+    var bool= bcrypt.compareSync(password, this.password);
+    return bool;
+};
+
 var Store = mongoose.model('Store', storeSchema);
 module.exports = Store;
