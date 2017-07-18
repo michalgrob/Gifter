@@ -19,6 +19,7 @@
 <% layout('boilerplate') %>
 <!--<div id="navigate buttons">-->
 
+<body style="background-color: #fafafa;">
 
 <header1>
 
@@ -28,52 +29,40 @@
     <!--</div>-->
     <div>
 
-        <h1>gifts list:</h1>
+        <h1 style="margin-top: 6%">gifts list:</h1>
+        <hr>
     </div>
-    <section class="no-padding" id="portfolio">
-        <div class="container-fluid">
-            <div style="width:80%; margin-left: 10%" class="row no-gutter popup-gallery">
-                <!--<ol>gifts:-->
+    <div style="margin-top: 4%" class="no-padding" id="portfolio">
+        <!--<div class="container-fluid">-->
+        <div style="width:80%; margin-left: 10%;" class="row no-gutter popup-gallery">
 
-                <% for(var i=0; i<gifts.length; i++) {%>
-                <!--<li>-->
+            <% for(var i=0; i<gifts.length; i++) {%>
 
-                <!--</li>-->
 
-                <div style="width:30%;height:500px;align-items: center;"class="col-lg-4 col-sm-6">
-                    <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
-                    <%= gifts[i].name.toString() %>
+            <div style=" background-color:white;width:30%;height:500px;align-items: center; "class="col-lg-4 col-sm-6">
+                <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
+                <%= gifts[i].name.toString() %>
 
-                    <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
+                <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
-                    <div class="portfolio-box-caption">
-                        <div class="portfolio-box-caption-content">
-                            <div class="project-category text-faded">
 
-                                <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
-                                <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
-                                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color: #0b0b0b"></p>
+                <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
+                <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
+                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color: #0b0b0b"></p>
 
-                                    <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                                    <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'LIKE' />
-                                </form>
-                                <br>
-                            </div>
-                            <!--<div class="project-name">-->
-                            <!--Project Name-->
-                            <!--</div>-->
-                        </div>
-                    </div>
-                    </a>
+                    <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
+                    <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'LIKE' />
+                </form>
 
-                </div>
-                <% } %>
-
-                <!--</ol>-->
             </div>
+            <% } %>
+
+            <!--</ol>-->
+            <!--</div>-->
         </div>
-    </section>
+    </div>
 </header1>
+</body>
 <script>
     function  viewGiftDetails(giftName,giftPrice,giftStore)
     {
