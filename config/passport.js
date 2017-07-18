@@ -76,7 +76,7 @@ module.exports = function(passport) {
             passwordField: 'password',
             passReqToCallback: true
         },
-        function(req, email, password,store_id, done) {
+        function(req, email, password, done) {
             process.nextTick(function() {
                 User.findOne({ email:  email }, function(err, user) {
                     if (err)
@@ -86,20 +86,20 @@ module.exports = function(passport) {
                     } else {
                         var storeManager = new StoreManager();
                         storeManager .email = email;
-                        storeManager .password = newUser.generateHash(password);
+                        storeManager .password = storeManager.generateHash(password);
                         storeManager .name= req.body.name;
                         storeManager .username= req.body.username;
                         //   newUser.password= req.body.password;
                         storeManager .admin= false;
-                        storeManager.store_id=store_id;
+                        storeManager.store_id=req.body.store_id;
                         //storeManager .age=req.body.age;
                         // newUser.email=req.body.email;
                         //newUser.interests=req.body.hobbies;
                         //newUser.gender=req.body.gender;
-                        storeManager .save(function(err) {
+                        storeManager.save(function(err) {
                             if (err)
                                 throw err;
-                            return done(null, newUser);
+                            return done(null, storeManager);
                         });
                     }
                 });
