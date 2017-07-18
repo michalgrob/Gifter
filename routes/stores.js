@@ -20,9 +20,8 @@ router.get('/storeManager-sign-up', function (req, res, next) {
 });
 
 // process the signup form//stores/storeManagerSignUp
-router.post('/storeManagerSignUp',
-    passport.authenticate('local-storeManager-signup', {
-    successRedirect: '/storeInfo', // redirect to the secure profile section
+router.post('/storeManagerSignUp', passport.authenticate('local-storeManager-signup', {
+    successRedirect: '/profile', // redirect to the secure profile section
     failureRedirect: '/storeManager-sign-up', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
 }));
