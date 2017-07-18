@@ -29,12 +29,15 @@
     <!--</div>-->
     <div>
 
-        <h1 style="margin-top: 6%">gifts list:</h1>
+        <h1 style="margin-top: 6%">YOUR GIFT LIST</h1>
         <hr>
+        <h5> These are the gift we found according to your input.</h5>
+        <h5> Now its your turun, all you need to do is to choose.</h5>
+        <h5> Thanks for using our service!</h5>
     </div>
     <div style="margin-top: 4%" class="no-padding" id="portfolio">
         <!--<div class="container-fluid">-->
-        <div style="width:80%; margin-left: 10%;" class="row no-gutter popup-gallery">
+        <div style="width:80%; margin-left: 15%;" class="row no-gutter popup-gallery">
 
             <% for(var i=0; i<gifts.length; i++) {%>
 
@@ -48,10 +51,10 @@
 
                 <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
                 <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
-                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color: #0b0b0b"></p>
+                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
 
                     <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                    <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'LIKE' />
+                    <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="margin-left:20%;display: none;" value = 'LIKE' />
                 </form>
 
             </div>
@@ -67,7 +70,9 @@
     function  viewGiftDetails(giftName,giftPrice,giftStore)
     {
         var moreDetailsP=document.getElementById(giftName);
-        moreDetailsP.innerHTML=giftName+' '+giftPrice+' '+giftStore;
+        moreDetailsP.innerHTML='description: '+giftName+
+            ' ,price: '+giftPrice +
+            ' ,NISstore: '+giftStore;
         var iLikeButton = document.getElementById('b'+giftName);
         //  iLikeButton.style.display = "block";
         if (moreDetailsP.style.display === 'none') {

@@ -31,7 +31,7 @@
     <hr>
 </div>
     <div class="container-fluid">
-            <div style="width:80%; margin-left: 10%;" class="row no-gutter popup-gallery">
+            <div style="width:80%; margin-left: 15%;" class="row no-gutter popup-gallery">
 
             <!--<ol>gifts:-->
             <% if(gifts.length)%>
@@ -52,11 +52,11 @@
 
                             <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
                             <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/stores/DelGift?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>" >
-                                <p id='<%= gifts[i].name.toString() %>' name='gift' style="display: none; color: #0b0b0b"></p>
+                                <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
 
 
                                 <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                                <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="display: none;" value = 'DELETE GIFT' />
+                                <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="margin-left:20%;display: none;" value = 'DELETE GIFT' />
                             </form>
                             <br>
                         </div>
