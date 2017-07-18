@@ -25,18 +25,31 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-router.post('/signup', passport.authenticate('local-signup', {//signup
+router.post('/signup', passport.authenticate('local-client-signup', {//signup
     successRedirect: '/profile',
     failureRedirect: 'users/signup',
     failureFlash: true,
 }));
 
 router.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/',//'/profile',
+    successRedirect: '/loginSuccess',//'/profile',
     failureRedirect: '/users/login',
     failureFlash: true,
 }));
-//////////////////////////////try
+
+router.get('/loginSuccess', function(req,res){
+    if (req.user.email == "admin")
+        res.redirect('/')//('/admin');
+    else if (req.user.role == 'storeManager')
+        res.redirect('/storeInfoPage');
+    else
+        res.redirect('/');
+});
+
+
+
+
+
 
 
 /* GET users listing. */

@@ -1,0 +1,111 @@
+<% layout('boilerplate') %>
+<header>
+    <div class="header-content">
+<form name="singnupForm" class="form-horizontal" method="post" action="/stores/storeManagerSignUp" >
+    <!--onsubmit="return validationUserInput()"-->
+
+    <div class="form-group">
+        <label for="name" class="cols-sm-2 control-label" >Store Name</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                <input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name"required/>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="email" class="cols-sm-2 control-label">Store Email</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                <input type="text" class="form-control" name="email" id="email"  placeholder="Enter your Email"required/>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="username" class="cols-sm-2 control-label">store Username</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                <input type="text" class="form-control" name="username" id="username"  placeholder="Enter store Username"required/>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="cols-sm-2 control-label">Password</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"required/>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="confirm" class="cols-sm-2 control-label">Confirm Password</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                <input type="password" class="form-control" name="confirm" id="confirm"  placeholder="Confirm your Password"required/>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="username" class="cols-sm-2 control-label">Store Id</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                <input type="text" class="form-control" name="store_id" id="store_id"  placeholder="Enter store id as given grom Manager"required/>
+            </div>
+        </div>
+    </div>
+
+
+    <!--<div class="login-register">-->
+    <!--&lt;!&ndash;<a href="index.php">Login</a>&ndash;&gt;-->
+    <!--</div>-->
+    <div class="form-group ">
+        <button type="submit" class="btn btn-primary btn-lg btn-block login-button" >Register</button>
+    </div>
+</form>
+    </div>
+</header>
+<script type="text/javascript" >
+    function validationUserInput()
+    {
+        //  var name = document.ContactForm.Name;
+        var email = document.singnupForm.email;
+        var password=document.singnupForm.password;
+        var confirm=document.singnupForm.confirm;
+
+        if (email.value.indexOf("@", 0) < 0||email.value.indexOf(".", 0) < 0)
+        {
+            alert("Please enter a valid e-mail address.");
+            email.focus();
+            return false;
+        }
+
+        if (password.value!=confirm.value)
+        {
+            password.focus;
+            confirm.focus;
+            alert("password and confirm must be equal");
+            return false
+        }
+
+
+        if (name.value == "")
+        {
+            window.alert("Please enter your name.");
+            name.focus();
+            return false;
+        }
+        return true;
+    }
+
+</script>
