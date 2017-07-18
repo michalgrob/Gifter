@@ -32,7 +32,7 @@ router.post('/signup', passport.authenticate('local-client-signup', {//signup
 }));
 
 router.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/loginSuccess',//'/profile',
+    successRedirect: '/users/loginSuccess',//'/profile',
     failureRedirect: '/users/login',
     failureFlash: true,
 }));
@@ -41,7 +41,7 @@ router.get('/loginSuccess', function(req,res){
     if (req.user.email == "admin")
         res.redirect('/')//('/admin');
     else if (req.user.role == 'storeManager')
-        res.redirect('/storeInfoPage');
+        res.redirect('/storeInfoPage', { LogedInUser: req.user ? req.user.username : 'guest' });
     else
         res.redirect('/');
 });
