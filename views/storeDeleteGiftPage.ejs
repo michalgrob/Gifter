@@ -1,13 +1,35 @@
+<style>
+
+    header1 {
+        width:40%;
+        margin-left: 30%;
+        position: relative;
+        width: 100%;
+        min-height: auto;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+        background-position: center;
+        background-color: lightgrey;
+        text-align: center;
+        color: dimgrey;
+    }
+</style>
+
 <% layout('boilerplate') %>
 <!--<div id="navigate buttons">-->
 
 
 <!--</div>-->
+<header1>
+
+
 <div>
     <br>
     <br>
     <br>
-    <h4>gifts list:</h4>
+    <h1>gifts list:</h1>
 
 
 
@@ -15,19 +37,20 @@
 </div>
 <section class="no-padding" id="portfolio">
     <div class="container-fluid">
-        <div class="row no-gutter popup-gallery">
+            <div style="width:80%; margin-left: 10%" class="row no-gutter popup-gallery">
+
             <!--<ol>gifts:-->
-            <% if(gifts.length){%>
+            <% if(gifts.length)%>
 
             <% for(var i=0; i<gifts.length; i++) {%>
             <!--<li>-->
 
             <!--</li>-->
+                <div style="width:30%;height:500px;align-items: center;"class="col-lg-4 col-sm-6">
 
-            <div class="col-lg-4 col-sm-6">
                 <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
                 <%= gifts[i].name.toString() %>
-                <img src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
+                    <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
                 <div class="portfolio-box-caption">
                     <div class="portfolio-box-caption-content">
@@ -52,18 +75,11 @@
             </div>
             <% } %>
 
-
-            <%}%>
-            <%if(!gifts.length){%>
-            <h4>your gift collection is empty.</h4>
-            <a href="/stores/storeAddGift" class="btn btn-default btn-xl sr-button">Add gift</a>
-
-            <%}%>
             <!--</ol>-->
         </div>
     </div>
 </section>
-
+</header1>
 <script>
     function  viewGiftDetails(giftName,giftPrice,giftStore)
     {

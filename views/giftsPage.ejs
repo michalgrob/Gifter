@@ -1,8 +1,29 @@
 
 <title><%=etitle %></title>
 
+
 <% layout('boilerplate') %>
-<h1>giftsPage</h1>
+
+
+<style>
+    div1 {
+        width   : 50%;
+    }
+    header1 {
+        position: relative;
+        width: 100%;
+        min-height: auto;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+        background-position: center;
+        background-color: lightgrey;
+        text-align: center;
+        color: dimgrey;
+    }
+
+</style>
 
 
 <script type="text/javascript">
@@ -40,61 +61,70 @@
             return false;
         }
 
-    //    if (okayGender&&okayHobbies) return true;
+        //    if (okayGender&&okayHobbies) return true;
 
     }
 
-//
-//        if (gender.checked == false)
-//        {
-//            alert("Please tell us how we can help you.");
-//            return false;
-//        }
-//        if (hobbies.cheked==false)
-//        {
-//            alert("error1");
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//
-//
-//
-//    var MainInterets=new Array (4);
-//
-//    // when page is ready
-//    $(document).ready(function() {
-//        // on form submit
-//        $("#form").submit(function() {
-//
-//            // to each unchecked checkbox
-//            $(this + 'input[type=checkbox]:not(:checked)').each(function () {
-//                // set value 0 and check it
-//                $(this).attr('checked', true).val(0);
-//                // $('input[name=gender][value=3]').attr('checked', true);
-//                var gender = document.querySelector('input[name = "gender"]:checked').value;
-//                $("#gender").val(gender);
-////                $(this + 'input[type=radio]:not(:checked)').each(function () {
-////                    // set value 0 and check it
-////                    $(this).attr('checked', true).val(0);
-//
-//                var ageTextBox = $("#ageText_range").val();
-//                $("#age").val(ageTextRange);
-//                var minPriceRange = $("#price_min_range").val();
-//                $("#minPrice").val(minPriceRange);
-//                var maxPriceRange = $("#price_max_range").val();
-//                $("#maxPrice").val(maxPriceRange);
-//            });
-//
-//
-//
-//        })
-//    })
+    //
+    //        if (gender.checked == false)
+    //        {
+    //            alert("Please tell us how we can help you.");
+    //            return false;
+    //        }
+    //        if (hobbies.cheked==false)
+    //        {
+    //            alert("error1");
+    //            return false;
+    //        }
+    //        return true;
+    //    }
+    //
+    //
+    //
+    //
+    //    var MainInterets=new Array (4);
+    //
+    //    // when page is ready
+    //    $(document).ready(function() {
+    //        // on form submit
+    //        $("#form").submit(function() {
+    //
+    //            // to each unchecked checkbox
+    //            $(this + 'input[type=checkbox]:not(:checked)').each(function () {
+    //                // set value 0 and check it
+    //                $(this).attr('checked', true).val(0);
+    //                // $('input[name=gender][value=3]').attr('checked', true);
+    //                var gender = document.querySelector('input[name = "gender"]:checked').value;
+    //                $("#gender").val(gender);
+    ////                $(this + 'input[type=radio]:not(:checked)').each(function () {
+    ////                    // set value 0 and check it
+    ////                    $(this).attr('checked', true).val(0);
+    //
+    //                var ageTextBox = $("#ageText_range").val();
+    //                $("#age").val(ageTextRange);
+    //                var minPriceRange = $("#price_min_range").val();
+    //                $("#minPrice").val(minPriceRange);
+    //                var maxPriceRange = $("#price_max_range").val();
+    //                $("#maxPrice").val(maxPriceRange);
+    //            });
+    //
+    //
+    //
+    //        })
+    //    })
 
 </script>
+<header1>
 
-<form name="AppForm" method="post" action="/searchingResult" >
+<form style="background-color: #fafafa;" name="AppForm" method="post" action="/searchingResult" >
+    <div class="header-content">
+        <div class="header-content-inner">
+            <h1 id="homeHeading">   </h1>
+            <h1 id="homeHeading">GiftPage</h1>
+            <hr>
+        </div>
+    </div>
+
     <div class="form-group" >
         <div id="gender"  class="Info">
             <h4>Choose gender:</h4>
@@ -108,21 +138,21 @@
 
             <!--max: <input type="text" name="maxPricText"><br>-->
 
-            <div data-role="rangeslider">
-                <label for="price-min">Price:</label>
-                <input type="range" name="minPrice" id="minPrice" value="50" min="0" max="1000">
+            <div1 data-role="rangeslider">
+                <label for="price-min" >Price:</label>
+                <input style="width:40%; margin-left: 30%"type="range" name="minPrice" id="minPrice" value="50" min="0" max="1000">
                 <label for="price-max">Price:</label>
-                <input type="range" name="maxPrice" id="maxPrice" value="800" min="0" max="1000">
-            </div>
+                <input style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="800" min="0" max="1000">
+            </div1>
         </div>
         <div id="age" class="Info">
             <h4>Choose age:</h4>
 
-            <div data-role="rangeslider">
+            <div1 data-role="rangeslider">
                 <label for="age">age:</label>
-                <input type="range" name="age" id="age" value="2" min="2" max="130">
+                <input style="width:40%; margin-left: 30%" type="range" name="age" id="age" value="2" min="2" max="130">
 
-            </div>
+            </div1>
             <!--<input type="checkbox" name="age_0_12" value = '1'/>0 - 12<br />-->
             <!--<input type="checkbox" name="age_12_18" value = '1'/>12 - 18<br />-->
             <!--<input type="checkbox" name="age_18_30" value = '1'/>18 - 30<br />-->
@@ -149,7 +179,8 @@
 
     <!--<input type="submit" value="Send" name="submit">-->
     <input type="submit" value = 'Save Changes' name="submit"onclick="return ValidationAppForm()">
+
 </form>
 
 
-
+</header1>
