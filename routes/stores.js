@@ -19,8 +19,9 @@ router.get('/storeManager-sign-up', function (req, res, next) {
     res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
 });
 
-// process the signup form
-router.post('/storeManagerSignUp', passport.authenticate('local-storeManager-signup', {
+// process the signup form//stores/storeManagerSignUp
+router.post('/storeManagerSignUp',
+    passport.authenticate('local-storeManager-signup', {
     successRedirect: '/storeInfo', // redirect to the secure profile section
     failureRedirect: '/storeManager-sign-up', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
