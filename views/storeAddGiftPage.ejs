@@ -1,44 +1,15 @@
 
 <title><%=etitle %></title>
 
+
 <% layout('boilerplate') -%>
-<h1>giftsPage</h1>
+<body style="background-color: #fafafa;">
+<img src="/img/red.jpg" style="width:120%; margin-top: -.5% ">
 
 
-<!--<script type="text/javascript">-->
-<!--var MainInterets=new Array (4);-->
-
-<!--// when page is ready-->
-<!--$(document).ready(function() {-->
-<!--// on form submit-->
-<!--$("#form").submit(function() {-->
-
-<!--// to each unchecked checkbox-->
-<!--$(this + 'input[type=checkbox]:not(:checked)').each(function () {-->
-<!--// set value 0 and check it-->
-<!--$(this).attr('checked', true).val(0);-->
-<!--// $('input[name=gender][value=3]').attr('checked', true);-->
-<!--var gender = document.querySelector('input[name = "gender"]:checked').value;-->
-<!--$("#gender").val(gender);-->
-<!--//                $(this + 'input[type=radio]:not(:checked)').each(function () {-->
-<!--//                    // set value 0 and check it-->
-<!--//                    $(this).attr('checked', true).val(0);-->
-
-<!--var ageTextBox = $("#ageText_range").val();-->
-<!--$("#age").val(ageTextRange);-->
-<!--var minPriceRange = $("#price_min_range").val();-->
-<!--$("#minPrice").val(minPriceRange);-->
-<!--var maxPriceRange = $("#price_max_range").val();-->
-<!--$("#maxPrice").val(maxPriceRange);-->
-<!--});-->
-
-
-
-<!--})-->
-<!--})-->
-
-<!--</script>-->
-
+<header1>
+    <h1>ADDING GIFT:</h1>
+    <br>
 
     <script type="text/javascript">
         function ValidationAppForm()
@@ -140,68 +111,71 @@
 
         }
 
-</script>
+    </script>
 
-
-
-<form name="Form" method="post" action="/stores/addGift" >
-    <div class="form-group" >
-        <div id="store_name" class="Info">
-            <h4>Enter store information:</h4>
-            <label> store name:</label>
-            <input type="text" name="storeName" id="storeName" value="">
-            <label> store id:</label>
-            <input type="text" name="storeId" id="storeId" >
-        </div>
-        <div id="gift_name" class="Info">
-            <h4>Enter gift information:</h4>
-            <label>gift name:</label>
-            <input type="text" name="giftName" id="giftName" >
-            <label>product id:</label>
-            <input type="text" name="giftId" id="giftId" >
-        </div>
-        <div id="gender"  class="Info">
-            <h4>Choose gender:</h4>
-            <input type="radio" id="male" name="gender" value = 'male'/>Male <br />
-            <input type="radio" id="female" name="gender" value = 'female'/>Female  <br />
-            <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter <br />
-        </div>
-        <div id="Choose price" class="Info">
-            <h4>Enter age:</h4>
-            <div data-role="rangeslider">
-                <label for="price-min"> min age:</label>
-                <input type="text" name="minAge" id="minAge"  >
-                <label for="price-max">max age:</label>
-                <input type="text" name="maxAge" id="maxAge" >
+    <!--<div style="background-color:#2e2e2e; height:9%">-->
+    <form name="Form" method="post" action="/stores/addGift" >
+        <div class="form-group" style="width: 60%;margin-left: 18%" >
+            <div id="store_name" class="Info">
+                <h4>Enter store information:</h4>
+                <label> store name: </label>
+                <input type="text" name="storeName" id="storeName" value=""><br>
+                <label style="margin-left: 2.5%">  store  id: </label>
+                <input type="text" name="storeId" id="storeId" ><br>
             </div>
+            <hr>
+            <div id="gift_name" class="Info">
+                <h4>Enter gift information:</h4>
+                <label>gift name: </label>
+                <input type="text" name="giftName" id="giftName" ><br>
+                <label>product id: </label>
+                <input type="text" name="giftId" id="giftId" ><br>
+            </div>
+            <hr>
+            <div id="gender"  class="Info">
+                <h4>Choose gender:</h4>
+                <input type="radio" id="male" name="gender" value = 'male'/>Male <br />
+                <input type="radio" id="female" name="gender" value = 'female'/>Female  <br />
+                <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter <br />
+            </div>
+            <hr>
+            <div id="Choose price" class="Info">
+                <h4>Enter age:</h4>
+                <div data-role="rangeslider">
+                    <label for="price-min"> min age: </label>
+                    <input type="text" name="minAge" id="minAge" ><br>
+                    <label for="price-max">max age: </label>
+                    <input type="text" name="maxAge" id="maxAge" ><br>
+                </div>
+            </div>
+            <hr>
+            <div id="Price" class="Info">
+                <h4>Enter price:</h4>
+
+                <label >price: </label>
+                <input type="text" name="price" id="price" ><br>
+            </div>
+            <hr>
+            <div id="hobbis" class="Info">
+                <h4>Choose relevant interests for the gift:</h4>
+                <% for(var i=0; i<orders.length; i++) {%>
+                <tr>
+                    <td></td>
+                    <input type="checkbox" value = <%= orders[i].interest.toString() %> name="hobbies"/>  <%= orders[i].interest %><br />
+                </tr>
+
+                <% } %>
+                <br>
+
+            </div>
+            <br>
         </div>
-        <div id="Price" class="Info">
-            <h4>Enter price:</h4>
-
-            <label >price:</label>
-            <input type="text" name="price" id="price" >
-        </div>
-        <div id="hobbis" class="Info">
-            <h4>Choose relevant interests for the gift</h4>
-            <% for(var i=0; i<orders.length; i++) {%>
-            <tr>
-                <td></td>
-                <input type="checkbox" value = <%= orders[i].interest.toString() %> name="hobbies"/>  <%= orders[i].interest %><br />
-            </tr>
-            <% } %>
 
 
-        </div>
+        <input class="btn btn-primary btn-xl page-scroll" type="submit" value = 'Save Changes' name="submit" style="margin-right: 5%" onclick="return ValidationAppForm()"/>
+
+    </form>
 
 
-        <br>
-
-    </div>
-
-
-    <input type="submit" value = 'Save Changes' name="submit" onclick="return ValidationAppForm()"/>
-
-</form>
-
-
-
+</header1>
+</body>

@@ -41,7 +41,7 @@ router.get('/loginSuccess', function(req,res){
     if (req.user.email == "admin")
         res.redirect('/')//('/admin');
     else if (req.user.role == 'storeManager')
-        res.redirect('/storeInfoPage', { LogedInUser: req.user ? req.user.username : 'guest' });
+        res.render('storeInfoPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
     else
         res.redirect('/');
 });

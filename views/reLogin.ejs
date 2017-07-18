@@ -1,38 +1,52 @@
 <% layout('boilerplate') %>
 
-<body>
 
 <section class="bg-primary">
 
     <div class="container">
         <div class="imgcontainer">
-            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img class="img-circle" src="img/gifter.jpg" alt="Avatar" class="avatar">
+            <!--<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>-->
+            <!--<img class="img-circle" src="/img/gifter.jpg" alt="Avatar" class="avatar">-->
         </div>
-        <h2 class="section-heading"> incorrect log in details...</h2>
-        <div class="modal-content animate" >
+
+        <div style="text-align: center">
+            <h1><b> Oops!! </b></h1>
+            <hr style="border-color:snow">
+            <p>something went wrong<br>please try again</p>
+
+
+        </div>
+
+
+
+        <div style="color: black ;background-color: #fafafa;border: 1px solid; align-items: center;margin-left: 18%;margin-right: 18%">
 
             <form action='/users/login'  method="post" >
-                <div class="container">
+                <div class="container" style="border-color: #2e2e2e">
                     <label><b>Email</b></label>
+                    <br>
                     <input type="text" placeholder="Enter Username" name="email" required>
-
+                    <br>
                     <label><b>Password</b></label>
+                    <br>
                     <input type="password" placeholder="Enter Password" name="password" required>
 
-                    <button type="submit">Login</button>
-
-                    <input type="checkbox" checked="checked"> Remember me
+                    <button type="submit" style="width: 60%">Login</button>
                     <br>
-                    <a class="psw" href="#">Forgot  password?</a>
+
+                    <input type="checkbox" checked="checked" > Remember me
+                    <br>
+                    <!--<a class="psw" href="#">Forgot  password?</a>-->
                 </div>
             </form>
-            <div class="container" style="background-color:#f1f1f1">
-                <button type="button" class="cancelbtn">Cancel</button>
+            <div class="container" style="background-color:#f1f1f1;width: 100%">
+                <button type="button" class="cancelbtn" >Cancel</button>
             </div>
+            <div style="margin-left: 5%">
             <span class="fa fa-sign-in"> Don't have an account?<a href='/users/signin'> Signup</a></span>
             <p>Or go <a href="/">home</a>.</p>
+            </div>
         </div>
+<!--</boarder>-->
     </div>
 </section>
-</body>

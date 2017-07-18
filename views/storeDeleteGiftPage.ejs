@@ -1,99 +1,83 @@
-<style>
-
-    header1 {
-        width:40%;
-        margin-left: 30%;
-        position: relative;
-        width: 100%;
-        min-height: auto;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        background-size: cover;
-        -o-background-size: cover;
-        background-position: center;
-        background-color: lightgrey;
-        text-align: center;
-        color: dimgrey;
-    }
-</style>
-
 <% layout('boilerplate') %>
 <!--<div id="navigate buttons">-->
 
 
-<!--</div>-->
-<header1>
+<div style="background-color:#2e2e2e; height:9%">
+    <!--</div>-->
 
-    <section style="background-color: #fafafa;margin-top: 6%;" class="no-padding" id="portfolio">
+    <body style="background-color: #fafafa;">
+    <img src="/img/red.jpg" style="width:120%; margin-top: -.5% ">
+    <header1>
 
-<div>
-    <h1 style="margin-top: 4%">gifts list:</h1>
-    <hr>
-</div>
-    <div class="container-fluid">
+        <div>
+            <h1 style="margin-top: 4%">YOUR GOFT COLLECTION</h1>
+            <hr>
+        </div>
+        <div class="container-fluid">
             <div style="width:80%; margin-left: 15%;" class="row no-gutter popup-gallery">
 
-            <!--<ol>gifts:-->
-            <% if(gifts.length)%>
+                <!--<ol>gifts:-->
+                <% if(gifts.length)%>
 
-            <% for(var i=0; i<gifts.length; i++) {%>
-            <!--<li>-->
+                <% for(var i=0; i<gifts.length; i++) {%>
+                <!--<li>-->
 
-            <!--</li>-->
-                <div style="width:30%;height:500px;align-items: center;"class="col-lg-4 col-sm-6">
+                <!--</li>-->
+                <div style=" background-color:white;width:30%;height:500px;align-items: center; "class="col-lg-4 col-sm-6">
 
-                <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
-                <%= gifts[i].name.toString() %>
+                    <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
+                    <b> <%= gifts[i].name.toString() %></b>
                     <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
-                <div class="portfolio-box-caption">
-                    <div class="portfolio-box-caption-content">
-                        <div class="project-category text-faded">
+                    <div class="portfolio-box-caption">
+                        <div class="portfolio-box-caption-content">
+                            <div class="project-category text-faded">
 
-                            <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
-                            <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/stores/DelGift?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>" >
-                                <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
+                                <button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
+                                <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/stores/DelGift?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>" >
+                                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
 
 
-                                <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                                <input type="submit"  id='b<%= gifts[i].name.toString() %>' style="margin-left:20%;display: none;" value = 'DELETE GIFT' />
-                            </form>
-                            <br>
+                                    <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
+                                    <input class="btn btn-primary btn-xl page-scroll" type="submit"  id='b<%= gifts[i].name.toString() %>' style="margin-left:20%;display: none;" value = 'DELETE GIFT' />
+                                </form>
+                                <br>
+                            </div>
+                            <!--<div class="project-name">-->
+                            <!--Project Name-->
+                            <!--</div>-->
                         </div>
-                        <!--<div class="project-name">-->
-                        <!--Project Name-->
-                        <!--</div>-->
                     </div>
+                    </a>
                 </div>
-                </a>
+                <% } %>
+
+                <!--</ol>-->
             </div>
-            <% } %>
-
-            <!--</ol>-->
         </div>
-    </div>
-</section>
-</header1>
-<script>
-    function  viewGiftDetails(giftName,giftPrice,giftStore)
-    {
-        var moreDetailsP=document.getElementById(giftName);
-        moreDetailsP.innerHTML=giftName+' '+giftPrice+' '+giftStore;
-        var iLikeButton = document.getElementById('b'+giftName);
-        //  iLikeButton.style.display = "block";
-        if (moreDetailsP.style.display === 'none') {
-            moreDetailsP.style.display = 'block';
-        } else {
-            moreDetailsP.style.display = 'none';
+        </section>
+    </header1>
+    </body>
+    <script>
+        function  viewGiftDetails(giftName,giftPrice,giftStore)
+        {
+            var moreDetailsP=document.getElementById(giftName);
+            moreDetailsP.innerHTML=giftName+' '+giftPrice+' '+giftStore;
+            var iLikeButton = document.getElementById('b'+giftName);
+            //  iLikeButton.style.display = "block";
+            if (moreDetailsP.style.display === 'none') {
+                moreDetailsP.style.display = 'block';
+            } else {
+                moreDetailsP.style.display = 'none';
+            }
+            if ( iLikeButton.style.display === 'none') {
+                iLikeButton.style.display = 'block';
+            } else {
+                iLikeButton.style.display = 'none';
+            }
         }
-        if ( iLikeButton.style.display === 'none') {
-            iLikeButton.style.display = 'block';
-        } else {
-            iLikeButton.style.display = 'none';
-        }
-    }
 
 
 
-</script>
+    </script>
 

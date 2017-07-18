@@ -20,6 +20,8 @@
 <!--<div id="navigate buttons">-->
 
 <body style="background-color: #fafafa;">
+<img src="img/red.jpg" style="width:120%; margin-top: -.5% ">
+
 
 <header1>
 
@@ -29,10 +31,10 @@
     <!--</div>-->
     <div>
 
-        <h1 style="margin-top: 6%">YOUR GIFT LIST</h1>
+        <h1 style="margin-top: 6%">THAT'S IT!</h1>
         <hr>
         <h5> These are the gift we found according to your input.</h5>
-        <h5> Now its your turun, all you need to do is to choose.</h5>
+        <h5> Now its your turn, all you need to do is to choose.</h5>
         <h5> Thanks for using our service!</h5>
     </div>
     <div style="margin-top: 4%" class="no-padding" id="portfolio">
@@ -44,12 +46,12 @@
 
             <div style=" background-color:white;width:30%;height:500px;align-items: center; "class="col-lg-4 col-sm-6">
                 <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
-                <%= gifts[i].name.toString() %>
+                <b> <%= gifts[i].name.toString() %></b>
 
                 <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
 
-                <button  onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
+                <button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
                 <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
                     <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
 
