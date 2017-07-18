@@ -1,9 +1,5 @@
 <style>
-    .divider{
-        width:70%;
-        /*height:auto;*/
-        /*display:inline-block;*/
-    }
+
     header1 {
         width:40%;
         margin-left: 30%;
@@ -29,31 +25,26 @@
 
 
 
-<!--</div>-->
-<div>
-    <br>
-    <br>
-    <br>
-    <h4>gifts list:</h4>
+    <!--</div>-->
+    <div>
 
+        <h1>gifts list:</h1>
+    </div>
+    <section class="no-padding" id="portfolio">
+        <div class="container-fluid">
+            <div style="width:80%; margin-left: 10%" class="row no-gutter popup-gallery">
+                <!--<ol>gifts:-->
 
+                <% for(var i=0; i<gifts.length; i++) {%>
+                <!--<li>-->
 
+                <!--</li>-->
 
-</div>
-<section class="no-padding" id="portfolio">
-    <div class="container-fluid">
-        <div style="width:70%; margin-left: 15%" class="row no-gutter popup-gallery">
-            <!--<ol>gifts:-->
-
-            <% for(var i=0; i<gifts.length; i++) {%>
-            <!--<li>-->
-            <div class="divider"/>
-            <!--</li>-->
-
-            <div class="col-lg-4 col-sm-6">
-                <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
+                <div style="width:30%;height:500px;align-items: center;"class="col-lg-4 col-sm-6">
+                    <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
                     <%= gifts[i].name.toString() %>
-                    <img src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
+
+                    <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
                     <div class="portfolio-box-caption">
                         <div class="portfolio-box-caption-content">
@@ -73,15 +64,15 @@
                             <!--</div>-->
                         </div>
                     </div>
-                </a>
+                    </a>
 
+                </div>
+                <% } %>
+
+                <!--</ol>-->
             </div>
-            <% } %>
-
-            <!--</ol>-->
         </div>
-    </div>
-</section>
+    </section>
 </header1>
 <script>
     function  viewGiftDetails(giftName,giftPrice,giftStore)
