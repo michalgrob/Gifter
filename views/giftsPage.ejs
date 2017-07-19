@@ -44,19 +44,6 @@
                 }
             }
         }
-    }
-    function getValAge(){
-        // Get slider values
-        var parent = this.parentNode;
-        var slides = parent.getElementsByTagName("input");
-        var slide1 = parseFloat( slides[0].value );
-        // Neither slider will clip the other, so make sure we determine which is larger
-        var displayElement = parent.getElementsByClassName("rangeValuesAge")[0];
-        displayElement.innerHTML = " " + slide1 ;
-    }
-
-    window.onload = function(){
-        // Initialize Sliders
         var sliderSections = document.getElementsByClassName("range-slider-age");
         for( var x = 0; x < sliderSections.length; x++ ){
             var sliders = sliderSections[x].getElementsByTagName("input");
@@ -69,6 +56,17 @@
             }
         }
     }
+    function getValAge(){
+        // Get slider values
+        var parent = this.parentNode;
+        var slides = parent.getElementsByTagName("input");
+        var slide1 = parseFloat( slides[0].value );
+        // Neither slider will clip the other, so make sure we determine which is larger
+        var displayElement = parent.getElementsByClassName("rangeValuesAge")[0];
+        displayElement.innerHTML = " " + slide1 ;
+    }
+
+
     function ValidationAppForm()
     {
         var gender=document.getElementsByName("gender");
@@ -134,15 +132,15 @@
             </div>
             <hr >
             <div id="Choose price" class="Info">
-                <h4>Choose price:</h4>
+                <h4>Choose price limits:</h4>
                 <!--min: <input type="text" name="minPricText"><br>-->
 
                 <!--max: <input type="text" name="maxPricText"><br>-->
 
                 <div1 class="range-slider"  Sdata-role="rangeslider" >
-                    <label for="price-min" >Price:</label>
+                    <label for="price-min" >Low Price:</label>
                     <input oninput="getVals()" style="width:40%; margin-left: 30%"type="range" name="minPrice" id="minPrice" value="20" min="0" max="1000">
-                    <label for="price-max">Price:</label>
+                    <label for="price-max">High Price:</label>
                     <input oninput="getVals()" style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="580" min="0" max="8000">
                     <br>
                     <span class="rangeValues"></span>
