@@ -16,6 +16,59 @@
 
 
 <script type="text/javascript">
+
+    function getVals(){
+        // Get slider values
+        var parent = this.parentNode;
+        var slides = parent.getElementsByTagName("input");
+        var slide1 = parseFloat( slides[0].value );
+        var slide2 = parseFloat( slides[1].value );
+        // Neither slider will clip the other, so make sure we determine which is larger
+        if( slide1 > slide2 ){ var tmp = slide2; slide2 = slide1; slide1 = tmp; }
+
+        var displayElement = parent.getElementsByClassName("rangeValues")[0];
+        displayElement.innerHTML = " " + slide1 + "NIS - " + slide2 + "NIS";
+    }
+
+    window.onload = function(){
+        // Initialize Sliders
+        var sliderSections = document.getElementsByClassName("range-slider");
+
+        for( var x = 0; x < sliderSections.length; x++ ){
+            var sliders = sliderSections[x].getElementsByTagName("input");
+            for( var y = 0; y < sliders.length; y++ ){
+                if( sliders[y].type ==="range" ){
+                    sliders[y].oninput = getVals;
+                    // Manually trigger event first time to display values
+                    sliders[y].oninput();
+                }
+            }
+        }
+    }
+    function getValAge(){
+        // Get slider values
+        var parent = this.parentNode;
+        var slides = parent.getElementsByTagName("input");
+        var slide1 = parseFloat( slides[0].value );
+        // Neither slider will clip the other, so make sure we determine which is larger
+        var displayElement = parent.getElementsByClassName("rangeValuesAge")[0];
+        displayElement.innerHTML = " " + slide1 ;
+    }
+
+    window.onload = function(){
+        // Initialize Sliders
+        var sliderSections = document.getElementsByClassName("range-slider-age");
+        for( var x = 0; x < sliderSections.length; x++ ){
+            var sliders = sliderSections[x].getElementsByTagName("input");
+            for( var y = 0; y < sliders.length; y++ ){
+                if( sliders[y].type ==="range" ){
+                    sliders[y].oninput = getValAge;
+                    // Manually trigger event first time to display values
+                    sliders[y].oninput();
+                }
+            }
+        }
+    }
     function ValidationAppForm()
     {
         var gender=document.getElementsByName("gender");
@@ -64,12 +117,12 @@
 
     <form style="background-color: #fafafa;margin-top:6%" name="AppForm" method="post" action="/searchingResult" >
         <!--<div class="header-content">-->
-            <!--<div class="header-content-inner">-->
-                <!--<h1 id="homeHeading">   </h1>-->
-                <h1 id="homeHeading">LET'S FIND THE BEST</h1>
-                <hr>
-                <p>Now please choose according to your friend </p>
-            <!--</div>-->
+        <!--<div class="header-content-inner">-->
+        <!--<h1 id="homeHeading">   </h1>-->
+        <h1 id="homeHeading">LET'S FIND THE BEST</h1>
+        <hr>
+        <p>Now please choose according to your friend </p>
+        <!--</div>-->
         <!--</div>-->
 
         <div class="form-group" >
@@ -86,21 +139,25 @@
 
                 <!--max: <input type="text" name="maxPricText"><br>-->
 
-                <div1 data-role="rangeslider">
+                <div1 class="range-slider"  Sdata-role="rangeslider" >
                     <label for="price-min" >Price:</label>
-                    <input style="width:40%; margin-left: 30%"type="range" name="minPrice" id="minPrice" value="50" min="0" max="1000">
+                    <input oninput="getVals()" style="width:40%; margin-left: 30%"type="range" name="minPrice" id="minPrice" value="20" min="0" max="1000">
                     <label for="price-max">Price:</label>
-                    <input style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="8000" min="0" max="1000">
+                    <input oninput="getVals()" style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="580" min="0" max="8000">
+                    <br>
+                    <span class="rangeValues"></span>
                 </div1>
             </div>
             <hr>
             <div id="age" class="Info">
                 <h4>Choose age:</h4>
 
-                <div1 data-role="rangeslider">
-                    <label for="age">age:</label>
-                    <input style="width:40%; margin-left: 30%" type="range" name="age" id="age" value="2" min="2" max="130">
+                <div1 class="range-slider-age" data-role="rangeslider">
 
+                    <label for="age" >age:</label>
+                    <input oninput="getValAge()"style="width:40%; margin-left: 30%" type="range" name="age" id="age" value="2" min="2" max="130">
+                    <br>
+                    <span class="rangeValuesAge"></span>
                 </div1>
                 <!--<input type="checkbox" name="age_0_12" value = '1'/>0 - 12<br />-->
                 <!--<input type="checkbox" name="age_12_18" value = '1'/>12 - 18<br />-->
