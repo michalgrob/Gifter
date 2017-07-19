@@ -1,12 +1,19 @@
 <% layout('boilerplate') %>
 <h1>store info</h1>
 
+
+
+
 <aside class="bg-dark">
     <div class="container text-center">
         <div class="call-to-action">
             <a href="/stores/storeAddGift" class="btn btn-default btn-xl sr-button">Add gift</a>
             <a href="/stores/storeDeleteGift" class="btn btn-default btn-xl sr-button">Delete gift</a>
-
+            <br>
+            <form method="post" action="/stores/showStoreGifts" >
+                <input type="submit" class="btn btn-default btn-xl sr-button" value="show store gifts" />
+            </form>
+            <br>
             <form action="/stores/importCSV" method="post">
                 <div class="form-group">
                     <label>File Path</label>
@@ -24,7 +31,9 @@
                     <input type="submit" class="btn btn-default btn-xl sr-button" value="Import CSV File" />
                 </div>
             </form>
+
+
         </div>
     </div>
 </aside>
-<%include storeLogin.ejs%>
+

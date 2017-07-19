@@ -13,7 +13,12 @@ var csv = require('fast-csv');
 var passport = require('passport');
 
 
-//michal 17/7/17
+//michal 17/7/17/stores/showStoreGifts
+router.post('/showStoreGifts'),
+    function(req,res,next){
+    getAllStoreGifts(req.user.name,req, res)
+
+}
 
 router.get('/storeManager-sign-up', function (req, res, next) {
     res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
@@ -122,10 +127,9 @@ router.post('/addGift', function(req, res, next) {
 });
 router.get('/storeInfo', function(req, res, next) {
 
-    var x=0;
-    var uName=req.query.sname;
+    //getAllStoreGifts(req.user.name,req, res)
 
-    res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser: req.user ? req.user.username : 'guest'});
+    res.render('storeInfoPage', {LogedInUser: req.user ? req.user.username : 'guest'});
 
 });
 
@@ -258,4 +262,15 @@ function deleteGiftFromStoreCollection(giftId,giftName)
         //next();
 
     });
+}
+
+
+function getAllStoreGifts(storeName,req, res){
+    Gift.find({ store_name: storeName},function(err,gifts){
+        if (err) {
+            throw err;
+        }
+        res.render('storeGiftsPage', {gifts: gifts,etitle:req.user.username , LogedInUser: req.user ? req.user.username : 'guest'});
+    })
+
 }
