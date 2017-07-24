@@ -1,5 +1,5 @@
 <% layout('boilerplate') %>
-<title><%=etitle %></title>
+
 
 <section class="bg-primary" id="about">
 <div class="container">
@@ -19,7 +19,7 @@
 
 
 <button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
-
+    <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
 
 </div>
 <% } %>
@@ -34,11 +34,10 @@
     function  viewGiftDetails(giftName,giftPrice,giftStore)
     {
         var moreDetailsP=document.getElementById(giftName);
-        moreDetailsP.innerHTML='description: '+giftName+
-            ' ,price: '+giftPrice +
-            ' ,NISstore: '+giftStore;
+        moreDetailsP.innerHTML='' +
+            ''+giftName+','+'<br>'+'price:'+giftPrice +' NIS,' +'<br>'+
+            'store: '+giftStore;
 
-        //  iLikeButton.style.display = "block";
         if (moreDetailsP.style.display === 'none') {
             moreDetailsP.style.display = 'block';
         } else {
