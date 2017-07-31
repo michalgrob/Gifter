@@ -63,7 +63,7 @@ function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res) {
             giftsTotalScore.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl,tot: currTotal});
         }
 
-        giftsTotalScore.sort(function (b,a){return a.tot-b.tot});
+        giftsTotalScore.sort(function (b,a){return a.tot-b.tot });
         giftsTotalScore.slice(0,51);
         res.render('resultPage', {gifts: giftsTotalScore, searchInterest: userInterests,LogedInUser: "Guest"});
 

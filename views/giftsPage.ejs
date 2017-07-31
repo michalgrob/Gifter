@@ -108,10 +108,10 @@
 
 </script>
 
-<body style="background-color: #fafafa;">
+<!--<body style="background-color: #fafafa;">-->
 
 <img src="/img/red.jpg" style="width:120%; margin-top: -.5% ">
-<header1>
+<div style="margin-top:81px; text-align:center;background-color: #fafafa;">
 
     <form style="background-color: #fafafa;margin-top:6%" name="AppForm" method="post" action="/searchingResult" >
         <!--<div class="header-content">-->
@@ -124,11 +124,12 @@
         <!--</div>-->
 
         <div class="form-group" >
-            <div id="gender"  class="Info">
-                <h4>Choose gender:</h4>
-                <input type="radio" id="male" name="gender" value = 'male'/>Male <br />
-                <input type="radio" id="female" name="gender" value = 'female'/>Female  <br />
-                <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter <br />
+            <div id="gender" class="Info"><h4>Choose gender:</h4>
+                <div style="margin: 0 auto;display: table;" class="inline-items">
+                    <input type="radio" id="male" name="gender" value="male" style="float: left;">
+                    <span>Male </span><input type="radio" id="female" name="gender" value="female"><span>Female  </span>
+                    <input type="radio" id="b" name="gender" value="b"><span>Dosen't Metter </span>
+                </div>
             </div>
             <hr >
             <div id="Choose price" class="Info">
@@ -188,5 +189,5 @@
     </form>
 
 
-</header1>
-</body>
+</div>
+<!--</body>-->

@@ -1,21 +1,3 @@
-<style>
-
-    header1 {
-        width:40%;
-        margin-left: 30%;
-        position: relative;
-        width: 100%;
-        min-height: auto;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        background-size: cover;
-        -o-background-size: cover;
-        background-position: center;
-        background-color: lightgrey;
-        text-align: center;
-        color: dimgrey;
-    }
-</style>
 <% layout('boilerplate') %>
 <!--<div id="navigate buttons">-->
 
@@ -23,11 +5,7 @@
 <img src="img/red.jpg" style="width:120%; margin-top: -.5% ">
 
 
-<header1>
-
-
-
-
+<div style="margin-top:81px; text-align:center;">
     <!--</div>-->
     <div>
 
@@ -49,17 +27,18 @@
         </select>
 
         <!--<div class="container-fluid">-->
-        <div style="width:80%; margin-left: 15%;" class="row no-gutter popup-gallery">
+        <div id="gifts-list" style="width:70%; margin-left: 15%;" class="row no-gutter popup-gallery">
 
 
             <% for(var i=0; i<gifts.length; i++) {%>
 
 
-            <div style=" background-color:white;width:30%;height:500px;align-items: center; "class="col-lg-4 col-sm-6">
+            <div style=" background-color:white;height:500px;align-items: center; "class="col-lg-4 col-sm-6" data-storeId="<%= gifts[i].store_id %>" data-price="<%= gifts[i].price.toString() %>" data-totalScore="<%= gifts[i].tot %>">
                 <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
                 <b> <%= gifts[i].name.toString() %></b>
 
-                <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
+                <img style="
+    margin: 0 auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
 
                 <button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
@@ -77,7 +56,7 @@
             <!--</div>-->
         </div>
     </div>
-</header1>
+</div>
 </body>
 <script>
     function  viewGiftDetails(giftName,giftPrice,giftStore)
@@ -103,22 +82,39 @@
     function sortResult(sel)
     {
         var value = sel.value;
+        var gifts = $("#gifts-list > div");
+        var sortFunction;
+
         switch (value) {
             case "sortByResult":
-
+                sortFunction = sortByResult
                 // sortByResult();
                 break;
             case "sortByPrice":
-
+                sortFunction = sortByPrice
                 //   sortByPrice();
                 break;
             case "sortByStore":
-
+                sortFunction = sortByStore
                 //     sortByStore();
                 break
 
         }
+
+        if (typeof sortFunction !== "undefined") {
+            gifts.sort(sortFunction);
+
+            for (var i = 0; i < gifts.length; i++) {
+                gifts[i].parentNode.appendChild(gifts[i]);
+            }
+        }
     }
+
+    function sortByResult(b,a){return a.attributes['data-totalScore'].value-b.attributes['data-totalScore'].value}
+    function sortByPrice(b,a){return a.attributes['data-price'].value-b.attributes['data-price'].value}
+    function sortByStore(b,a){return a.attributes['data-storeId']-b.attributes['data-storeId'].value}
+
+
 
 </script>
 
