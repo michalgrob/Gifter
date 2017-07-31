@@ -18,8 +18,6 @@ router.post('/IncScore', function(req, res, next) {
     var giftName=req.query.giftName;
     var giftId=req.query.giftId;
     updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests);
-
-
 });
 
 router.post('/', function(req, res, next) {

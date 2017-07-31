@@ -4,17 +4,7 @@
 
 <% layout('boilerplate') %>
 
-
-<style>
-    div1 {
-        width   : 50%;
-    }
-
-</style>
-
-</div>
-
-
+<body style="background-color: #fafafa;">
 <script type="text/javascript">
 
     function getVals(){
@@ -138,26 +128,26 @@
 
                 <!--max: <input type="text" name="maxPricText"><br>-->
 
-                <div1 class="range-slider"  Sdata-role="rangeslider" >
+                <div class="range-slider"  Sdata-role="rangeslider" >
                     <label for="price-min" >Low Price:</label>
                     <input oninput="getVals()" style="width:40%; margin-left: 30%"type="range" name="minPrice" id="minPrice" value="20" min="0" max="1000">
                     <label for="price-max">High Price:</label>
                     <input oninput="getVals()" style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="580" min="0" max="8000">
                     <br>
                     <span class="rangeValues"></span>
-                </div1>
+                </div>
             </div>
             <hr>
             <div id="age" class="Info">
                 <h4>Choose age:</h4>
 
-                <div1 class="range-slider-age" data-role="rangeslider">
+                <div class="range-slider-age" data-role="rangeslider">
 
                     <label for="age" >age:</label>
                     <input oninput="getValAge()"style="width:40%; margin-left: 30%" type="range" name="age" id="age" value="2" min="2" max="130">
                     <br>
                     <span class="rangeValuesAge"></span>
-                </div1>
+                </div>
                 <!--<input type="checkbox" name="age_0_12" value = '1'/>0 - 12<br />-->
                 <!--<input type="checkbox" name="age_12_18" value = '1'/>12 - 18<br />-->
                 <!--<input type="checkbox" name="age_18_30" value = '1'/>18 - 30<br />-->
