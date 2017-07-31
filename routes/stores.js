@@ -14,11 +14,10 @@ var passport = require('passport');
 
 
 //michal 17/7/17/stores/showStoreGifts
-router.post('/showStoreGifts'),
-    function(req,res,next){
+router.post('/showStoreGifts', function(req,res,next){
     getAllStoreGifts(req.user.name,req, res)
 
-}
+});
 
 router.get('/storeManager-sign-up', function (req, res, next) {
     res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
@@ -270,7 +269,11 @@ function getAllStoreGifts(storeName,req, res){
         if (err) {
             throw err;
         }
-        res.render('storeGiftsPage', {gifts: gifts,etitle:req.user.username , LogedInUser: req.user ? req.user.username : 'guest'});
+        var storeGifts=[];
+        for(var i=0;i<gifts.length;i++){
+            storeGifts.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
+        }
+        res.render('storeGiftsPage.ejs',{ LogedInUser: req.user ? req.user.username : 'guest',gifts: storeGifts});//('storeGiftsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest'});//gifts: gifts,etitle:req.user.username ,
     })
 
 }

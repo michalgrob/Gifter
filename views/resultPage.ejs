@@ -83,9 +83,9 @@
     function  viewGiftDetails(giftName,giftPrice,giftStore)
     {
         var moreDetailsP=document.getElementById(giftName);
-        moreDetailsP.innerHTML='description: '+giftName+
-            ' ,price: '+giftPrice +
-            ' ,NISstore: '+giftStore;
+        moreDetailsP.innerHTML='' +
+            ''+giftName+','+'<br>'+'price:'+giftPrice +' NIS,' +'<br>'+
+            'store: '+giftStore;
         var iLikeButton = document.getElementById('b'+giftName);
         //  iLikeButton.style.display = "block";
         if (moreDetailsP.style.display === 'none') {
