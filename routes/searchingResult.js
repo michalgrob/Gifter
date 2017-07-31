@@ -30,7 +30,7 @@ router.post('/', function(req, res, next) {
     var maxPrice = req.body.maxPrice;
 
     giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
-   // res.render('resultPage');
+    // res.render('resultPage');
 
 });
 module.exports = router;
@@ -40,30 +40,31 @@ module.exports = router;
 
 function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res) {
 
-      Gift.find({}).populate('interests').exec(function(err,gifts) {
+    Gift.find({}).populate('interests').exec(function(err,gifts) {
 
-          var giftsTotalScore=[];
-          for(var i=0;i<gifts.length;i++)// interest for
-         {
-             var currTotal=0;
-             for(var j=0;j< gifts[i]._doc.interests.length;j++)
-             {
-                 if(isContaineInterest(gifts[i]._doc.interests[j].interest,userInterests))
-                 {
-                     currTotal+=gifts[i]._doc.interests[j].dynamicScore;
-                 }
-             }
+        var giftsTotalScore=[];
+        for(var i=0;i<gifts.length;i++)// interest for
+        {
+            var currTotal=0;
+            for(var j=0;j< gifts[i]._doc.interests.length;j++)
+            {
+                if(isContaineInterest(gifts[i]._doc.interests[j].interest,userInterests))
+                {
+                    currTotal+=gifts[i]._doc.interests[j].dynamicScore;
+                }
+            }
 
-             if(!isPriceMatches(gifts[i]._doc.price,maxPrice,minPrice))
-             {
-              continue;
-             }
-             currTotal=ageMatches(gifts[i]._doc.minAge,gifts[i]._doc.maxAge,userAge,currTotal);
-             currTotal=genderMatches(gender,gifts[i]._doc.gender,currTotal);
-             giftsTotalScore.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl,tot: currTotal});
-         }
+            if(!isPriceMatches(gifts[i]._doc.price,maxPrice,minPrice))
+            {
+                continue;
+            }
+            currTotal=ageMatches(gifts[i]._doc.minAge,gifts[i]._doc.maxAge,userAge,currTotal);
+            currTotal=genderMatches(gender,gifts[i]._doc.gender,currTotal);
+            giftsTotalScore.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl,tot: currTotal});
+        }
 
         giftsTotalScore.sort(function (b,a){return a.tot-b.tot});
+        giftsTotalScore.slice(0,51);
         res.render('resultPage', {gifts: giftsTotalScore, searchInterest: userInterests,LogedInUser: "Guest"});
 
     });
@@ -115,11 +116,11 @@ function isContaineInterest(inter, userInterests) {
 function genderMatches(userGender,giftGender,totalScore)
 {
 
-   if(userGender=="b")
-   {
-     return totalScore;
-   }
-   if(userGender==giftGender)
+    if(userGender=="b")
+    {
+        return totalScore;
+    }
+    if(userGender==giftGender)
     {
         return (totalScore*1.20);
     }
@@ -158,6 +159,6 @@ function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests)
         }
 
         var x=2;
-    gift.save();
+        gift.save();
     });
 }

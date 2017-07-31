@@ -37,9 +37,20 @@
         <h5> Now its your turn, all you need to do is to choose.</h5>
         <h5> Thanks for using our service!</h5>
     </div>
+
+
     <div style="margin-top: 4%" class="no-padding" id="portfolio">
+        <label>Sort By: </label>
+        <select id="sort" onchange="sortResult(this)">
+            <option value="">Choose:</option>
+            <option value="sortByResult">best results</option>
+            <option value="sortByPrice">price</option>
+            <option value="sortByStore">store</option>
+        </select>
+
         <!--<div class="container-fluid">-->
         <div style="width:80%; margin-left: 15%;" class="row no-gutter popup-gallery">
+
 
             <% for(var i=0; i<gifts.length; i++) {%>
 
@@ -88,8 +99,31 @@
             iLikeButton.style.display = 'none';
         }
     }
+    function sortResult(sel) {
+        var value = sel.value;
+        switch (value) {
+            case "sortByResult":
+                sortByResult();
+                break;
+            case "sortByPrice":
+                sortByPrice();
+                break;
+            case "sortByStore":
+                sortByStore();
 
+        }
+    }
 
+    function sortByResult() {
+        <%gifts.sort(function (b,a){return a.tot-b.tot});%>
+    }
+    function sortByPrice() {
+        <%gifts.sort(function (b,a){return a.price-b.price});%>
+    }
+    function sortByStore() {
+        <%gift.sort(function (b,a){return a.store_id-b.store_id});%>
+
+    }
 
 </script>
 
