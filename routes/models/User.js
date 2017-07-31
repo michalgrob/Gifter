@@ -1,6 +1,7 @@
 /**
  * Created by michal on 26/03/2017.
  */
+// var Gift = require('./gift');
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 //mongoose.connect('mongodb://localhost/sadna1');
@@ -13,6 +14,9 @@ var userSchema = new Schema({
         password: { type: String, required: true },
         created_at: Date,
         updated_at: Date,
+        // gift_bag:[{
+        //     interestRef: {type: mongoose.Schema.Types.ObjectId, ref: 'gift'}
+        // }],
         admin: Boolean,
     },
     { discriminatorKey: 'role' });

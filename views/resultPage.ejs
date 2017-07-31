@@ -41,7 +41,7 @@
 
     <div style="margin-top: 4%" class="no-padding" id="portfolio">
         <label>Sort By: </label>
-        <select id="sort" onchange="sortResult(this)">
+        <select id="sort" onchange="sortResult(this)">-->
             <option value="">Choose:</option>
             <option value="sortByResult">best results</option>
             <option value="sortByPrice">price</option>
@@ -99,30 +99,25 @@
             iLikeButton.style.display = 'none';
         }
     }
-    function sortResult(sel) {
+
+    function sortResult(sel)
+    {
         var value = sel.value;
         switch (value) {
             case "sortByResult":
-                sortByResult();
+
+                // sortByResult();
                 break;
             case "sortByPrice":
-                sortByPrice();
+
+                //   sortByPrice();
                 break;
             case "sortByStore":
-                sortByStore();
+
+                //     sortByStore();
+                break
 
         }
-    }
-
-    function sortByResult() {
-        <%gifts.sort(function (b,a){return a.tot-b.tot});%>
-    }
-    function sortByPrice() {
-        <%gifts.sort(function (b,a){return a.price-b.price});%>
-    }
-    function sortByStore() {
-        <%gift.sort(function (b,a){return a.store_id-b.store_id});%>
-
     }
 
 </script>
