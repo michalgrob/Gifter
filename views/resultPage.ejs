@@ -40,7 +40,7 @@
     margin: 0 auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
                 <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%; color: #0b0b0b">
-                     <%= gifts[i].name.toString() %><br>
+                    <b>  <%= gifts[i].name.toString() %></b><br>
                     <%= gifts[i].price.toString() %> NIS<br>
                     <%= gifts[i].storeName.toString() %>
 
@@ -51,7 +51,7 @@
 
                     <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
                    <button type="submit"  id='b<%= gifts[i].name.toString() %>' style="background-color: white;color:#cf484f;width:40px; height: 40px; ">
-                       <i class="fa fa-cart-plus" aria-hidden="true" data-sr-id="3" style="font-size: 40px;margin-left: -15px;display: inline-block; "></i>
+                       <i class="fa fa-cart-plus" aria-hidden="true" data-sr-id="3" style="font-size:40px;margin-left:-15px;"></i>
                    </button> <!--<input  value = 'LIKE' />-->
                 </form>
 
