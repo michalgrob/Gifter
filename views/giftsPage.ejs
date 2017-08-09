@@ -1,6 +1,4 @@
-
 <title><%=etitle %></title>
-
 
 <% layout('boilerplate') %>
 
@@ -116,9 +114,14 @@
         <div class="form-group" >
             <div id="gender" class="Info"><h4>Choose gender:</h4>
                 <div style="margin: 0 auto;display: table;" class="inline-items">
-                    <input type="radio" id="male" name="gender" value="male" style="float: left;">
-                    <span>Male </span><input type="radio" id="female" name="gender" value="female"><span>Female  </span>
-                    <input type="radio" id="b" name="gender" value="b"><span>Dosen't Metter </span>
+                    <i class="fa fa-mars" aria-hidden="true"style="    color: #cf484f;"></i>
+                    <input type="radio" id="male" name="gender" value="male"><span>Male    </span>
+                    <i class="fa fa-venus" aria-hidden="true" style="    color: #cf484f;"></i>
+
+                    <input type="radio" id="female" name="gender" value="female"><span>Female    </span>
+                    <i class="fa fa-venus-mars" aria-hidden="true"style="    color: #cf484f;"></i>
+
+                    <input type="radio" id="b" name="gender" value="b"><span>Dosen't Metter    </span>
                 </div>
             </div>
             <hr >
@@ -132,7 +135,7 @@
                     <label for="price-min" >Low Price:</label>
                     <input oninput="getVals()" style="width:40%; margin-left: 30%"type="range" name="minPrice" id="minPrice" value="20" min="0" max="1000">
                     <label for="price-max">High Price:</label>
-                    <input oninput="getVals()" style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="580" min="0" max="8000">
+                    <input oninput="getVals()" style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="580" min="0" max="3000">
                     <br>
                     <span class="rangeValues"></span>
                 </div>

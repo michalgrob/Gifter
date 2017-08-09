@@ -33,7 +33,7 @@ router.get('/', function(request, response, next) {
                 orders_json.push({ interest: order.name});
         });
 
-        response.render('giftsPage', {orders: orders_json,etitle : "present",LogedInUser: "Guest"});
+        response.render('giftsPage', {orders: orders_json,etitle : "present", LogedInUser: request.user ? request.user.username : 'guest' });
        // response.send('giftsPage', {orders: orders_json});
     });
 });
