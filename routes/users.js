@@ -25,6 +25,7 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
+
 router.post('/signup', passport.authenticate('local-client-signup', {//signup
     successRedirect: '/profile',
     failureRedirect: 'users/signup',
@@ -46,10 +47,13 @@ router.get('/loginSuccess', function(req,res){
         res.redirect('/');
 });
 
+router.get('/logout', function(req, res){
+    req.logout();
 
+    req.flash('success_msg', 'You are logged out');
 
-
-
+    res.redirect('/users/login');
+});
 
 
 /* GET users listing. */

@@ -129,7 +129,7 @@
             </button>
             <i class="fa fa-4x fa fa-gift text-primary sr-icons"></i>
             <a class="navbar-brand page-scroll" href="/">Gifter</a>
-            <a class="navbar-brand page-scroll" href="#"><%=LogedInUser %></a>
+            <a id="logged_in_username_text_field" class="navbar-brand page-scroll" href="#"><%=LogedInUser %></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -144,7 +144,10 @@
                     <a class="page-scroll" href="#services">Services</a>
                 </li>
                 <li>
-                    <a class="page-scroll" href="#" onclick="document.getElementById('id01').style.display='block'">Log In</a>
+                    <a id="login_button" class="page-scroll" href="#" onclick="document.getElementById('id01').style.display='block'">Log In</a>
+                </li>
+                <li>
+                    <a id="logout_button" class="page-scroll" href="/users/logout">Logout</a>
                 </li>
                 <li>
                     <a class="page-scroll" href="#contact">Contact</a>
@@ -156,6 +159,16 @@
     <!-- /.container-fluid -->
     <%include userLogin.ejs%>
 
-
+    <script>
+        var username = document.getElementById("logged_in_username_text_field").textContent;
+        console.log('Loged in user is:' + username);
+        if(username == "guest"){
+            document.getElementById("logout_button").style.display="none";
+            document.getElementById("login_button").style.display="block";
+        }else{
+            document.getElementById("logout_button").style.display="block";
+            document.getElementById("login_button").style.display="none";
+        }
+    </script>
 </nav>
 
