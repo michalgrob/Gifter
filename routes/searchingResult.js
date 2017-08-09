@@ -17,6 +17,8 @@ router.post('/IncScore', function(req, res, next) {
     var searchInterests = req.query.searchInterest.split(',');
     var giftName=req.query.giftName;
     var giftId=req.query.giftId;
+    //req.user.gift_bag.push(giftId);
+
     updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests);
 });
 
@@ -27,7 +29,7 @@ router.post('/', function(req, res, next) {
     var minPrice=req.body.minPrice;
     var maxPrice = req.body.maxPrice;
 
-    giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
+    giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res,req);
     // res.render('resultPage');
 
 });
@@ -36,7 +38,7 @@ module.exports = router;
 
 
 
-function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res) {
+function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req) {
 
     Gift.find({}).populate('interests').exec(function(err,gifts) {
 
@@ -63,7 +65,8 @@ function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res) {
 
         giftsTotalScore.sort(function (b,a){return a.tot-b.tot });
         giftsTotalScore.slice(0,51);
-        res.render('resultPage', {gifts: giftsTotalScore, searchInterest: userInterests,LogedInUser: "Guest"});
+        res.render('resultPage', {gifts: giftsTotalScore, searchInterest: userInterests,LogedInUser: req.user ? req.user.username : 'guest' });
+
 
     });
 }
