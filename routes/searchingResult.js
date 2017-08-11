@@ -165,7 +165,7 @@ function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests,res)
         gift.save(function (err) {
             if(err){throw err;}
                 //next();
-         //  res.redirect("/shoppingCart/add-to-cart/"+giftId.toString());
+          // res.redirect("/shoppingCart/add-to-cart/"+giftId.toString());
 
         });
     });

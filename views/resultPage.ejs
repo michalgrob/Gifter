@@ -51,7 +51,7 @@
 
                     <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
                    <button type="submit"  id='b<%= gifts[i].name.toString() %>' style="background-color: white;color:#cf484f;width:40px; height: 40px; ">
-                       <i class="fa fa-cart-plus" aria-hidden="true" data-sr-id="3" style="font-size:40px;margin-left:-15px;"></i>
+                       <i class="fa fa-cart-plus" aria-hidden="true" data-sr-id="3" style="font-size:40px;margin-left:-15px;" ></i>
                    </button> <!--<input  value = 'LIKE' />-->
                     <a href="shoppingCart/add-to-cart/<%= gifts[i].id %>" class="btn btn-success pull-right" role="button" onclick="incQty()">Add to cart</a>
                 </form>
@@ -69,6 +69,20 @@
     function incQty() {
         var qty = parseInt($("#cartQty").text());
         $("#cartQty").text(qty+1);
+
+    }
+
+    function ajaxAddGiftToCart(myUrl) {
+        $.ajax({
+            type: "POST",
+            url: myUrl,
+            //data: "game-name=" + GAME_NAME,
+            success: function (status) {
+                alert("gift added to cart succesfully");
+                incQty();
+            }
+
+        })
     }
 
 
