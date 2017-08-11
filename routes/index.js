@@ -12,9 +12,10 @@ router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 //router.use(express.json());
 //////////////////////////////////////////
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('mainPage', {etitle : "present", LogedInUser: req.user ? req.user.username : 'guest' });//userName
+    res.render('mainPage', {etitle : "present", LogedInUser: req.user ? req.user.username : 'guest', CartQty: req.session.cart ? req.session.cart.totalQty : 0 });//userName
 });
 
 
@@ -26,9 +27,10 @@ router.post('/', function(req, res, next) {
     var lname = req.body.lname,
         fname = req.body.fname;
     ////////////////////////////////////
-    insertdb(lname,fname);
+    //  insertdb(lname,fname);
     res.send('POST to Hello World!');
-    res.render('index', {etitle : "present"});
+    res.render('index', {etitle : "present",CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
+
 
 });
 router.get('/profile', isLoggedIn, function(req, res) {
@@ -49,25 +51,9 @@ module.exports = router;
 
 
 
-function insertdb(lname, fname){
-    MongoClient.connect("mongodb://localhost:27017/test", function(err, db) {
-        if(err) { return console.dir(err); } //handling errors
-        console.log('connecting');
-        var collection = db.collection('clients'); //selecting the collection
-        var a = parseInt(lname);
-        var doc = {"x" : a, "name" : fname }; //valid JSON ibject
 
-        collection.insert(doc,function(err, result) {
-            if(err) throw Error;
-            console.log(result); //we are getting back the object inserted
-        });
 
-        collection.find({"x":555}).toArray(function(err, items) { //foreach
-            console.log(items);
-        });
 
-    });
-}
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();

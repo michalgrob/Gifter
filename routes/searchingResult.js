@@ -19,7 +19,9 @@ router.post('/IncScore', function(req, res, next) {
     var giftId=req.query.giftId;
     //req.user.gift_bag.push(giftId);
 
-    updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests);
+    updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests,res);
+    //res.redirect("shoppingCart/add-to-cart/"+giftId)
+
 });
 
 router.post('/', function(req, res, next) {
@@ -65,7 +67,7 @@ function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req) {
 
         giftsTotalScore.sort(function (b,a){return a.tot-b.tot });
         giftsTotalScore.slice(0,51);
-        res.render('resultPage', {gifts: giftsTotalScore, searchInterest: userInterests,LogedInUser: req.user ? req.user.username : 'guest' });
+        res.render('resultPage', {gifts: giftsTotalScore, searchInterest: userInterests,LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0  });
 
 
     });
@@ -131,7 +133,7 @@ function genderMatches(userGender,giftGender,totalScore)
     }
 }
 
-function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests)
+function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests,res)
 {
     Gift.findOne({_id: giftId}).populate('interests').exec(function(err,gift) {
 
@@ -160,6 +162,11 @@ function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests)
         }
 
         var x=2;
-        gift.save();
+        gift.save(function (err) {
+            if(err){throw err;}
+                //next();
+         //  res.redirect("/shoppingCart/add-to-cart/"+giftId.toString());
+
+        });
     });
 }

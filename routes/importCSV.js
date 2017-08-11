@@ -42,7 +42,7 @@ router.post('/', function(req, res, next) {
     //     }
     //     console.log(data);
     // });
-    res.render('mainPage', {etitle : "present",LogedInUser: "Guest"});
+    res.render('mainPage', {etitle : "present",LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
 });
 
 module.exports = router;

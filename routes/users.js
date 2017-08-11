@@ -10,11 +10,11 @@ var User=require('./models/User');
 var passport = require('passport');
 
 router.get('/login', function(req, res, next) {
-    res.render('reLogin.ejs', { LogedInUser: req.user ? req.user.username : 'guest' } );// req.flash('loginMessage')//
+    res.render('reLogin.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/signup', function(req, res) {
-    res.render('signup.ejs', { message:req.flash('signupMessage')  });//
+    res.render('signup.ejs', { message:req.flash('signupMessage'),LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0  });//
 });
 
 router.get('/profile', isLoggedIn, function(req, res) {
@@ -62,7 +62,7 @@ router.get('/login1', function(req, res, next) {
     var uName=req.query.uname;
 
     //res.render('userLogin');
-    res.render('giftsPage');//, {orders: orders_json,etitle : "present"});
+    res.render('giftsPage',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});//, {orders: orders_json,etitle : "present"});
 });
 
 router.get('/signin', function(req, res, next) {
@@ -83,7 +83,7 @@ router.get('/signin', function(req, res, next) {
          });*/
         // Uses views/orders.ejs
 
-        res.render('signUpPage', {orders: orders_json,etitle : "sign Up Page",LogedInUser:"Guest"});
+        res.render('signUpPage', {orders: orders_json,etitle : "sign Up Page",LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
         // response.send('giftsPage', {orders: orders_json});
     });
     // res.render('signUpPage');

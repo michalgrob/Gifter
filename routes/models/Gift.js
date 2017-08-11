@@ -32,14 +32,15 @@ giftSchema.pre('save', function (next) {
 
     for (var i = 0; i < this.interests.length; i++) {
         var currinter = this.interests[i].interest;
-
         var Inter = new Interest({
-            name: currinter//"test"//this.interest[i]
+            name: currinter,
         });
+      //  Inter.addCategory();
         Inter.save(function (err) {
             if (err) throw err;
             console.log('inter saved successfully!');
         });
+
 
         this.interests[i].interestRef = Inter._id;
     }

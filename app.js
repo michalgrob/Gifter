@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var passport = require('passport');
 var flash = require('connect-flash');
+var MongoStore = require('connect-mongo')(session);
 var LocalStrategy = require('passport-local').Strategy;
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -16,6 +17,7 @@ var searchingOpt = require('./routes/searchingOpt');
 var searchingResult = require('./routes/searchingResult');
 var stores = require('./routes/stores');
 var importCSV = require('./routes/importCSV');
+var shoppingCart = require('./routes/shoppingCart');
 
 
 var app = express();
@@ -28,7 +30,10 @@ var router = express.Router();
 router.use(passport.initialize());
 router.use(passport.session()); // persistent login sessions
 
+//connect to DB
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://michal:123456@ds121212.mlab.com:21212/heroku_whwjpt2s');
 
 
 
@@ -47,11 +52,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'ilovescotchscotchyscotchscotch', // session secret
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new MongoStore ({mongooseConnection: mongoose.connection}),
+    cookie: {maxAge: 180 * 60 * 1000}
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash());
+app.use(function(req,res,next){
+    res.locals.session=req.session;
+    next();
+})
 //sapir
 app.use(function(req, res, next) {
     res.locals.messages = req.flash();
@@ -64,12 +75,11 @@ app.use('/searchingOpt', searchingOpt);
 app.use('/searchingResult',searchingResult);
 app.use('/stores',stores);
 app.use('/importCSV',importCSV);
+app.use('/shoppingCart',shoppingCart);
 
 
-//connect to DB
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://michal:123456@ds121212.mlab.com:21212/heroku_whwjpt2s');
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

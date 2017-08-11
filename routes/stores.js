@@ -20,7 +20,7 @@ router.post('/showStoreGifts', function(req,res,next){
 });
 
 router.get('/storeManager-sign-up', function (req, res, next) {
-    res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
+    res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 });
 
 // process the signup form//stores/storeManagerSignUp
@@ -65,7 +65,7 @@ router.get('/storeDeleteGift', function(req, res, next) {
                 price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
         }
 
-        res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: "Guest"});
+        res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
 
     });
 
@@ -90,6 +90,7 @@ router.post('/DelGift', function(req, res, next) {
 });
 router.get('/storeAddGift', function(req, res, next) {
 
+
     var x = 0;
     //  var uName=req.query.sname;
     interest.find({}, function (err, orders) {
@@ -99,7 +100,7 @@ router.get('/storeAddGift', function(req, res, next) {
             orders_json.push({interest: order.name});
         });
 
-        res.render('storeAddGiftPage', {orders: orders_json, etitle: "add gift ", LogedInUser: "Guest"});
+        res.render('storeAddGiftPage', {orders: orders_json, etitle: "add gift ", LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 
 
     });
@@ -107,17 +108,18 @@ router.get('/storeAddGift', function(req, res, next) {
 
 router.post('/addGift', function(req, res, next) {
 
+
     var minAge=req.body.minAge;
     var maxAge=req.body.maxAge;
     var gender=req.body.gender;
     var price=req.body.price;
     var storeName=req.body.storeName;
-    var storeInterests=req.body.hobbies;
+    var storeInterests=["Travel","Readind","Cooking","Fashion"];//["Sports & Outdoors-Travel"];//req.body.hobbies;
     var  giftName=req.body.giftName;
     var  giftId =req.body.giftId;
     var storeId=req.body.storeId;
     //
-    addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId," ",function(){
+    addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId,"https://steim.amazingcdn.space/catalog/product/cache/1/image/300x/9df78eab33525d08d6e5fb8d27136e95/1/0/108409063.jpg",function(){
         res.redirect('/stores/storeInfo');});
 
         // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
@@ -128,7 +130,7 @@ router.get('/storeInfo', function(req, res, next) {
 
     //getAllStoreGifts(req.user.name,req, res)
 
-    res.render('storeInfoPage', {LogedInUser: req.user ? req.user.username : 'guest'});
+    res.render('storeInfoPage', {LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 
 });
 
@@ -156,7 +158,7 @@ router.post('/importCSV', function(req, res, next) {
             }
         });
 
-    res.render('mainPage', {etitle : "present",LogedInUser: "Guest"});
+    res.render('mainPage', {etitle : "present",LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
 });
 
 module.exports = router;
@@ -204,11 +206,24 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
         newGift.minAge= minAge;
         newGift.maxAge=maxAge;
         newGift.ImageUrl=imgURL;
+        /////////////////
+        for(var i=0;i<storeInterests.length;i++)
+        {
+
+          //  if(interest.name==storeInterests[i])
+           // {
+           //     isfound=true;
+                newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
+            //    break;
+          //  }
+        }
+        //////////////
 
         interests.forEach(function (interest) {
                 var isfound=false;
             for(var i=0;i<storeInterests.length;i++)
             {
+
                 if(interest.name==storeInterests[i])
                 {
                     isfound=true;
@@ -218,6 +233,7 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
             }
             if(!isfound)
             {
+
                 newGift.interests.push({interest: interest.name, dynamicScore: 0});
 
             }
@@ -233,6 +249,29 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
 
 
     })
+}
+//Leisure	,Sports&Outdoors	,Fashion	,Home&Garden	,Indoor Hobbies	, Life Style
+
+function findInterCategoryNumByName(category) {
+    //category=category.trim();
+    switch (category.replace(/\s/g, "") )
+    {
+        case "Leisure":
+            return 1;
+        case "Sports&Outdoors":
+            return 2;
+        case "Fashion":
+            return 3;
+        case"Home&Garden":
+            return 4;
+        case "IndoorHobbies":
+            return 5;
+        case "LifeStyle":
+            return 6;
+
+
+
+    }
 }
 
 function relateGiftToStore(newGiftId,store_id,storeName,next) {
@@ -273,7 +312,7 @@ function getAllStoreGifts(storeName,req, res){
         for(var i=0;i<gifts.length;i++){
             storeGifts.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
         }
-        res.render('storeGiftsPage.ejs',{ LogedInUser: req.user ? req.user.username : 'guest',gifts: storeGifts});//('storeGiftsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest'});//gifts: gifts,etitle:req.user.username ,
+        res.render('storeGiftsPage.ejs',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0,gifts: storeGifts});//('storeGiftsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest'});//gifts: gifts,etitle:req.user.username ,
     })
 
 }
