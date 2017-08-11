@@ -302,7 +302,7 @@ function deleteGiftFromStoreCollection(giftId,giftName)
     });
 }
 
-
+//
 function getAllStoreGifts(storeName,req, res){
     Gift.find({ store_name: storeName},function(err,gifts){
         if (err) {
