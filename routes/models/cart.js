@@ -1,6 +1,7 @@
 /**
  * Created by michal on 11/08/2017.
  */
+var Gift = require('./Gift');
 
 module.exports = function Cart (oldCart) {
 
@@ -28,4 +29,13 @@ module.exports = function Cart (oldCart) {
         }
         return arr;
     };
+
+    this.generateGiftIdToCart = function(giftId){
+        Gift.findById(giftsId,function (err,gift) {
+            this.add(gift,giftsId);
+        })
+
+    };
+
+
 };
