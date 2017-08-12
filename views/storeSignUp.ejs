@@ -1,8 +1,9 @@
 <% layout('boilerplate') %>
 
+
 <header>
     <div class="header-content">
-        <form name="singnupForm" class="form-horizontal" method="post" action="/stores/storeManagerSignUp" >
+        <form name="singnupForm" class="form-horizontal" method="post" action="/mallManager/createNewStore" >
             <!--onsubmit="return validationUserInput()"-->
 
             <div class="form-group">
@@ -10,7 +11,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name"required/>
+                        <input type="text" class="form-control" name="store_name" id="store_name"  placeholder="Enter your Name"required/>
                     </div>
                 </div>
             </div>
@@ -20,7 +21,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="email" id="email"  placeholder="Enter your Email"required/>
+                        <input type="text" class="form-control" name="store_manager_email" id="store_manager_email"  placeholder="Enter your Email"required/>
                     </div>
                 </div>
             </div>
@@ -31,7 +32,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="username" id="username"  placeholder="Enter store Username"required/>
+                        <input type="text" class="form-control" name="store_manager_username" id="store_manager_username"  placeholder="Enter store Username"required/>
                     </div>
                 </div>
             </div>
@@ -41,7 +42,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                        <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"required/>
+                        <input type="password" class="form-control" name="store_manager_password" id="store_manager_password"  placeholder="Enter your Password"required/>
                     </div>
                 </div>
             </div>
@@ -66,12 +67,22 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Store Location</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location" id="store_location"  placeholder="Enter store location inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+
 
             <!--<div class="login-register">-->
             <!--&lt;!&ndash;<a href="index.php">Login</a>&ndash;&gt;-->
             <!--</div>-->
             <div class="form-group ">
-                <button type="submit" class="btn btn-primary btn-lg btn-block login-button" >Register</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
             </div>
         </form>
     </div>

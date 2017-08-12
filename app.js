@@ -18,15 +18,15 @@ var searchingResult = require('./routes/searchingResult');
 var stores = require('./routes/stores');
 var importCSV = require('./routes/importCSV');
 var shoppingCart = require('./routes/shoppingCart');
-
+var mallManager = require('./routes/mallManager');
 
 var app = express();
 
 app.engine('ejs',engine);
 
-
-
 var router = express.Router();
+
+//Passport Init:
 router.use(passport.initialize());
 router.use(passport.session()); // persistent login sessions
 
@@ -76,7 +76,7 @@ app.use('/searchingResult',searchingResult);
 app.use('/stores',stores);
 app.use('/importCSV',importCSV);
 app.use('/shoppingCart',shoppingCart);
-
+app.use('/mallManager',mallManager);
 
 
 

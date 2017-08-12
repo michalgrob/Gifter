@@ -38,6 +38,7 @@ userSchema.pre('save', function(next) {
 userSchema.methods.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
+
 userSchema.methods.validPassword = function(password) {
     var bool= bcrypt.compareSync(password, this.password);
     return bool;

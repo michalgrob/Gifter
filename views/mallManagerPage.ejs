@@ -1,5 +1,15 @@
 <% layout('boilerplate') %>
 
+<!--<div id="popupCreateNewStore">
+    <div class="popupBoxWrapper">
+        <div class="popupBoxContent">
+            <h3>Popup Box 1</h3>
+            <p>You are currently viewing popup box 1.</p>
+            <p>Click <a href="javascript:void(0)" onclick="toggle_visibility('popupCreateNewStore',false);">here</a> to close popup box one.</p>
+        </div>
+    </div>
+</div>-->
+
 
 <div class="container">
     <div class="row">
@@ -18,12 +28,15 @@
                             <h3 class="panel-title">Store List</h3>
                         </div>
                         <div class="col col-xs-6 text-right">
-                            <button type="button" class="btn btn-sm btn-primary btn-create">Create A New Store</button>
+                            <button type="button" onclick="toggleCreateNewStorePopupVisibility(true)" class="btn btn-sm btn-primary btn-create">Create A New Store</button>
                         </div>
                         <div class="col col-xs-6 text-right">
-                            <button type="button" class="btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+                            <form method="get" action="/mallManager">
+                                <button type="submit" class="btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+                            </form>
                         </div>
                     </div>
+                    <input type="text" id="searchInput" onkeyup="searchStores()" placeholder="Search for stores.." title="Type in a name" >
                 </div>
                 <div class="panel-body">
                     <table class="table table-striped table-bordered table-list">
@@ -32,19 +45,20 @@
                             <th><em class="fa fa-cog"></em></th>
                             <th class="hidden-xs">Store ID</th>
                             <th>Store Name</th>
+                            <th>Store Manager Email</th>
                             <th>Store Location</th>
                         </tr>
                         </thead>
                         <tbody id="stores_table_body">
-<!--                        <tr>
-                            <td align="center">
-                                <a class="btn btn-default"><em class="fa fa-pencil"></em></a>
-                                <a class="btn btn-danger"><em class="fa fa-trash"></em></a>
-                            </td>
-                            <td class="hidden-xs">1</td>
-                            <td>John Doe</td>
-                            <td>johndoe@example.com</td>
-                        </tr>-->
+                        <!--                        <tr>
+                                                    <td align="center">
+                                                        <a class="btn btn-default"><em class="fa fa-pencil"></em></a>
+                                                        <a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+                                                    </td>
+                                                    <td class="hidden-xs">1</td>
+                                                    <td>John Doe</td>
+                                                    <td>johndoe@example.com</td>
+                                                </tr>-->
                         </tbody>
                     </table>
 
@@ -56,69 +70,221 @@
 
 
 <script>
-    var table = '';
-    var rowsNumber = 8;
-    for(var r = 1; r <= rowsNumber; r++)
-    {
-        table+= '<tr>';
 
-        table+= '<td align="center">';
-        table+= '<a class="btn btn-default"><em class="fa fa-pencil"></em></a>';
-        table+= '<a class="btn btn-danger"><em class="fa fa-trash"></em></a>';
-        table+= '</td>';
-        table+= '<td class="hidden-xs">' + r + '</td>';
-        table+= '<td>' + 'John Doe' + '</td>';
-        table+= '<td>' + 'John Doe' + '</td>';
+    window.onload = loadStores();
 
-        table+= '</tr>';
+    function  loadStores() {
+        var table = '';
+        var av_stores = <%- JSON.stringify(available_stores) %>;
+        var rowsNumber = av_stores.length;
+        for(var r = 0; r < rowsNumber; r++)
+        {
+            table+= '<tr id="row-' + r + '">';
+
+            table+= '<td align="center">';
+            table+= '<button type="button" onclick="editStore(' + r + ')" class="btn btn-default"><em class="fa fa-pencil"></em></button>';
+            table+= '<button type="button" onclick="deleteStore(' + r + ')" class="btn btn-danger"><em class="fa fa-trash"></em></button>';
+            table+= '</td>';
+            table+= '<td class="hidden-xs" id="store_id_field">' + r + '</td>';
+            table+= '<td id="store_name_field">' + av_stores[r].name + '</td>';
+            table+= '<td id="store_manager_email_field">' + 'admin@super-pharm.co.il' + '</td>';
+            table+= '<td id="store_location_field">' + av_stores[r].location + '</td>';
+
+            table+= '</tr>';
+        }
+        var tbody = document.getElementById("stores_table_body");
+        tbody.innerHTML = '<table>' + table + '</table>';
     }
-    var tbody = document.getElementById("stores_table_body");
-    tbody.innerHTML = '<table>' + table + '</table>';
+</script>
+
+<script type="text/javascript" >
+    function deleteStore(rowNum)
+    {
+        var rowElement = document.getElementById("row-" + rowNum);
+        var storeName = rowElement.getElementsByTagName("td")[2].textContent;
+        var storeManagerEmail = rowElement.getElementsByTagName("td")[3].textContent;
+
+        var isDeletionConfirmed = showDeleteConfirmationDialog(storeName);
+        if(isDeletionConfirmed){
+            post('/mallManager/deleteStore', {store_name: storeName, store_manager_email:storeManagerEmail});
+            alert("The store: " + storeName + " was deleted!");
+        }
+    }
+</script>
+
+<script type="text/javascript" >
+    function showDeleteConfirmationDialog(storeName){
+        var x = confirm("Are you sure you want to delete the store: " + storeName + "?");
+        if (x)
+            return true;
+        else
+            return false;
+    }
+</script>
+
+<script type="text/javascript" >
+    function editStore(rowNum)
+    {
+        var rowElement = document.getElementById("row-" + rowNum);
+        var storeName = rowElement.getElementsByTagName("td")[2].textContent;
+        alert("editStore  store: " + storeName + " number: " + rowNum + "!");
+    }
+</script>
+
+<script type="text/javascript" >
+    function post(path, params, method) {
+        method = method || "post"; // Set method to post by default if not specified.
+
+// The rest of this code assumes you are not using a library.
+// It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+<script type="text/javascript">
+    function searchStores() {
+        var input, filter, storesTableBodyElement, trs, tdStoreName, i;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        storesTableBodyElement = document.getElementById("stores_table_body");
+        trs = storesTableBodyElement.getElementsByTagName("tr");
+        for (i = 0; i < trs.length; i++) {
+            tdStoreName = trs[i].getElementsByTagName("td")[2].textContent;
+            console.log(tdStoreName);
+            if (tdStoreName.toUpperCase().indexOf(filter) > -1) {
+                console.log("hide");
+                trs[i].style.display = "block";
+            } else {
+                console.log("show");
+                trs[i].style.display = "none";
+
+            }
+        }
+    }
 </script>
 
 
-<section class="bg-primary" id="about">
-    <div class="container">
-
-        <div style="margin-top: 4%" class="no-padding" id="portfolio">
-            <!--<div class="container-fluid">-->
-            <div style="width:80%; margin-left: 15%;" class="row no-gutter popup-gallery">
-
-                <% for(var i=0; i<gifts.length; i++) {%>
 
 
-                <div style=" background-color:white;width:30%;height:500px;align-items: center; "class="col-lg-4 col-sm-6">
-                    <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
-                    <b> <%= gifts[i].name.toString() %></b>
-
-                    <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
 
 
-                    <button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
-                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
+<!--------------------------------------------------------Create New Store Popup--------------------------------------------------------------->
 
-                </div>
-                <% } %>
-
-                <!--</ol>-->
-                <!--</div>-->
-            </div>
+<div id="popup_create_new_store" class="modal">
+    <div class="modal-content animate" >
+        <div class="imgcontainer">
+            <span onclick="toggleCreateNewStorePopupVisibility(false)" class="close" title="Close Popup">&times;</span>
+            <img class="img-circle" src="img/gifter.jpg" alt="Create New Store" class="avatar">
         </div>
+        <form name="singnupForm" class="form-horizontal" method="post" action="/mallManager/createNewStore" >
+            <!--onsubmit="return validationUserInput()"-->
+
+            <div class="form-group">
+                <label for="name" class="cols-sm-2 control-label" >Store Name</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_name" id="store_name"  placeholder="Enter your Name"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="cols-sm-2 control-label">Store Email</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_manager_email" id="store_manager_email"  placeholder="Enter your Email"required/>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">store Username</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_manager_username" id="store_manager_username"  placeholder="Enter store Username"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="cols-sm-2 control-label">Password</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                        <input type="password" class="form-control" name="store_manager_password" id="store_manager_password"  placeholder="Enter your Password"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm" class="cols-sm-2 control-label">Confirm Password</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                        <input type="password" class="form-control" name="confirm" id="confirm"  placeholder="Confirm your Password"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Store Id</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_id" id="store_id"  placeholder="Enter store id as given grom Manager"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Store Location</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location" id="store_location"  placeholder="Enter store location inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <button type="submit" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
+            </div>
+        </form>
     </div>
-</section>
+</div>
+
 <script>
-    function  viewGiftDetails(giftName,giftPrice,giftStore)
-    {
-        var moreDetailsP=document.getElementById(giftName);
-        moreDetailsP.innerHTML='' +
-            ''+giftName+','+'<br>'+'price:'+giftPrice +' NIS,' +'<br>'+
-            'store: '+giftStore;
-
-        if (moreDetailsP.style.display === 'none') {
-            moreDetailsP.style.display = 'block';
-        } else {
-            moreDetailsP.style.display = 'none';
+    function toggleCreateNewStorePopupVisibility(isToShowPopup) {
+        var popupCreateNewStore = document.getElementById('popup_create_new_store');
+        if(isToShowPopup){
+            popupCreateNewStore.style.display = "block";
+        }else{
+            popupCreateNewStore.style.display = "none";
         }
+    }
 
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('popup_create_new_store')) {
+            toggleCreateNewStorePopupVisibility(false);
+        }
     }
 </script>

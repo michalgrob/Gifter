@@ -8,49 +8,30 @@ var interest=require('./models/interest');
 var inGiftInter=require('./models/inGiftInter');
 var User=require('./models/User');
 var Store=require('./models/Store');
+var StoreManager=require('./models/StoreManager');
 var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
 
-
 //michal 17/7/17/stores/showStoreGifts
 router.post('/showStoreGifts', function(req,res,next){
     getAllStoreGifts(req.user.name,req, res)
-
 });
 
 router.get('/storeManager-sign-up', function (req, res, next) {
     res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 });
 
-// process the signup form//stores/storeManagerSignUp
+// process the signup form/stores/storeManagerSignUp
 router.post('/storeManagerSignUp', passport.authenticate('local-storeManager-signup', {
     successRedirect: '/profile', // redirect to the secure profile section
     failureRedirect: '/storeManager-sign-up', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
 }));
 
-
-// router.post('/login', passport.authenticate('local-login', {
-//     successRedirect: '/',//'/profile',
-//     failureRedirect: '/stores/login',
-//     failureFlash: true,
-// }));
-
-// router.get('/login', function(req, res, next) {
-//     res.render('storeInfoPage', { LogedInUser: req.store ? req.store.name : 'guest' } );// req.flash('loginMessage')//
-// });
-
-
-// router.get('/login', function(req, res, next) {
-//
-//     var x=0;
-//     var uName=req.query.sname;
-//  //   var gifts = [];
-//  //   addNewStore("castro","azrieli tlv",gifts);//
-//     res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
-//
-// });
+router.post('/createNewStore', function(req,res,next){
+    createNewStore(req);
+});
 
 router.get('/storeDeleteGift', function(req, res, next) {
     var storeName="zara";//
@@ -136,7 +117,7 @@ router.get('/storeInfo', function(req, res, next) {
 
 router.post('/importCSV', function(req, res, next) {
     var path = req.body.path;
-    var store_name = req.body.store_name.toLowerCase();;
+    var store_name = req.body.store_name;
     var store_id = req.body.store_id;
 
     var csvData = [];
@@ -163,7 +144,7 @@ router.post('/importCSV', function(req, res, next) {
 
 module.exports = router;
 
-function addNewStore(storeName,location,gifts,password){
+function addNewStore1(storeName,location,gifts){
 
     Store.find({name:storeName,location:location},(function(err,stores) {
         if (err) throw err;
@@ -177,7 +158,7 @@ function addNewStore(storeName,location,gifts,password){
             newStore.name = storeName;
             newStore.store_id = stores.length;
             newStore.location = location;
-            newStore.password = newStore.generateHash(password);
+            //newStore.password = newStore.generateHash(password);
 
             for (var i = 0; i < gifts.length; i++)// interest for
             {
@@ -246,8 +227,6 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
             var giftMongoId=newGift._id;
             relateGiftToStore(giftMongoId,store_id,storeName,next);
         });
-
-
     })
 }
 //Leisure	,Sports&Outdoors	,Fashion	,Home&Garden	,Indoor Hobbies	, Life Style
@@ -316,3 +295,120 @@ function getAllStoreGifts(storeName,req, res){
     })
 
 }
+
+function createNewStore(req){
+
+    var storeName = req.body.store_name;
+    var storeManagerEmail = req.body.store_manager_email;
+    var storeManagerUserName = req.body.store_manager_username;
+    var storeManagerPassword = req.body.store_manager_password;
+    var storeId = req.body.store_id;
+    var storeLocation = req.body.store_location;
+
+    //Create new Store:
+    var newStore = new Store({
+        name: storeName,
+        store_id: storeId,
+        location: storeLocation
+    });
+
+    //Save it into the DB:
+    Store.find({name:storeName},(function(err,stores){
+        if (err) throw err;
+        if (stores.length > 0) {
+            console.log('Store already exists!!!');
+            //alert("The store name: " + storeName + " already exists !");
+        }else{
+            newStore.save(function (err, done) {
+                if (err) throw err;
+                console.log('Store saved successfully!');
+
+                //Create Store Manager User:
+                var newStoreManagerUser = new StoreManager({
+                    email: storeManagerEmail,
+                    password: storeManagerPassword,
+                    name: storeName,
+                    username: storeManagerUserName,
+                    store: newStore,
+                    admin: true,
+                    store_id: storeId
+                });
+
+                //Save it into the DB:
+                User.findOne({ email:  storeManagerEmail }, function(err, user) {
+                    if (err) throw err;
+                    if (user) {
+                        console.log('User email is already in use.!');
+                        return done(null, false, req.flash('signupMessage', 'That email is already in use.'));
+                    } else {
+                        newStoreManagerUser.save(function (err, done) {
+                            if (err)throw err;
+                            console.log('Store Manager User created successfully!');
+                        });
+
+                        //Save store_manager_user in mall_manager
+                        User.findOne({email:storeManagerEmail},function(err, user_saved){
+                            if (err) throw err;
+                            var savedStoreManager = user_saved;
+
+                            var mallManagerEmail = req.mall_manager_email;
+                            User.findOne({email:mallManagerEmail},function(err, mall_manager_user){
+                                if (err) throw err;
+                                var mallManagerUser = mall_manager_user;
+                                mallManagerUser.mall_stores_manager_users.push(savedStoreManager);
+                        });
+                    });
+                }});
+            });
+        }
+    }));
+}
+
+    //Validations:
+/*    req.checkBody('storeName','The Store Name is required.').notEmpty();
+    req.checkBody('storeManagerEmail','The Store Manager Email is required.').notEmpty();
+    req.checkBody('storeManagerUserName','The Store Manager Username is required.').notEmpty();
+    req.checkBody('storeManagerPassword','The Store Password is required.').notEmpty();
+    req.checkBody('storeManagerPasswordConfirm','Passwords does not match.').equals(storeManagerPassword);
+    req.checkBody('storeId','The Store ID is required.').notEmpty();
+
+    var errors = req.validationErrors();*/
+
+/*    passport.authenticate('local-storeManager-signup', {
+        successRedirect: '/profile', // redirect to the secure profile section
+        failureRedirect: '/storeManager-sign-up', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
+    });*/
+
+/*    passport.authenticate('create-store-manager', {
+        successRedirect: '/profile', // redirect to the secure profile section
+        failureRedirect: '/storeManager-sign-up', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
+    }, function(req,res,done){*/
+
+
+
+
+// router.post('/login', passport.authenticate('local-login', {
+//     successRedirect: '/',//'/profile',
+//     failureRedirect: '/stores/login',
+//     failureFlash: true,
+// }));
+
+// router.get('/login', function(req, res, next) {
+//     res.render('storeInfoPage', { LogedInUser: req.store ? req.store.name : 'guest' } );// req.flash('loginMessage')//
+// });
+
+
+// router.get('/login', function(req, res, next) {
+//
+//     var x=0;
+//     var uName=req.query.sname;
+//  //   var gifts = [];
+//  //   addNewStore("castro","azrieli tlv",gifts);//
+//     res.render('storeInfoPage', {etitle : "Stroe Page",LogedInUser:uName});
+//
+// });
+
+
+
