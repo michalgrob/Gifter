@@ -155,7 +155,7 @@ function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests,res)
                         newScore=gift._doc.interests[j].dynamicScore*1.10;
                     }
 
-                    gift._doc.interests[j].dynamicScore=newScore;
+                    gift._doc.interests[jf].dynamicScore=newScore;
                     continue;
                 }
             }
