@@ -1,0 +1,124 @@
+<% layout('boilerplate') %>
+
+
+<div class="container">
+    <div class="row">
+
+        <p></p>
+        <h1>Mall Stores</h1>
+        <p>A list of all the stores inside the mall.</p>
+        <p> </p><p> </p>
+
+        <div class="col-md-10 col-md-offset-1">
+
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col col-xs-6">
+                            <h3 class="panel-title">Store List</h3>
+                        </div>
+                        <div class="col col-xs-6 text-right">
+                            <button type="button" class="btn btn-sm btn-primary btn-create">Create A New Store</button>
+                        </div>
+                        <div class="col col-xs-6 text-right">
+                            <button type="button" class="btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-list">
+                        <thead>
+                        <tr>
+                            <th><em class="fa fa-cog"></em></th>
+                            <th class="hidden-xs">Store ID</th>
+                            <th>Store Name</th>
+                            <th>Store Location</th>
+                        </tr>
+                        </thead>
+                        <tbody id="stores_table_body">
+<!--                        <tr>
+                            <td align="center">
+                                <a class="btn btn-default"><em class="fa fa-pencil"></em></a>
+                                <a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+                            </td>
+                            <td class="hidden-xs">1</td>
+                            <td>John Doe</td>
+                            <td>johndoe@example.com</td>
+                        </tr>-->
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var table = '';
+    var rowsNumber = 8;
+    for(var r = 1; r <= rowsNumber; r++)
+    {
+        table+= '<tr>';
+
+        table+= '<td align="center">';
+        table+= '<a class="btn btn-default"><em class="fa fa-pencil"></em></a>';
+        table+= '<a class="btn btn-danger"><em class="fa fa-trash"></em></a>';
+        table+= '</td>';
+        table+= '<td class="hidden-xs">' + r + '</td>';
+        table+= '<td>' + 'John Doe' + '</td>';
+        table+= '<td>' + 'John Doe' + '</td>';
+
+        table+= '</tr>';
+    }
+    var tbody = document.getElementById("stores_table_body");
+    tbody.innerHTML = '<table>' + table + '</table>';
+</script>
+
+
+<section class="bg-primary" id="about">
+    <div class="container">
+
+        <div style="margin-top: 4%" class="no-padding" id="portfolio">
+            <!--<div class="container-fluid">-->
+            <div style="width:80%; margin-left: 15%;" class="row no-gutter popup-gallery">
+
+                <% for(var i=0; i<gifts.length; i++) {%>
+
+
+                <div style=" background-color:white;width:30%;height:500px;align-items: center; "class="col-lg-4 col-sm-6">
+                    <!--<a href=<%=gifts[i].ImageUrl %>class="portfolio-box">-->
+                    <b> <%= gifts[i].name.toString() %></b>
+
+                    <img style="margin-left:13.5%;width:auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
+
+
+                    <button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />
+                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%;display: none; color: #0b0b0b"></p>
+
+                </div>
+                <% } %>
+
+                <!--</ol>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function  viewGiftDetails(giftName,giftPrice,giftStore)
+    {
+        var moreDetailsP=document.getElementById(giftName);
+        moreDetailsP.innerHTML='' +
+            ''+giftName+','+'<br>'+'price:'+giftPrice +' NIS,' +'<br>'+
+            'store: '+giftStore;
+
+        if (moreDetailsP.style.display === 'none') {
+            moreDetailsP.style.display = 'block';
+        } else {
+            moreDetailsP.style.display = 'none';
+        }
+
+    }
+</script>
