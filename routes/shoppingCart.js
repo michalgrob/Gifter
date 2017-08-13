@@ -38,7 +38,8 @@ router.get('/add-to-cart/:id', function(req, res, next) {
 });
 
 router.get('/shopping-cart',function(req,res,next){
-    if (req.user.role == 'client') {
+
+    if (req.user && req.user.role == 'client') {
         findUserSoppingCart(req.user.id,req,res);
     }
     else{//guest
