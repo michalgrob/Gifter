@@ -7,6 +7,7 @@ var parser = require('json-parser');
 var interest=require('./models/interest');
 var inGiftInter=require('./models/inGiftInter');
 var User=require('./models/User');
+var Cart = require('./models/cart');
 var passport = require('passport');
 
 router.get('/login', function(req, res, next) {
@@ -22,7 +23,9 @@ router.get('/profile', isLoggedIn, function(req, res) {
 });
 
 router.get('/logout', function(req, res) {
+    var cart = new Cart({});
     req.logout();
+    req.session.cart = cart;
     res.redirect('/');
 });
 
@@ -59,6 +62,13 @@ router.get('/redirect_user_by_role', function(req,res){
                 CartQty: req.session.cart ? req.session.cart.totalQty : 0
             });//userName
             break;
+        case 'client':
+             var totalQty = req.user._doc.shoppingCart.length;
+            res.render('mainPage', {
+                etitle: "gifter",
+                LogedInUser: req.user ? req.user.username : 'guest',
+                CartQty: totalQty});
+            break;
 
         default:
             res.redirect('/');
@@ -73,13 +83,11 @@ router.get('/redirect_user_by_role', function(req,res){
      res.redirect('/');*/
 });
 
-router.get('/logout', function(req, res){
-    req.logout();
-
-    req.flash('success_msg', 'You are logged out');
-
-    res.redirect('/users/login');
-});
+// router.get('/logout', function(req, res){
+//     req.logout();
+//     req.flash('success_msg', 'You are logged out');
+//     res.redirect('/users/login');
+// });
 
 
 /* GET users listing. */
@@ -156,4 +164,6 @@ function isLoggedIn(req, res, next) {
 
     }
 }
+
+
 

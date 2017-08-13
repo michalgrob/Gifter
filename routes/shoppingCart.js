@@ -8,10 +8,6 @@ var MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
 var Gift = require('./models/Gift');
 var parser = require('json-parser');
-//var interest=require('./models/interest');
-//var inGiftInter=require('./models/inGiftInter');
-//var User=require('./models/User');
-//var Store=require('./models/Store');
 var Cart = require('./models/cart');
 var User = require('./models/User');
 var fs = require('fs');
@@ -84,21 +80,6 @@ function findUserSoppingCart(userId,req,res) {
     });
 }
 
-
-
-/*
- *
- * router.get('/shopping-cart',function(req,res,next){
- if(!req.session.cart){
- return res.render('shoppingCartPage',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: null});
- }
- var cart = new Cart(req.session.cart);
- var gifts = cart.generateArray();
- req.session.cart = cart;
- console.log(req.session.cart);
- var totPrice = cart.totalPrice;
- res.render('shoppingCartPage',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: gifts,totalPrice: totPrice});
- });*/
 
 function updateUserShoppingCart(userId,giftId,gift,res)
 {
