@@ -51,10 +51,7 @@ router.get('/shopping-cart',function(req,res,next){
 
     }
 });
-function indexToChar(i) {
-    return String.fromCharCode(i); //97 in ASCII is 'a', so i=0 returns 'a',
-                                      // i=1 returns 'b', etc
-}
+
 
 function findUserSoppingCart(userId,req,res) {
 

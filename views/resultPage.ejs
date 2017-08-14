@@ -47,14 +47,14 @@
                 </p>
 
                 <!--<button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />-->
-                <form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >
+                <!--<form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >-->
 
                     <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
-                   <button type="submit"  id='b<%= gifts[i].name.toString() %>' style="background-color: white;color:#cf484f;width:40px; height: 40px; ">
+                   <button type="button"  id='b<%= gifts[i].name.toString() %>' onclick="ajaxAddGiftToCart('/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>','<%= gifts[i].id %>')" style="background-color: white;color:#cf484f;width:40px; height: 40px; ">
                        <i class="fa fa-cart-plus" aria-hidden="true" data-sr-id="3" style="font-size:40px;margin-left:-15px;" ></i>
                    </button> <!--<input  value = 'LIKE' />-->
                     <a href="shoppingCart/add-to-cart/<%= gifts[i].id %>" class="btn btn-success pull-right" role="button" onclick="incQty()">Add to cart</a>
-                </form>
+                <!--</form>-->
 
             </div>
             <% } %>
@@ -72,14 +72,28 @@
 
     }
 
-    function ajaxAddGiftToCart(myUrl) {
+    function ajaxAddGiftToCart(myUrl,giftId) {
         $.ajax({
             type: "POST",
             url: myUrl,
             //data: "game-name=" + GAME_NAME,
             success: function (status) {
                 alert("gift added to cart succesfully");
+                ajaxUpdateCart(giftId);
                 incQty();
+            }
+
+        })
+    }
+
+    function ajaxUpdateCart(giftId) {
+        $.ajax({
+            type: "GET",
+            url: "shoppingCart/add-to-cart/"+giftId.toString(),
+            //data: "game-name=" + GAME_NAME,
+            success: function (status) {
+                alert("gift added to cart succesfully");
+               // incQty();
             }
 
         })

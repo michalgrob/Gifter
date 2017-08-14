@@ -155,7 +155,7 @@ function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests,res)
                         newScore=gift._doc.interests[j].dynamicScore*1.10;
                     }
 
-                    gift._doc.interests[jf].dynamicScore=newScore;
+                    gift._doc.interests[j].dynamicScore=newScore;
                     continue;
                 }
             }
@@ -165,7 +165,10 @@ function updateDynamicScoreOfGiftInterest(giftId,giftName,searchInterests,res)
         gift.save(function (err) {
             if(err){throw err;}
                 //next();
-          // res.redirect("/shoppingCart/add-to-cart/"+giftId.toString());
+      //      var redirectUrl = '/shoppingCart/add-to-cart/'+giftId.toString();
+        //  res.redirect('/shoppingCart/add-to-cart/'+giftId.toString());
+            res.redirect('/');/////TODO CHANGE
+
 
         });
     });
