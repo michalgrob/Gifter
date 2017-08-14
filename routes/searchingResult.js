@@ -25,6 +25,7 @@ router.post('/IncScore', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+//todo change render to next fucntion! michal sapir
 
     var age=req.body.age;
     var gender=req.body.gender;
@@ -35,13 +36,29 @@ router.post('/', function(req, res, next) {
     // res.render('resultPage');
 
 });
+
+router.post('/giftSearchByClient', function(req, res, next) {
+//todo change render to next fucntion! michal sapir
+
+    var age=req.user.age;
+    var gender=req.body.gender;
+    var minPrice=0;
+    var maxPrice = 8000;
+    var hobbies=req.user.interests;
+
+    giftSearch(gender,maxPrice ,minPrice,age,hobbies,res,req);
+    // res.render('resultPage');
+
+});
+
+
 module.exports = router;
 
 
 
 
 function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req) {
-
+//todo change render to next fucntion! michal sapir
     Gift.find({}).populate('interests').exec(function(err,gifts) {
 
         var giftsTotalScore=[];

@@ -19,6 +19,7 @@ var stores = require('./routes/stores');
 var importCSV = require('./routes/importCSV');
 var shoppingCart = require('./routes/shoppingCart');
 var mallManager = require('./routes/mallManager');
+var wishlist=require('./routes/wishlist');
 
 var app = express();
 
@@ -77,6 +78,7 @@ app.use('/stores',stores);
 app.use('/importCSV',importCSV);
 app.use('/shoppingCart',shoppingCart);
 app.use('/mallManager',mallManager);
+app.use('/wishlist',wishlist);
 
 
 

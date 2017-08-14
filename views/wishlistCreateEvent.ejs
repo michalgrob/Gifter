@@ -1,0 +1,64 @@
+
+
+
+<% layout('boilerplate') %>
+
+<img src="/img/red.jpg" style="width:120%; margin-top: -.5% ">
+
+
+
+<div style="margin-top:81px; text-align:center;background-color: #fafafa;">
+    <h1>Create Event:</h1>
+    <br>
+
+
+    <!--<div style="background-color:#2e2e2e; height:9%">-->
+    <form name="Form" method="post" action="/wishlist/addEvent" >
+        <div class="form-group" style="width: 60%;margin-left: 18%" >
+            <div id="eventDetails" class="Info">
+                <h4>Enter Event Details:</h4>
+
+                <label> Event Title: </label><br>
+                <input type="text" name="eventTitle" id="eventTitle" value=""><br>
+                <hr>
+
+                <label style="margin-left: 2.5%">  Event Description: </label><br>
+                <input type="text" name="eventDescription" id="eventDescription" ><br>
+                <hr>
+
+                <label>Event Date: </label><br>
+                <input type="date" name="eventDate" id="eventDate" value="2017-09-04">
+                <br>
+                <hr>
+
+                <label>Events Guests: </label><br>
+                <input type="text" name="eventGuests" id="eventGuests" value="">
+                <input type='button' value='add to list' id='add' onclick="addGuests()" />
+                <ul id='list'></ul>
+                <br>
+
+            </div>
+            <hr>
+
+        </div>
+
+
+        <input class="btn btn-primary btn-xl page-scroll" type="submit" value = 'Save Changes' name="submit" style="margin-right: 5%">
+        <!--onclick="return ValidationAppForm()"/>-->
+
+    </form>
+
+
+</div>
+<script type="text/javascript">
+    //    document.getElementById("add").onclick = function() {
+    //First things first, we need our text:
+    function addGuests() {//validation mail!!todo
+        var node = document.createElement("Li");
+        var text = document.getElementById("eventGuests").value; //.value gets input values
+        var textnode = document.createTextNode(text);
+        node.appendChild(textnode);
+        document.getElementById("list").appendChild(node);
+    }
+</script>
+
