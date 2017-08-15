@@ -41,7 +41,9 @@
             <hr>
 
         </div>
-
+        <div>
+            <input class="btn btn-primary btn-xl page-scroll" type="button" value = 'add gift to event' name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
+        </div>
 
         <input class="btn btn-primary btn-xl page-scroll" type="submit" value = 'Save Changes' name="submit" style="margin-right: 5%">
         <!--onclick="return ValidationAppForm()"/>-->
@@ -51,6 +53,16 @@
 
 </div>
 <script type="text/javascript">
+    function ajaxGiftToAdd() {
+        $.ajax({
+            type: "POST",
+            url: "/searchingResult/giftSearchByClient",
+            success: function (data,status) {
+                console.log(data);
+
+            }
+        })
+    }
     //    document.getElementById("add").onclick = function() {
     //First things first, we need our text:
     function addGuests() {//validation mail!!todo

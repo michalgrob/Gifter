@@ -31,8 +31,9 @@ router.post('/', function(req, res, next) {
     var gender=req.body.gender;
     var minPrice=req.body.minPrice;
     var maxPrice = req.body.maxPrice;
+    var fromFunction=1;
 
-    giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res,req);
+    giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res,req,fromFunction);
     // res.render('resultPage');
 
 });
@@ -41,12 +42,13 @@ router.post('/giftSearchByClient', function(req, res, next) {
 //todo change render to next fucntion! michal sapir
 
     var age=req.user.age;
-    var gender=req.body.gender;
+    var gender=req.user.gender;
     var minPrice=0;
     var maxPrice = 8000;
     var hobbies=req.user.interests;
+    var fromFunction=2;
 
-    giftSearch(gender,maxPrice ,minPrice,age,hobbies,res,req);
+    giftSearch(gender,maxPrice ,minPrice,age,hobbies,res,req,fromFunction);
     // res.render('resultPage');
 
 });
@@ -57,7 +59,7 @@ module.exports = router;
 
 
 
-function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req) {
+function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req,fromFunction) {
 //todo change render to next fucntion! michal sapir
     Gift.find({}).populate('interests').exec(function(err,gifts) {
 
@@ -84,8 +86,23 @@ function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req) {
 
         giftsTotalScore.sort(function (b,a){return a.tot-b.tot });
         giftsTotalScore.slice(0,51);
-        res.render('resultPage', {gifts: giftsTotalScore, searchInterest: userInterests,LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0  });
+        if (fromFunction==1) {
+            res.render('resultPage', {
+                gifts: giftsTotalScore,
+                searchInterest: userInterests,
+                LogedInUser: req.user ? req.user.username : 'guest',
+                CartQty: req.session.cart ? req.session.cart.totalQty : 0
+            });
+        }
+        else{
+            res.render('wishlistGiftsEdit.ejs', {
+                gifts: giftsTotalScore,
+                searchInterest: userInterests,
+                LogedInUser: req.user ? req.user.username : 'guest',
+                CartQty: req.session.cart ? req.session.cart.totalQty : 0
+            });
 
+        }
 
     });
 }

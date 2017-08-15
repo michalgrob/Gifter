@@ -1,0 +1,143 @@
+<% layout('boilerplate') %>
+<!--<div id="navigate buttons">-->
+
+<body style="background-color: #fafafa;">
+<img src="img/red.jpg" style="width:120%; margin-top: -.5% ">
+
+
+<div style="margin-top:81px; text-align:center;">
+    <!--</div>-->
+    <div>
+
+        <h1 style="margin-top: 6%">THAT'S IT!</h1>
+        <hr>
+        <h5> These are the gift we found according to your input.</h5>
+        <h5> Now its your turn, all you need to do is to choose.</h5>
+        <h5> Thanks for using our service!</h5>
+    </div>
+
+    <div class="col-md-8">
+        <div style="margin-top: 4%" class="no-padding" id="portfolio">
+            <label>Sort By: </label>
+            <select id="sort" onchange="sortResult(this)">-->
+                <option value="">Choose:</option>
+                <option value="sortByResult">best results</option>
+                <option value="sortByPrice">price</option>
+                <option value="sortByStore">store</option>
+            </select>
+
+            <!--<div class="container-fluid">-->
+            <div id="gifts-list" style="width:70%; margin-left: 15%;" class="row no-gutter popup-gallery">
+
+
+                <% for(var i=0; i<gifts.length; i++) {%>
+
+
+                <div style="background-color:white;height:500px;align-items: center; "class="col-lg-4 col-sm-6" data-storeId="<%= gifts[i].store_id %>" data-price="<%= gifts[i].price.toString() %>" data-totalScore="<%= gifts[i].tot %>">
+
+
+                    <img style="
+    margin: 0 auto;height:33.3%;" src=<%=gifts[i].ImageUrl %> class="img-responsive" alt="">
+
+                    <p id='<%= gifts[i].name.toString() %>' name='gift' style="width:70%;margin-left:15%; color: #0b0b0b">
+                        <b>  <%= gifts[i].name.toString() %></b><br>
+                        <%= gifts[i].price.toString() %> NIS<br>
+                        <%= gifts[i].storeName.toString() %>
+
+                    </p>
+
+                    <!--<button class="btn btn-primary btn-xl page-scroll" onClick="viewGiftDetails('<%= gifts[i].name.toString() %>','<%= gifts[i].price.toString() %>','<%= gifts[i].storeName.toString() %>')" name="gift"> more Details </button><br />-->
+                    <!--<form id='f<%= gifts[i].name.toString() %>'  method="post" action="/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>" >-->
+
+                    <!--<button id='b<%= gifts[i].name.toString() %>' style="display: none;">I like It</button>-->
+                    <button type="button"  id='b<%= gifts[i].name.toString() %>' onclick="ajaxAddGiftToCart('/searchingResult/IncScore?giftName=<%= gifts[i].name.toString() %>&giftId=<%= gifts[i].id %>&searchInterest=<%= searchInterest %>','<%= gifts[i].id %>')" style="background-color: white;color:#cf484f;width:40px; height: 40px; ">
+                        <i class="fa fa-cart-plus" aria-hidden="true" data-sr-id="3" style="font-size:40px;margin-left:-15px;" ></i>
+                    </button> <!--<input  value = 'LIKE' />-->
+                    <!--<a href="shoppingCart/add-to-cart/<%= gifts[i].id %>" class="btn btn-success pull-right" role="button" onclick="incQty()">Add to cart</a>-->
+                    <!--</form>-->
+
+                </div>
+                <% } %>
+
+                <!--</ol>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <h1>ccccccc</h1>
+    </div>
+</div>
+</body>
+<script>
+    function incQty() {
+        var qty = parseInt($("#cartQty").text());
+        $("#cartQty").text(qty+1);
+        alert("gift added to cart successfully");
+    }
+
+    function ajaxAddGiftToCart(myUrl,giftId) {
+        $.ajax({
+            type: "POST",
+            url: myUrl,
+            //data: "game-name=" + GAME_NAME,
+            success: function (status) {
+                ajaxUpdateCart(giftId);
+            }
+
+        })
+    }
+
+    function ajaxUpdateCart(giftId) {
+        $.ajax({
+            type: "GET",
+            url: "shoppingCart/add-to-cart/"+giftId.toString(),
+            //data: "game-name=" + GAME_NAME,
+            success: function (status) {
+                incQty();
+
+            }
+
+        })
+    }
+
+
+    function sortResult(sel)
+    {
+        var value = sel.value;
+        var gifts = $("#gifts-list > div");
+        var sortFunction;
+
+        switch (value) {
+            case "sortByResult":
+                sortFunction = sortByResult
+                // sortByResult();
+                break;
+            case "sortByPrice":
+                sortFunction = sortByPrice
+                //   sortByPrice();
+                break;
+            case "sortByStore":
+                sortFunction = sortByStore
+                //     sortByStore();
+                break;
+
+        }
+
+        if (typeof sortFunction !== "undefined") {
+            gifts.sort(sortFunction);
+
+            for (var i = 0; i < gifts.length; i++) {
+                gifts[i].parentNode.appendChild(gifts[i]);
+            }
+        }
+    }
+
+    function sortByResult(b,a){return a.attributes['data-totalScore'].value-b.attributes['data-totalScore'].value}
+    function sortByPrice(b,a){return b.attributes['data-price'].value-a.attributes['data-price'].value}
+    function sortByStore(b,a){return a.attributes['data-storeId']-b.attributes['data-storeId'].value}
+
+
+
+</script>
+
