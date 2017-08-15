@@ -13,7 +13,8 @@
 
 
     <!--<div style="background-color:#2e2e2e; height:9%">-->
-    <form name="Form" method="post" action="/wishlist/addEvent" >
+    <form name="Form"  >
+        <!--method="post" action="/wishlist/addEvent"-->
         <div class="form-group" style="width: 60%;margin-left: 18%" >
             <div id="eventDetails" class="Info">
                 <h4>Enter Event Details:</h4>
@@ -31,10 +32,10 @@
                 <br>
                 <hr>
 
-                <label>Events Guests: </label><br>
+                <label>Event Guests: </label><br>
                 <input type="text" name="eventGuests" id="eventGuests" value="">
-                <input type='button' value='add to list' id='add' onclick="addGuests()" />
-                <ul id='list'></ul>
+                <input type='button' value='add to list' id='add' onclick="ajaxCheckIfGuestIsRegister()" />
+                <ul id='list' name="guestsList"></ul>
                 <br>
 
             </div>
@@ -44,13 +45,16 @@
         <div>
             <input class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you' name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
         </div>
+        <div>
+            <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit" value = 'Save Changes' name="submit" style="margin-right: 5%">
+        </div>
 
-        <input class="btn btn-primary btn-xl page-scroll" type="submit" value = 'Save Changes' name="submit" style="margin-right: 5%">
+
         <!--onclick="return ValidationAppForm()"/>-->
         <section id="giftsResultSection" style="display:none;">
 
             <div class="col-md-8">
-<h1>left</h1>
+                <h1>left</h1>
                 <div style="margin-top: 4%" class="no-padding" id="portfolio">
                     <label>Sort By: </label>
                     <select id="sort" onchange="sortResult(this)">-->
@@ -71,18 +75,52 @@
                 <div class="row">
                     <div >
                         <!--class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"-->
-                        <ul id="list-group" class="list-group">
+                        <ul id="list-group" name="chosenGifts" class="list-group">
 
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
+
     </form>
 
 
 </div>
 <script type="text/javascript">
+    function ajaxSaveChanges()
+    {
+        var guestArrayData =[];
+        var guestList = Array.from(document.querySelectorAll('#list>li'));
+
+        for(var i =0; i<guestList.length; i++) {
+            guestArrayData.push(guestList[i].textContent);
+        }
+
+        var gifts = [];
+        var giftsList = Array.from(document.querySelectorAll('#list-group>div'));
+        console.log(giftsList);
+
+        for(var j=0; j<giftsList.length; j++){
+            gifts.push(giftsList[j].getAttribute("name"));
+        }
+
+        var eventTitle = document.getElementById("eventTitle").value;
+        var eventDescription = document.getElementById("eventDescription").value;
+        var eventDate = document.getElementById("eventDate").value;
+
+
+
+        $.ajax({
+            type: "POST",
+            data: {guests:guestArrayData, gifts:gifts, eventTitle:eventTitle ,eventDescription: eventDescription, eventDate:eventDate},
+            url: "/wishlist/addEvent",
+            success: function(msg){
+
+            }
+        });
+    }
+
     function ajaxGiftToAdd() {
         $.ajax({
             type: "POST",
@@ -95,15 +133,15 @@
     }
 
     function displayGifts(gifts) {
-       // var giftsArr = gifts.toArray();
+        // var giftsArr = gifts.toArray();
         for(var i=0; i<gifts.length; i++){
             var newDiv = document.createElement("div");
-           newDiv.setAttribute("style","background-color:white;height:500px;align-items: center;");
-           newDiv.setAttribute("class","col-lg-5 col-sm-5 list-group-item");
-           newDiv.setAttribute("data-storeId",gifts[i].store_id);
-           newDiv.setAttribute("data-price",gifts[i].price);
-           newDiv.setAttribute("data-totalScore",gifts[i].tot);
-           newDiv.setAttribute("name",gifts[i].name);
+            newDiv.setAttribute("style","background-color:white;height:500px;align-items: center;");
+            newDiv.setAttribute("class","col-lg-5 col-sm-5 list-group-item");
+            newDiv.setAttribute("data-storeId",gifts[i].store_id);
+            newDiv.setAttribute("data-price",gifts[i].price);
+            newDiv.setAttribute("data-totalScore",gifts[i].tot);
+            newDiv.setAttribute("name",gifts[i].name);
 
             var newImg = document.createElement("img");
             newImg.setAttribute("style","margin: 0 auto;height:33.3%;");
@@ -119,8 +157,8 @@
             var newButton = document.createElement("button");
             newButton.setAttribute("type","button");
             newButton.setAttribute("id","b"+gifts[i].name);
-          newButton.onclick = function(){addGiftToWishlist(this.id)};
-           //newButton.addEventListener('click',function(){addGiftToWishlist(gifts[i].name);});
+            newButton.onclick = function(){addGiftToWishlist(this.id)};
+            //newButton.addEventListener('click',function(){addGiftToWishlist(gifts[i].name);});
             newButton.setAttribute("style","background-color: white;color:#cf484f;width:40px; height: 40px; ");
 
             var newI = document.createElement("i");
@@ -136,7 +174,7 @@
             newDiv.appendChild(newP);
             newDiv.appendChild(newImg);
             newDiv.appendChild(newButton);
-           document.getElementById("gifts-list").appendChild(newDiv);
+            document.getElementById("gifts-list").appendChild(newDiv);
 
         }
 
@@ -144,29 +182,45 @@
         giftsSection.style.display = 'block';
 
     }
-    //    document.getElementById("add").onclick = function() {
-    //First things first, we need our text:
+
+    function ajaxCheckIfGuestIsRegister() {
+        var guestMail = document.getElementById("eventGuests").value;
+        $.ajax({
+            type: "GET",
+            url: "/wishlist/checkIfGuestIsRegister/" +guestMail,
+            success: function (ans) {
+                if(ans=="true"){
+                    addGuests();
+                }
+                else {
+                    alert(guestMail+ " isn't register");
+                }
+            }
+        })
+    }
+
     function addGuests() {//validation mail!!todo
         var node = document.createElement("Li");
         var text = document.getElementById("eventGuests").value; //.value gets input values
         var textnode = document.createTextNode(text);
         node.appendChild(textnode);
         document.getElementById("list").appendChild(node);
+        document.getElementById("eventGuests").value="";
     }
 
     function addGiftToWishlist(giftName) {
 
-      var gifts = $("#gifts-list > div");
+        var gifts = $("#gifts-list > div");
         var rightList =  document.getElementById("list-group");
 
         for (var i = 0; i < gifts.length; i++) {
 
             var elm='b'+gifts[i].getAttribute("name");
-           if( elm == giftName){
-               rightList.appendChild(gifts[i]);
-               document.getElementById(giftName).onclick = function(){removeGiftfromWishlist(giftName)};
-               document.getElementById('i'+giftName).setAttribute("class","fa fa-times");//fa fa-shopping-bag
-           }
+            if( elm == giftName){
+                rightList.appendChild(gifts[i]);
+                document.getElementById(giftName).onclick = function(){removeGiftfromWishlist(giftName)};
+                document.getElementById('i'+giftName).setAttribute("class","fa fa-times");//fa fa-shopping-bag
+            }
 
         }
 
