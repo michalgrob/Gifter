@@ -49,7 +49,7 @@
         <!--onclick="return ValidationAppForm()"/>-->
         <section id="giftsResultSection" style="display:none;">
 
-            <div class="col-md-7">
+            <div class="col-md-8">
 <h1>left</h1>
                 <div style="margin-top: 4%" class="no-padding" id="portfolio">
                     <label>Sort By: </label>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <h1>right</h1>
                 <div class="row">
                     <div >
@@ -99,7 +99,7 @@
         for(var i=0; i<gifts.length; i++){
             var newDiv = document.createElement("div");
            newDiv.setAttribute("style","background-color:white;height:500px;align-items: center;");
-           newDiv.setAttribute("class","col-lg-3 col-sm-4 list-group-item");
+           newDiv.setAttribute("class","col-lg-5 col-sm-5 list-group-item");
            newDiv.setAttribute("data-storeId",gifts[i].store_id);
            newDiv.setAttribute("data-price",gifts[i].price);
            newDiv.setAttribute("data-totalScore",gifts[i].tot);
@@ -128,6 +128,7 @@
             newI.setAttribute("aria-hidden","true");
             newI.setAttribute("data-sr-id","3");
             newI.setAttribute("style","font-size:40px;margin-left:-15px;");
+            newI.setAttribute("id","ib"+gifts[i].name);
 
             newButton.appendChild(newI);
 
@@ -157,14 +158,35 @@
 
       var gifts = $("#gifts-list > div");
         var rightList =  document.getElementById("list-group");
-        //<li class="list-group-item">
 
         for (var i = 0; i < gifts.length; i++) {
 
             var elm='b'+gifts[i].getAttribute("name");
            if( elm == giftName){
                rightList.appendChild(gifts[i]);
+               document.getElementById(giftName).onclick = function(){removeGiftfromWishlist(giftName)};
+               document.getElementById('i'+giftName).setAttribute("class","fa fa-times");//fa fa-shopping-bag
            }
+
+        }
+
+
+    }
+
+    function removeGiftfromWishlist(giftName) {
+
+        var gifts = $("#list-group > div");
+        var rightList =  document.getElementById("gifts-list");
+
+        for (var i = 0; i < gifts.length; i++) {
+
+            var elm='b'+gifts[i].getAttribute("name");
+            if( elm == giftName){
+                rightList.appendChild(gifts[i]);
+                document.getElementById(giftName).onclick = function(){addGiftToWishlist(giftName)};
+                document.getElementById('i'+giftName).setAttribute("class","fa fa-shopping-bag");//
+
+            }
 
         }
 
