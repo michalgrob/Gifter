@@ -3,7 +3,7 @@
 
 <% layout('boilerplate') %>
 
-<img src="/img/red.jpg" style="width:120%; margin-top: -.5% ">
+
 
 
 
@@ -49,7 +49,7 @@
         <!--onclick="return ValidationAppForm()"/>-->
         <section id="giftsResultSection" style="display:none;">
 
-            <div class="col-md-10">
+            <div class="col-md-7">
 <h1>left</h1>
                 <div style="margin-top: 4%" class="no-padding" id="portfolio">
                     <label>Sort By: </label>
@@ -61,17 +61,21 @@
                     </select>
 
                     <!--<div class="container-fluid">-->
-                    <div id="gifts-list" style="width:70%; margin-left: 15%;" class="row no-gutter popup-gallery">
+                    <div id="gifts-list" style="width:70%; margin-left: 15%;" class="row no-gutter popup-gallery col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
 
-
-
-                        <!--</ol>-->
-                        <!--</div>-->
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <h1>ccccccc</h1>
+            <div class="col-md-5">
+                <h1>right</h1>
+                <div class="row">
+                    <div >
+                        <!--class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"-->
+                        <ul id="list-group" class="list-group">
+
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
     </form>
@@ -95,10 +99,11 @@
         for(var i=0; i<gifts.length; i++){
             var newDiv = document.createElement("div");
            newDiv.setAttribute("style","background-color:white;height:500px;align-items: center;");
-           newDiv.setAttribute("class","col-lg-3 col-sm-4");
+           newDiv.setAttribute("class","col-lg-3 col-sm-4 list-group-item");
            newDiv.setAttribute("data-storeId",gifts[i].store_id);
            newDiv.setAttribute("data-price",gifts[i].price);
            newDiv.setAttribute("data-totalScore",gifts[i].tot);
+           newDiv.setAttribute("name",gifts[i].name);
 
             var newImg = document.createElement("img");
             newImg.setAttribute("style","margin: 0 auto;height:33.3%;");
@@ -111,13 +116,11 @@
             newP.setAttribute("style","width:70%;margin-left:15%; color: #0b0b0b");
             var nexContent = document.createTextNode(gifts[i].name +"\n"+gifts[i].price+" NIS"+"\n"+gifts[i].storeName);
 
-            /*
-             <i ="fa fa-cart-plus" ></i>
-             </button> */
             var newButton = document.createElement("button");
             newButton.setAttribute("type","button");
             newButton.setAttribute("id","b"+gifts[i].name);
-           newButton.onclick = ajaxAddGiftToWishlist();
+          newButton.onclick = function(){addGiftToWishlist(this.id)};
+           //newButton.addEventListener('click',function(){addGiftToWishlist(gifts[i].name);});
             newButton.setAttribute("style","background-color: white;color:#cf484f;width:40px; height: 40px; ");
 
             var newI = document.createElement("i");
@@ -150,7 +153,21 @@
         document.getElementById("list").appendChild(node);
     }
 
-    function ajaxAddGiftToWishlist() {
+    function addGiftToWishlist(giftName) {
+
+      var gifts = $("#gifts-list > div");
+        var rightList =  document.getElementById("list-group");
+        //<li class="list-group-item">
+
+        for (var i = 0; i < gifts.length; i++) {
+
+            var elm='b'+gifts[i].getAttribute("name");
+           if( elm == giftName){
+               rightList.appendChild(gifts[i]);
+           }
+
+        }
+
 
     }
 </script>
