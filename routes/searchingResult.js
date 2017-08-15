@@ -95,12 +95,7 @@ function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req,fr
             });
         }
         else{
-            res.render('wishlistGiftsEdit.ejs', {
-                gifts: giftsTotalScore,
-                searchInterest: userInterests,
-                LogedInUser: req.user ? req.user.username : 'guest',
-                CartQty: req.session.cart ? req.session.cart.totalQty : 0
-            });
+            res.send( (JSON.parse(JSON.stringify(giftsTotalScore))));
 
         }
 

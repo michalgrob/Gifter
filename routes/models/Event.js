@@ -6,9 +6,11 @@ var User = require('./User');
 
 
 var eventSchema = new Schema({
-    name: String,
-    gifts: [Gift],
-    user: User,
+    title: String,
+    description: String,
+    gifts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}],
+    hostUser: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    eventGuestsUsers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     created_at: Date,
     updated_at: Date,
     event_date: Date

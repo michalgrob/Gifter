@@ -42,12 +42,38 @@
 
         </div>
         <div>
-            <input class="btn btn-primary btn-xl page-scroll" type="button" value = 'add gift to event' name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
+            <input class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you' name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
         </div>
 
         <input class="btn btn-primary btn-xl page-scroll" type="submit" value = 'Save Changes' name="submit" style="margin-right: 5%">
         <!--onclick="return ValidationAppForm()"/>-->
+        <section id="giftsResultSection" style="display:none;">
 
+            <div class="col-md-10">
+<h1>left</h1>
+                <div style="margin-top: 4%" class="no-padding" id="portfolio">
+                    <label>Sort By: </label>
+                    <select id="sort" onchange="sortResult(this)">-->
+                        <option value="">Choose:</option>
+                        <option value="sortByResult">best results</option>
+                        <option value="sortByPrice">price</option>
+                        <option value="sortByStore">store</option>
+                    </select>
+
+                    <!--<div class="container-fluid">-->
+                    <div id="gifts-list" style="width:70%; margin-left: 15%;" class="row no-gutter popup-gallery">
+
+
+
+                        <!--</ol>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h1>ccccccc</h1>
+            </div>
+        </section>
     </form>
 
 
@@ -59,9 +85,60 @@
             url: "/searchingResult/giftSearchByClient",
             success: function (data,status) {
                 console.log(data);
-
+                displayGifts(data);
             }
         })
+    }
+
+    function displayGifts(gifts) {
+       // var giftsArr = gifts.toArray();
+        for(var i=0; i<gifts.length; i++){
+            var newDiv = document.createElement("div");
+           newDiv.setAttribute("style","background-color:white;height:500px;align-items: center;");
+           newDiv.setAttribute("class","col-lg-3 col-sm-4");
+           newDiv.setAttribute("data-storeId",gifts[i].store_id);
+           newDiv.setAttribute("data-price",gifts[i].price);
+           newDiv.setAttribute("data-totalScore",gifts[i].tot);
+
+            var newImg = document.createElement("img");
+            newImg.setAttribute("style","margin: 0 auto;height:33.3%;");
+            newImg.setAttribute("src",gifts[i].ImageUrl);
+            newImg.setAttribute("class","img-responsive");
+
+            var newP = document.createElement("p");
+            newP.setAttribute("id",gifts[i].name);
+            newP.setAttribute("name","gift");
+            newP.setAttribute("style","width:70%;margin-left:15%; color: #0b0b0b");
+            var nexContent = document.createTextNode(gifts[i].name +"\n"+gifts[i].price+" NIS"+"\n"+gifts[i].storeName);
+
+            /*
+             <i ="fa fa-cart-plus" ></i>
+             </button> */
+            var newButton = document.createElement("button");
+            newButton.setAttribute("type","button");
+            newButton.setAttribute("id","b"+gifts[i].name);
+           newButton.onclick = ajaxAddGiftToWishlist();
+            newButton.setAttribute("style","background-color: white;color:#cf484f;width:40px; height: 40px; ");
+
+            var newI = document.createElement("i");
+            newI.setAttribute("class","fa fa-shopping-bag");
+            newI.setAttribute("aria-hidden","true");
+            newI.setAttribute("data-sr-id","3");
+            newI.setAttribute("style","font-size:40px;margin-left:-15px;");
+
+            newButton.appendChild(newI);
+
+            newP.appendChild(nexContent);
+            newDiv.appendChild(newP);
+            newDiv.appendChild(newImg);
+            newDiv.appendChild(newButton);
+           document.getElementById("gifts-list").appendChild(newDiv);
+
+        }
+
+        var giftsSection = document.getElementById("giftsResultSection");
+        giftsSection.style.display = 'block';
+
     }
     //    document.getElementById("add").onclick = function() {
     //First things first, we need our text:
@@ -71,6 +148,10 @@
         var textnode = document.createTextNode(text);
         node.appendChild(textnode);
         document.getElementById("list").appendChild(node);
+    }
+
+    function ajaxAddGiftToWishlist() {
+
     }
 </script>
 
