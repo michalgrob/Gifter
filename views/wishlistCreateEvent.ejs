@@ -94,7 +94,7 @@
         var guestList = Array.from(document.querySelectorAll('#list>li'));
 
         for(var i =0; i<guestList.length; i++) {
-            guestArrayData.push(guestList[i].textContent);
+            guestArrayData.push({email:guestList[i].textContent,id:guestList[i].getAttribute("id")});
         }
 
         var gifts = [];
@@ -102,7 +102,7 @@
         console.log(giftsList);
 
         for(var j=0; j<giftsList.length; j++){
-            gifts.push(giftsList[j].getAttribute("name"));
+            gifts.push(giftsList[j].getAttribute("id"));
         }
 
         var eventTitle = document.getElementById("eventTitle").value;
@@ -142,6 +142,7 @@
             newDiv.setAttribute("data-price",gifts[i].price);
             newDiv.setAttribute("data-totalScore",gifts[i].tot);
             newDiv.setAttribute("name",gifts[i].name);
+            newDiv.setAttribute("id",gifts[i].id);
 
             var newImg = document.createElement("img");
             newImg.setAttribute("style","margin: 0 auto;height:33.3%;");
@@ -188,9 +189,10 @@
         $.ajax({
             type: "GET",
             url: "/wishlist/checkIfGuestIsRegister/" +guestMail,
-            success: function (ans) {
-                if(ans=="true"){
-                    addGuests();
+            success: function (id) {
+                if(id!=-1){
+                    addGuests(id);
+                    console.log(id);
                 }
                 else {
                     alert(guestMail+ " isn't register");
@@ -199,8 +201,9 @@
         })
     }
 
-    function addGuests() {//validation mail!!todo
+    function addGuests(id) {//validation mail!!todo
         var node = document.createElement("Li");
+        node.setAttribute("id",id.toString())
         var text = document.getElementById("eventGuests").value; //.value gets input values
         var textnode = document.createTextNode(text);
         node.appendChild(textnode);

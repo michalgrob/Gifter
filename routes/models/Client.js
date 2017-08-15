@@ -9,7 +9,8 @@ var Gift=require('./Gift');
 var clientSchema = User.discriminator('client', new mongoose.Schema({
         age: Number,
         interests: [String],
-        events:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
+        myEvents:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
+        friendsEvents:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
         gender: String,
         shoppingCart:[{type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}]
 

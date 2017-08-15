@@ -8,6 +8,7 @@ var interest=require('./models/interest');
 var inGiftInter=require('./models/inGiftInter');
 var User=require('./models/User');
 var Store=require('./models/Store');
+var Event=require('./models/Event');
 var StoreManager=require('./models/StoreManager');
 var fs = require('fs');
 var csv = require('fast-csv');
@@ -36,21 +37,65 @@ router.get('/checkIfGuestIsRegister/:guestMail',function (req,res,next) {
 });
 
 router.post('/addEvent',function (req,res,next) {
-   var x = 0;
+    createNewEvent(req);
 });
-
-
 
 module.exports = router;
 
+function createGuestsIdsArray(guests) {
+    var array=[];
+
+    for(var i=0;i<guests.length;i++){
+        array.push(guests[i][id]);
+    }
+    return array;
+}
+function createGuestsMailsArray(guests) {
+    var array=[];
+
+    for(var i=0;i<guests.length;i++){
+        array.push(guests[i][email]);
+    }
+    return array;
+}
+function sendMailsToGuests(guestsMailsArray) {
+
+}
+function createNewEvent(req) {//todo check gifts array
+    var news=[];
+    news=req.body.gifts;
+    var title=req.body.eventTitle;
+    var description = req.body.eventDescription;
+    var gifts = req.body.gifts;
+    var hostUser = req.user.id;
+    var eventGuestsUsers = createGuestsIdsArray(req.body.guests);
+    var guestsMailsArray=createGuestsMailsArray(req.body.guests);
+    var event_date = req.body.eventDate;
+
+
+//Create new Store:
+    var newEvent = new Event({
+        title: title,
+        description: description,
+        gifts: gifts,
+        hostUser: hostUser,
+        eventGuestsUsers: eventGuestsUsers,
+        event_date: event_date
+    });
+    newEvent.save(function (err, done) {
+        if (err) throw err;
+        console.log('Event saved successfully!');
+        sendMailsToGuests(guestsMailsArray);
+    });
+}
 function checkIfGuestIsRegister(guestMail,res){
 
     User.findOne({email: guestMail},function (err,user) {
         if(err || user == null){
-            res.send("false");
+            res.send(-1);
         }
         else {
-            res.send("true");
+            res.send(user.id);
         }
     })
 }
