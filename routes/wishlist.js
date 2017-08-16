@@ -92,7 +92,7 @@ function checkIfGuestIsRegister(guestMail,res){
 
     User.findOne({email: guestMail},function (err,user) {
         if(err || user == null){
-            res.send(-1);
+            res.send("0");
         }
         else {
             res.send(user.id);

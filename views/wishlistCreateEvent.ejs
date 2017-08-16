@@ -228,7 +228,7 @@
             type: "GET",
             url: "/wishlist/checkIfGuestIsRegister/" +guestMail,
             success: function (id) {
-                if(id!=-1){
+                if(id!="0"){
                     addGuests(id);
                     console.log(id);
                 }
