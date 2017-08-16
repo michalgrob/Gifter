@@ -99,26 +99,31 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
-        updateEventInHost(newEvent.id, hostUser);
-        updateEventInGuest(newEvent.id,eventGuestsUsers);
-
+        updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
     });
 }
-function updateEventInHost(eventId,hostUser){
+function updateEventInHost(eventId,hostUser,eventGuestsUsers){
 
-    User.findOneAndUpdate({_id: {$in:hostUser}},{$push:{myEvents:eventId}},{new:true},function (err,store) {
+    User.findOne({_id:hostUser},function (err,client) {
         if(err ){ throw err;}
-        console.log("updateEventInHost SUCCCESSFULLY")
-
+        client.myEvents.push(eventId);
+        client.save(function (err, done){
+            if(err ){ throw err;}
+            console.log("updateEventInHost SUCCCESSFULLY");
+            updateEventInGuest(eventId,eventGuestsUsers);
+        });
     })
 }
 function updateEventInGuest(eventId,eventGuestsUsers){
 
     for(guestUser in eventGuestsUsers){
-        User.findOneAndUpdate({_id: {$in:eventGuestsUsers[guestUser]}},{$push:{friendsEvents:eventId}},{new:true},function (err,store) {
+        User.findOne({_id:eventGuestsUsers[guestUser]},function (err,client) {
             if(err ){ throw err;}
-            console.log("updateEventInGuest SUCCCESSFULLY")
-
+            client.friendsEvents.push(eventId);
+            client.save(function (err, done){
+                if(err ){ throw err;}
+                console.log("updateEventInGuest SUCCCESSFULLY");
+            });
         })
     }
 
