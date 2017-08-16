@@ -16,20 +16,20 @@ var eventSchema = new Schema({
     event_date: Date
 });
 
-eventSchema.methods.addGift = function(gift) {
-    // add some stuff to the users name
-    this.gift.push(gift);
-};
-
-eventSchema.methods.getGifts = function(gift){
-    if(gifts.count>0)
-    {
-        return this.gifts;
-    }
-    else{
-        console.log('No Gifts in event');
-    }
-};
+// eventSchema.methods.addGift = function(gift) {
+//     // add some stuff to the users name
+//     this.gift.push(gift);
+// };
+//
+// eventSchema.methods.getGifts = function(gift){
+//     if(gifts.count>0)
+//     {
+//         return this.gifts;
+//     }
+//     else{
+//         console.log('No Gifts in event');
+//     }
+// };
 
 
 eventSchema.pre('save', function(next) {

@@ -66,7 +66,7 @@
                 <input class="form-control"type="text" name="eventDescription" id="eventDescription" ><br>
 
                 <label class="col-sm-3"style="margin:12px; ">Date:</label>
-                <input class="form-control"type="date" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"><br>
+                <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"><br>
 
                 <label class="col-sm-3"style="margin:12px; ">Guests: </label>
                 <input class="form-control"type="text" name="eventGuests" id="eventGuests" value="">
@@ -140,7 +140,7 @@
         console.log(giftsList);
 
         for(var j=0; j<giftsList.length; j++){
-            gifts.push(giftsList[j].getAttribute("id"));
+            gifts.push({id:giftsList[j].getAttribute("id")});
         }
 
         var eventTitle = document.getElementById("eventTitle").value;
@@ -151,7 +151,8 @@
 
         $.ajax({
             type: "POST",
-            data: {guests:guestArrayData, gifts:gifts, eventTitle:eventTitle ,eventDescription: eventDescription, eventDate:eventDate},
+            dataType: "json",
+            data: {guests:JSON.stringify(guestArrayData), gifts:JSON.stringify(gifts), eventTitle:eventTitle ,eventDescription: eventDescription, eventDate:eventDate},
             url: "/wishlist/addEvent",
             success: function(msg){
 
