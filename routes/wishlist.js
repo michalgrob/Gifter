@@ -25,8 +25,12 @@ router.get('/myFriendsEvents', function(req, res, next) {
     res.render('wishlistMyEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
-router.get('/myEvents', function(req, res, next) {
-    res.render('wishlistMyEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
+router.get('/myEvents', function(req, res, next){
+    User.findById(req.user.id).populate('myEvents').exec(function(err,client) {
+        var clientEvent =  parseClientEventToJson(client._doc.myEvents);
+        res.render('wishlistMyEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 ,events : clientEvent } );// req.flash('loginMessage')//
+
+    });
 });
 
 router.get('/createEvent', function(req, res, next) {
@@ -138,4 +142,62 @@ function checkIfGuestIsRegister(guestMail,res){
             res.send(user.id);
         }
     })
+}
+
+function parseClientEventToJson(events,res) {
+    var parsedArry = [];
+    for (var i = 0; i < events.length; i++) {
+        var guests = populateGuests(events[i]._doc._id,res)//eventGuestsUsers);
+        var gifts = populateGifts(events[i]._doc._id);
+        ///how to wait till mongoose is done
+        parsedArry.push({
+            id: events[i]._doc._id,
+            title: events[i]._doc.title,
+            description: events[i]._doc.description,
+            event_date: events[i]._doc.event_date,
+            gifts: gifts,
+            guests: guests
+
+        })
+    }
+    return parsedArry;
+}
+
+function populateGuests(eventId,res) {
+    var resultArray = [];
+
+    Event.findById(eventId).populate('eventGuestsUsers').exec(function(err,event) {
+        var eventGuestsUsers =  event._doc.eventGuestsUsers;
+        for(var j=0; j<eventGuestsUsers.length; j++){
+            resultArray.push({
+                email: eventGuestsUsers[j]._doc.email,
+                username: eventGuestsUsers[j]._doc.username,
+                id: eventGuestsUsers[j].id
+            })
+        }
+
+
+    })
+
+    return resultArray;
+}
+
+
+function populateGifts(eventId,res) {
+    var resultArray=[];
+
+    Event.findById(eventId).populate('gifts').exec(function(err,event) {
+        var gifts =  event._doc.gifts;
+        for(var j=0; j<gifts.length; j++) {
+            resultArray.push({
+                id: gifts[j].id,
+                name: gifts[j]._doc.name,
+                price: gifts[j]._doc.price,
+                store_name: gifts[j]._doc.store_name,
+                ImageUrl: gifts[j]._doc.ImageUrl
+
+            })
+        }
+    })
+    return resultArray;
 }

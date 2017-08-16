@@ -40,6 +40,16 @@
                         </tr>
                         </thead>
                         <tbody id="stores_table_body">
+                        <% for(var i = 0; i< events.length; i++){%>
+
+                        <%}%>
+                        <tr>
+                            <th></th>
+                            <th>Description:</th>
+                            <th>date</th>
+                            <th>guest</th>
+                            <th>wishlist</th>
+                        </tr>
                         <!--                        <tr>
                                                     <td align="center">
                                                         <a class="btn btn-default"><em class="fa fa-pencil"></em></a>
@@ -59,7 +69,7 @@
 </div>
 
 <script>
-    window.onload = loadStores();
+    window.onload = loadtSores();
 
     function  loadStores() {
         var table = '';
