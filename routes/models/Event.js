@@ -34,7 +34,7 @@ var eventSchema = new Schema({
 
 eventSchema.pre('save', function(next) {
     var self = this;
-    Event.find({name : self.name}, function (err, docs) {
+    Event.find({title : self.title}, function (err, docs) {
         if (!docs.length){
             // get the current date
             var currentDate = new Date();
@@ -48,7 +48,7 @@ eventSchema.pre('save', function(next) {
 
             next();
         }else{
-            console.log('event name exists: ',self.name);
+            console.log('event name exists: ',self.title);
         }
     });
 

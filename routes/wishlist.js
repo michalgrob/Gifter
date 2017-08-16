@@ -99,8 +99,29 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
+        updateEventInHost(newEvent.id, hostUser);
+        updateEventInGuest(newEvent.id,eventGuestsUsers);
 
     });
+}
+function updateEventInHost(eventId,hostUser){
+
+    User.findOneAndUpdate({_id: {$in:hostUser}},{$push:{myEvents:eventId}},{new:true},function (err,store) {
+        if(err ){ throw err;}
+        console.log("updateEventInHost SUCCCESSFULLY")
+
+    })
+}
+function updateEventInGuest(eventId,eventGuestsUsers){
+
+    for(guestUser in eventGuestsUsers){
+        User.findOneAndUpdate({_id: {$in:eventGuestsUsers[guestUser]}},{$push:{friendsEvents:eventId}},{new:true},function (err,store) {
+            if(err ){ throw err;}
+            console.log("updateEventInGuest SUCCCESSFULLY")
+
+        })
+    }
+
 }
 function checkIfGuestIsRegister(guestMail,res){
 
