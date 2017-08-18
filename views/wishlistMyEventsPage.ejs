@@ -33,6 +33,7 @@
                         <tr>
                             <th><em class="fa fa-cog"></em></th>
                             <!--<th class="hidden-xs">Store ID</th>-->
+                            <th>Title</th>
                             <th>Description:</th>
                             <th>Date</th>
                             <th>Guests</th>
@@ -41,24 +42,15 @@
                         </thead>
                         <tbody id="stores_table_body">
                         <% for(var i = 0; i< events.length; i++){%>
-
-                        <%}%>
                         <tr>
                             <th></th>
-                            <th>Description:</th>
-                            <th>date</th>
-                            <th>guest</th>
-                            <th>wishlist</th>
+                            <th><%=events[i].title%></th>
+                            <th> <%=events[i].description%></th>
+                            <th><%=events[i].event_date%></th>
+                            <th><%=events[i].guests.length%>guest</th>
+                            <th><%=events[i].gifts.length%>wishlist</th>
                         </tr>
-                        <!--                        <tr>
-                                                    <td align="center">
-                                                        <a class="btn btn-default"><em class="fa fa-pencil"></em></a>
-                                                        <a class="btn btn-danger"><em class="fa fa-trash"></em></a>
-                                                    </td>
-                                                    <td class="hidden-xs">1</td>
-                                                    <td>John Doe</td>
-                                                    <td>johndoe@example.com</td>
-                                                </tr>-->
+                        <%}%>
                         </tbody>
                     </table>
 
