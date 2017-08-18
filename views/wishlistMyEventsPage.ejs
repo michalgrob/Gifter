@@ -47,7 +47,11 @@
                             <th><%=events[i].title%></th>
                             <th> <%=events[i].description%></th>
                             <th><%=events[i].event_date%></th>
-                            <th><%=events[i].guests.length%>guest</th>
+                            <th><%=events[i].guests.length%>guest
+                                <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">-->
+                                    <!--Launch demo modal-->
+                                <!--</button>-->
+                            </th>
                             <th><%=events[i].gifts.length%>wishlist</th>
                         </tr>
                         <%}%>
@@ -59,44 +63,36 @@
         </div>
     </div>
 </div>
+<!--&lt;!&ndash; Modal &ndash;&gt;-->
+<!--<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">-->
+    <!--<div class="modal-dialog" role="document">-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                    <!--<span aria-hidden="true">&times;</span>-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--<div class="modal-body">-->
+                <!--...-->
+            <!--</div>-->
+            <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 
-<script>
-    window.onload = loadtSores();
 
-    function  loadStores() {
-        var table = '';
-        var av_stores =[];
-  /*
-   <!--<- JSON.stringify(available_stores) >--> todo%
-   */
-        var rowsNumber = av_stores.length;
-        for(var r = 0; r < rowsNumber; r++)
-        {
-            table+= '<tr id="row-' + r + '">';
 
-            table+= '<td align="center">';
-            table+= '<button type="button" onclick="editStore(' + r + ')" class="btn btn-default"><em class="fa fa-pencil"></em></button>';
-            table+= '<button type="button" onclick="deleteStore(' + r + ')" class="btn btn-danger"><em class="fa fa-trash"></em></button>';
-            table+= '</td>';
-            table+= '<td class="hidden-xs" id="store_id_field">' + r + '</td>';
-            table+= '<td id="store_name_field">' + av_stores[r].name + '</td>';
-            table+= '<td id="store_manager_email_field">' + 'admin@super-pharm.co.il' + '</td>';
-            table+= '<td id="store_location_field">' + av_stores[r].location + '</td>';
 
-            table+= '</tr>';
-        }
-        var tbody = document.getElementById("stores_table_body");
-        tbody.innerHTML = '<table>' + table + '</table>';
-    }
-    function ajaxUpdateCart(giftId) {
-        $.ajax({
-            type: "GET",
-            url: "wishlist/creatEvent/",
-            success: function (status) {
-                incQty();
 
-            }
-        })
-    }
+
+
+<script  type="text/javascript">
+
+//    $("#myModal").modal("show");
+//    $("#myModal").css("z-index", "1500");
 
 </script>

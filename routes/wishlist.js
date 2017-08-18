@@ -1,4 +1,4 @@
-//const SENDGRID_API_KEY = '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';
+const SENDGRID_API_KEY = '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';
 
 var express = require('express');
 var router = express.Router();
@@ -15,7 +15,8 @@ var StoreManager=require('./models/StoreManager');
 var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
-var nodemailer = require('nodemailer');
+var sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY)
+var moment = require('moment');
 var nodemailer = require('nodemailer');
 
 
@@ -173,7 +174,7 @@ function findClientEventDetails(req,res) {
                 id: events[i].id,
                 title: events[i]._doc.title,
                 description: events[i]._doc.description,
-                event_date: events[i]._doc.event_date,
+                event_date: moment(events[i]._doc.event_date).format( 'dddd, MMMM Do YYYY, h:mm:ss a'),
                 gifts: gifts,
                 guests: guests
             });
