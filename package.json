@@ -29,11 +29,14 @@
     "mongodb": "^2.2.25",
     "mongoose": "4.9.1",
     "morgan": "~1.7.0",
+    "nodemailer": "^4.0.1",
+    "nodemailer2": "^2.7.1",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-http": "*",
     "passport-local": "^1.0.0",
     "sendgrid": "^5.2.2",
+    "sendmail": "^1.2.0",
     "serve-favicon": "~2.3.2"
   }
 }

@@ -1,4 +1,4 @@
-const SENDGRID_API_KEY = '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';
+//const SENDGRID_API_KEY = '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';
 
 var express = require('express');
 var router = express.Router();
@@ -15,14 +15,16 @@ var StoreManager=require('./models/StoreManager');
 var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
-var sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY)
+var nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer');
+
 
 router.get('/', function(req, res, next) {
     res.render('wishlistMainPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/myFriendsEvents', function(req, res, next) {
-    res.render('wishlistMyEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
+    res.render('wishlistMyFriendsEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/myEvents', function(req, res, next){
@@ -61,19 +63,27 @@ function createGuestsMailsArray(guests) {
     return array;
 }
 function sendMailsToGuests(guestsMailsArray,res) {//todo check after sendgrid approved
-
-    sendgrid.send({
-        to: 'sapirv@gmail.com',
-        from: 'michalgrob@gmail.com',
-        subject: 'hiii',
-        text: 'firstEmail'
-    },function (err,json) {
-        if(err)
-            console.log(err);
-        console.log(json);
-        res.send("succes");
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'sadna.gifter@gmail.com',
+            pass: 'sadnagifter12'
+        }
     });
 
+    var mailOptions = {
+        from: 'sadna.gifter@gmail.com',
+        to: 'sapirv@gmail.com',//'sapirv@gmail.com,michalgrob@gmail.com',
+        subject: 'אחרון חביב להיום',
+        text: 'נסיון אחרון'
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 }
 function createNewEvent(req,res) {//todo check gifts array
 
@@ -85,7 +95,6 @@ function createNewEvent(req,res) {//todo check gifts array
     var eventGuestsUsers = createGuestsIdsArray(guests);
     var guestsMailsArray=createGuestsMailsArray(guests);
     var event_date = req.body.eventDate;
-    //sendMailsToGuests(guestsMailsArray,res);//todo
 
 //Create new Event:
     var newEvent = new Event({
@@ -99,6 +108,7 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
+        sendMailsToGuests([],res);//todo
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
     });
 }
@@ -167,7 +177,7 @@ function findClientEventDetails(req,res) {
                 guests: guests
             });
         }
-
+      //  sendMailsToGuests([],res);
         res.render('wishlistMyEventsPage.ejs', {
             LogedInUser: req.user ? req.user.username : 'guest',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
@@ -192,6 +202,7 @@ function generateEventGuestToArray(event) {
 }
 
 function generateEventGiftsToArray(event) {
+
     var giftsEvent = event.gifts;
     var gifts=[];
 
