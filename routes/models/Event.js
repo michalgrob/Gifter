@@ -6,33 +6,35 @@ var User = require('./User');
 
 
 var eventSchema = new Schema({
-    name: String,
-    gifts: [Gift],
-    user: User,
+    title: String,
+    description: String,
+    gifts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}],
+    hostUser: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    eventGuestsUsers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     created_at: Date,
     updated_at: Date,
     event_date: Date
 });
 
-eventSchema.methods.addGift = function(gift) {
-    // add some stuff to the users name
-    this.gift.push(gift);
-};
-
-eventSchema.methods.getGifts = function(gift){
-    if(gifts.count>0)
-    {
-        return this.gifts;
-    }
-    else{
-        console.log('No Gifts in event');
-    }
-};
+// eventSchema.methods.addGift = function(gift) {
+//     // add some stuff to the users name
+//     this.gift.push(gift);
+// };
+//
+// eventSchema.methods.getGifts = function(gift){
+//     if(gifts.count>0)
+//     {
+//         return this.gifts;
+//     }
+//     else{
+//         console.log('No Gifts in event');
+//     }
+// };
 
 
 eventSchema.pre('save', function(next) {
     var self = this;
-    Event.find({name : self.name}, function (err, docs) {
+    Event.find({title : self.title}, function (err, docs) {
         if (!docs.length){
             // get the current date
             var currentDate = new Date();
@@ -46,7 +48,7 @@ eventSchema.pre('save', function(next) {
 
             next();
         }else{
-            console.log('event name exists: ',self.name);
+            console.log('event name exists: ',self.title);
         }
     });
 

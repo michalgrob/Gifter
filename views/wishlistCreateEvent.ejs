@@ -1,0 +1,292 @@
+
+
+
+<% layout('boilerplate') %>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+
+<style>
+
+    .container1 {
+        border: 2px solid #ccc;
+        background-color: #eee;
+        border-radius: 5px;
+        padding: 16px;
+        margin: 16px 0
+    }
+
+    .container::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .container img {
+        float: left;
+        margin-right: 20px;
+        border-radius: 50%;
+    }
+
+    .container span {
+        font-size: 20px;
+        margin-right: 15px;
+    }
+
+    @media (max-width: 500px) {
+        .container {
+            text-align: center;
+        }
+        .container img {
+            margin: auto;
+            float: none;
+            display: block;
+        }
+    }</style>
+
+<div class="jumbotron">
+    <div class="text-center">
+        <h1>CREATE EVENT</h1>
+        <h4>Create your own event<br> And invites your best</h4>
+    </div>
+</div>
+<div style="margin-top:81px;background-color: #fafafa;">
+    <!--<div style="background-color:#2e2e2e; height:9%">-->
+    <form name="Form"  >
+        <!--method="post" action="/wishlist/addEvent"-->
+        <div  style="width: 60%;margin-left: 275px; " >
+            <div id="eventDetails" class="Info">
+
+                <label class="col-sm-3"style="margin:12px; ">Title: </label>
+                <input class="form-control"type="text" name="eventTitle" id="eventTitle" value=""><br>
+
+                <label class="col-sm-3"style="margin:12px; ">Description: </label>
+                <input class="form-control"type="text" name="eventDescription" id="eventDescription" ><br>
+
+                <label class="col-sm-3"style="margin:12px; ">Date:</label>
+                <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"><br>
+
+                <label class="col-sm-3"style="margin:12px; ">Guests: </label>
+                <input class="form-control"type="text" name="eventGuests" id="eventGuests" value="">
+                <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" />
+                <ul id='list' name="guestsList"></ul>
+
+            </div>
+
+        </div>
+        <div>
+            <input class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you'style="margin-left:41%;text-align: center" name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
+        </div>
+        <div>
+            <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit"style="margin-left:44%;text-align: center" value = 'Save Changes' name="submit" style="margin-right: 5%">
+        </div>
+
+
+        <!--onclick="return ValidationAppForm()"/>-->
+        <section id="giftsResultSection" style="display:none;">
+
+            <div class="col-md-9">
+                <h1>left</h1>
+                <div class="no-padding " id="portfolio">
+                    <!--<label>Sort By: </label>-->
+                    <!--<select id="sort" onchange="sortResult(this)">&ndash;&gt;-->
+                    <!--<option value="">Choose:</option>-->
+                    <!--<option value="sortByResult">best results</option>-->
+                    <!--<option value="sortByPrice">price</option>-->
+                    <!--<option value="sortByStore">store</option>-->
+                    <!--</select>-->
+
+                    <!--<div class="container-fluid">-->
+                    <div id="gifts-list" style="width:80%; margin-left: 5%;"
+                         class="row no-gutter popup-gallery col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h1>right</h1>
+                <div class="row">
+
+                    <div >
+                        <!--class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"-->
+
+                        <ul id="list-group" name="chosenGifts" class="list-group"style="width:80%; margin-left: -25%;">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </form>
+
+
+</div>
+<script type="text/javascript">
+
+    function ajaxSaveChanges()
+    {
+        var guestArrayData =[];
+        var guestList = Array.from(document.querySelectorAll('#list>li'));
+
+        for(var i =0; i<guestList.length; i++) {
+            guestArrayData.push({email:guestList[i].textContent,id:guestList[i].getAttribute("id")});
+        }
+
+        var gifts = [];
+        var giftsList = Array.from(document.querySelectorAll('#list-group>div'));
+        console.log(giftsList);
+
+        for(var j=0; j<giftsList.length; j++){
+            gifts.push({id:giftsList[j].getAttribute("id")});
+        }
+
+        var eventTitle = document.getElementById("eventTitle").value;
+        var eventDescription = document.getElementById("eventDescription").value;
+        var eventDate = document.getElementById("eventDate").value;
+
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            data: {guests:JSON.stringify(guestArrayData), gifts:JSON.stringify(gifts), eventTitle:eventTitle ,eventDescription: eventDescription, eventDate:eventDate},
+            url: "/wishlist/addEvent",
+            success: function(msg){
+
+            }
+        });
+    }
+
+    function ajaxGiftToAdd() {
+        $.ajax({
+            type: "POST",
+            url: "/searchingResult/giftSearchByClient",
+            success: function (data,status) {
+                console.log(data);
+                displayGifts(data);
+            }
+        })
+    }
+
+    function displayGifts(gifts) {
+        // var giftsArr = gifts.toArray();
+        for(var i=0; i<gifts.length; i++){
+            var newDiv = document.createElement("div");
+            newDiv.setAttribute("style","background-color:white;height:200px;align-items: center;width:350px");
+            newDiv.setAttribute("class","w3-card-2");
+            newDiv.setAttribute("data-storeId",gifts[i].store_id);
+            newDiv.setAttribute("data-price",gifts[i].price);//
+            newDiv.setAttribute("data-totalScore",gifts[i].tot);
+            newDiv.setAttribute("name",gifts[i].name);
+            newDiv.setAttribute("id",gifts[i].id);
+
+            var newImg = document.createElement("img");
+            newImg.setAttribute("style","margin:0;height:90px;");//
+            newImg.setAttribute("src",gifts[i].ImageUrl);
+            newImg.setAttribute("class","img-responsive");
+
+            var newP = document.createElement("p");
+            newP.setAttribute("id",gifts[i].name);
+            newP.setAttribute("name","gift");
+            newP.setAttribute("style","width:70%;margin-left:15%; color: #0b0b0b");
+            var nexContent = document.createTextNode(gifts[i].name +"\n"+gifts[i].price+" NIS"+"\n"+gifts[i].storeName);
+
+            var newButton = document.createElement("button");
+            newButton.setAttribute("type","button");
+            newButton.setAttribute("id","b"+gifts[i].name);
+            newButton.onclick = function(){addGiftToWishlist(this.id)};
+            //newButton.addEventListener('click',function(){addGiftToWishlist(gifts[i].name);});
+            newButton.setAttribute("style","background-color: white;color:#cf484f;width:30px; height: 30px; ");
+
+            var newI = document.createElement("i");
+            newI.setAttribute("class","fa fa-shopping-bag");
+            newI.setAttribute("aria-hidden","true");
+            newI.setAttribute("data-sr-id","5");
+            newI.setAttribute("style","font-size:30px;margin-left:-15px;");
+            newI.setAttribute("id","ib"+gifts[i].name);
+
+            newButton.appendChild(newI);
+
+            newP.appendChild(nexContent);
+            newDiv.appendChild(newP);
+            newDiv.appendChild(newImg);
+            newDiv.appendChild(newButton);
+            document.getElementById("gifts-list").appendChild(newDiv);
+
+        }
+
+        var giftsSection = document.getElementById("giftsResultSection");
+        giftsSection.style.display = 'block';
+
+    }
+
+    function ajaxCheckIfGuestIsRegister() {
+        var guestMail = document.getElementById("eventGuests").value;
+        $.ajax({
+            type: "GET",
+            url: "/wishlist/checkIfGuestIsRegister/" +guestMail,
+            success: function (id) {
+                if(id!="0"){
+                    addGuests(id);
+                    console.log(id);
+                }
+                else {
+                    alert(guestMail+ " isn't register");
+                }
+            }
+        })
+    }
+
+    function addGuests(id) {//validation mail!!todo
+        var node = document.createElement("Li");
+        node.setAttribute("id",id.toString())
+        var text = document.getElementById("eventGuests").value; //.value gets input values
+        var textnode = document.createTextNode(text);
+        node.appendChild(textnode);
+        document.getElementById("list").appendChild(node);
+        document.getElementById("eventGuests").value="";
+    }
+
+    function addGiftToWishlist(giftName) {
+
+        var gifts = $("#gifts-list > div");
+        var rightList =  document.getElementById("list-group");
+
+        for (var i = 0; i < gifts.length; i++) {
+
+            var elm='b'+gifts[i].getAttribute("name");
+            if( elm == giftName){
+                rightList.appendChild(gifts[i]);
+                document.getElementById(giftName).onclick = function(){removeGiftfromWishlist(giftName)};
+                document.getElementById('i'+giftName).setAttribute("class","fa fa-times");//fa fa-shopping-bag
+            }
+
+        }
+
+
+    }
+
+    function removeGiftfromWishlist(giftName) {
+
+        var gifts = $("#list-group > div");
+        var rightList =  document.getElementById("gifts-list");
+
+        for (var i = 0; i < gifts.length; i++) {
+
+            var elm='b'+gifts[i].getAttribute("name");
+            if( elm == giftName){
+                rightList.appendChild(gifts[i]);
+                document.getElementById(giftName).onclick = function(){addGiftToWishlist(giftName)};
+                document.getElementById('i'+giftName).setAttribute("class","fa fa-shopping-bag");//
+
+            }
+
+        }
+
+
+    }
+</script>
+
