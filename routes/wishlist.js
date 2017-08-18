@@ -15,7 +15,7 @@ var StoreManager=require('./models/StoreManager');
 var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
-var sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY)
+var sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
 var moment = require('moment');
 var nodemailer = require('nodemailer');
 
@@ -63,7 +63,17 @@ function createGuestsMailsArray(guests) {
     }
     return array;
 }
-function sendMailsToGuests(guestsMailsArray,res) {//todo check after sendgrid approved
+function sendMailsToGuests(guestsMailsArray,res) {
+    var mailString="";
+    for (var m=0; m<guestsMailsArray.length;m++)
+    {
+        mailString+=guestsMailsArray[m];
+    if(m!=guestsMailsArray.length-1)
+    {
+        mailString+=",";
+    }
+    }
+
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -74,7 +84,7 @@ function sendMailsToGuests(guestsMailsArray,res) {//todo check after sendgrid ap
 
     var mailOptions = {
         from: '"Gifter"<sadna.gifter@gmail.com>',
-        to: 'michalgrob@gmail.com',//'sapirv@gmail.com,michalgrob@gmail.com',
+        to: mailString,//'sapirv@gmail.com,michalgrob@gmail.com',
         subject: 'תראי איזה יופי(:',
         html: '<h1>Welcome</h1><p>That was easy!</p>'
  //       text: 'נסיון אחרון'
@@ -110,7 +120,7 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
-        sendMailsToGuests([],res);//todo
+        sendMailsToGuests(guestsMailsArray,res);//todo
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
     });
 }

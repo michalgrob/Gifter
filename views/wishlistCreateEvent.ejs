@@ -60,17 +60,17 @@
             <div id="eventDetails" class="Info">
 
                 <label class="col-sm-3"style="margin:12px; ">Title: </label>
-                <input class="form-control"type="text" name="eventTitle" id="eventTitle" value=""><br>
+                <input class="form-control"type="text" name="eventTitle" id="eventTitle" value=""required><br>
 
                 <label class="col-sm-3"style="margin:12px; ">Description: </label>
-                <input class="form-control"type="text" name="eventDescription" id="eventDescription" ><br>
+                <input class="form-control"type="text" name="eventDescription" id="eventDescription"required ><br>
 
                 <label class="col-sm-3"style="margin:12px; ">Date:</label>
-                <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"><br>
+                <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"required><br>
 
                 <label class="col-sm-3"style="margin:12px; ">Guests: </label>
-                <input class="form-control"type="text" name="eventGuests" id="eventGuests" value="">
-                <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" />
+                <input class="form-control"type="text" name="eventGuests" id="eventGuests" value=""required>
+                <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" required>
                 <ul id='list' name="guestsList"></ul>
 
             </div>
@@ -80,7 +80,7 @@
             <input class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you'style="margin-left:41%;text-align: center" name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
         </div>
         <div>
-            <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit"style="margin-left:44%;text-align: center" value = 'Save Changes' name="submit" style="margin-right: 5%">
+            <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit"style="margin-left:44%;text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
         </div>
 
 
@@ -125,39 +125,69 @@
 
 </div>
 <script type="text/javascript">
-
-    function ajaxSaveChanges()
-    {
-        var guestArrayData =[];
+    function ValidationAppForm() {
+        var title=document.Form.eventTitle
+        var description=document.Form.eventDescription;
+        var date=document.Form.eventDate;
         var guestList = Array.from(document.querySelectorAll('#list>li'));
-
-        for(var i =0; i<guestList.length; i++) {
-            guestArrayData.push({email:guestList[i].textContent,id:guestList[i].getAttribute("id")});
+        if (title.value=="")
+        {
+            document.Form.eventTitle.focus() ;
+            return false;
+        }
+        if (description.value=="")
+        {
+            document.Form.eventDescription.focus() ;
+            return false;
+        }
+        if (guestList.length==0)
+        {
+            document.Form.eventGuests.focus() ;
+            return false;
         }
 
-        var gifts = [];
-        var giftsList = Array.from(document.querySelectorAll('#list-group>div'));
-        console.log(giftsList);
-
-        for(var j=0; j<giftsList.length; j++){
-            gifts.push({id:giftsList[j].getAttribute("id")});
-        }
-
-        var eventTitle = document.getElementById("eventTitle").value;
-        var eventDescription = document.getElementById("eventDescription").value;
-        var eventDate = document.getElementById("eventDate").value;
+        return true;
 
 
+    }
+    function ajaxSaveChanges() {
+        if (ValidationAppForm()) {
+            var guestArrayData = [];
+            var guestList = Array.from(document.querySelectorAll('#list>li'));
 
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            data: {guests:JSON.stringify(guestArrayData), gifts:JSON.stringify(gifts), eventTitle:eventTitle ,eventDescription: eventDescription, eventDate:eventDate},
-            url: "/wishlist/addEvent",
-            success: function(msg){
-
+            for (var i = 0; i < guestList.length; i++) {
+                guestArrayData.push({email: guestList[i].textContent, id: guestList[i].getAttribute("id")});
             }
-        });
+
+            var gifts = [];
+            var giftsList = Array.from(document.querySelectorAll('#list-group>div'));
+            console.log(giftsList);
+
+            for (var j = 0; j < giftsList.length; j++) {
+                gifts.push({id: giftsList[j].getAttribute("id")});
+            }
+
+            var eventTitle = document.getElementById("eventTitle").value;
+            var eventDescription = document.getElementById("eventDescription").value;
+            var eventDate = document.getElementById("eventDate").value;
+
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: {
+                    guests: JSON.stringify(guestArrayData),
+                    gifts: JSON.stringify(gifts),
+                    eventTitle: eventTitle,
+                    eventDescription: eventDescription,
+                    eventDate: eventDate
+                },
+                url: "/wishlist/addEvent",
+                success: function (msg) {
+
+                }
+            });
+        }
     }
 
     function ajaxGiftToAdd() {
@@ -222,22 +252,42 @@
         giftsSection.style.display = 'block';
 
     }
+    function checkIfAlreadyChoose(guestMail) {
+        var guestList = Array.from(document.querySelectorAll('#list>li'));
 
+        for (var i = 0; i < guestList.length; i++) {
+            console.log(guestList[i].innerText);
+            if(guestList[i].innerText==guestMail)
+            {
+                return true;
+
+            }
+
+        }
+        return false;
+
+    }
     function ajaxCheckIfGuestIsRegister() {
         var guestMail = document.getElementById("eventGuests").value;
-        $.ajax({
-            type: "GET",
-            url: "/wishlist/checkIfGuestIsRegister/" +guestMail,
-            success: function (id) {
-                if(id!="0"){
-                    addGuests(id);
-                    console.log(id);
+        if (checkIfAlreadyChoose(guestMail)==true) {
+            alert(guestMail + " already invites to your event");
+        }
+        else {
+
+            $.ajax({
+                type: "GET",
+                url: "/wishlist/checkIfGuestIsRegister/" + guestMail,
+                success: function (id) {
+                    if (id != "0") {
+                        addGuests(id);
+                        console.log(id);
+                    }
+                    else {
+                        alert(guestMail + " isn't register");
+                    }
                 }
-                else {
-                    alert(guestMail+ " isn't register");
-                }
-            }
-        })
+            })
+        }
     }
 
     function addGuests(id) {//validation mail!!todo
