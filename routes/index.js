@@ -15,7 +15,8 @@ router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('mainPage', {etitle : "present", LogedInUser: req.user ? req.user.username : 'guest', CartQty: req.session.cart ? req.session.cart.totalQty : 0 });//userName
+    res.redirect("/users/redirect_user_by_role");
+    //res.render('mainPage', {etitle : "present", LogedInUser: req.user ? req.user.username : 'guest', CartQty: req.session.cart ? req.session.cart.totalQty : 0 });//userName
 });
 
 
@@ -29,9 +30,8 @@ router.post('/', function(req, res, next) {
     ////////////////////////////////////
     //  insertdb(lname,fname);
     res.send('POST to Hello World!');
+
     res.render('index', {etitle : "present",CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
-
-
 });
 router.get('/profile', isLoggedIn, function(req, res) {
     res.redirect('/');//res.render('profile.ejs', { user: req.user });

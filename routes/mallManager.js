@@ -13,8 +13,8 @@ var interest=require('./models/interest');
 var inGiftInter=require('./models/inGiftInter');
 var User=require('./models/User');
 var Store=require('./models/Store');
-var StoreManager=require('./models/StoreManager');
-var MallManager=require('./models/MallManager');
+var StoreManager = require('./models/StoreManager');
+var MallManager = require('./models/MallManager');
 var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
@@ -37,14 +37,14 @@ router.get('/', function(req, res, next) {
 
 router.post('/createNewStore', function(req,res,next){
     createNewStore(req);
-});
-
-router.post('/createNewStore', function(req,res,next){
-    createNewStore(req);
+    sleep(1000);
+    res.redirect("/users/redirect_user_by_role");
 });
 
 router.post('/deleteStore', function(req,res,next){
     deleteStore(req);
+    sleep(1000);
+    res.redirect("/users/redirect_user_by_role");
 });
 
 router.post('/createMallManager', function(req,res,next){
@@ -79,21 +79,21 @@ router.post('/importCSV', function(req, res, next) {
 });
 
 function getStores(req,done){
-    var currMallManagerUser = req.user;
+    var currMallManagerUserEmail = req.user.email;
     availableStores = [];
-    var mallManagerStoreManagers = currMallManagerUser.mall_stores_manager_users;
-    for(var i=0; i< mallManagerStoreManagers.length; i++){
-        User.findOne(mallManagerStoreManagers[i]).exec(function (err,user) {
-            var storeIDFound = user.store_id;
-            Store.findOne({store_id:storeIDFound}, function (err,storeFound) {
-                availableStores.push(storeFound);
-                if(i == mallManagerStoreManagers.length)
-                    done();
-            });
+    var iterations = 0;
+    User.findOne({email:currMallManagerUserEmail})
+        .populate('stores')
+        .exec(function(err, mall_manager_user) {
+            if (err) throw err;
+            var mallStores = mall_manager_user.stores;
+            for (var i = 0; i < mallStores.length; i++) {
+                availableStores.push(mallStores[i]);
             }
-        )
-    }
+            done();
+        });
 }
+
 
 
 function createNewStore(req){
@@ -121,69 +121,84 @@ function createNewStore(req){
     newStoreManagerUser.store = newStore;
     newStoreManagerUser.store_id = storeId;
 
-    //Save it into the DB:
-    Store.find({name:storeName},(function(err,stores){
+    newStore.store_manager_user = newStoreManagerUser;
+
+    //If the store & user doesn't exist in DB - Save it into the DB:
+    Store.findOne({name:storeName},(function(err,store){
         if (err) throw err;
-        if (stores.length > 0) {
+        if (store) {
             console.log('Store already exists!!!');
-            //alert("The store name: " + storeName + " already exists !");
         }else{
+            User.findOne({ email:  storeManagerEmail }, function(err1, user) {
+                if (err1) throw err;
+                if (user) {
+                    console.log('User email is already in use.!');
+                }
+            });
+
+            // Save new store:
             newStore.save(function (err, done) {
                 if (err) throw err;
                 console.log('Store saved successfully!');
+                connectStoreToMallManager(req,newStore);
+            });
 
-                //Save it into the DB:
-                User.findOne({ email:  storeManagerEmail }, function(err, user) {
-                    if (err) throw err;
-                    if (user) {
-                        console.log('User email is already in use.!');
-                        return done(null, false, req.flash('signupMessage', 'That email is already in use.'));
-                    } else {
-                        newStoreManagerUser.save(function (err, done) {
-                            if (err)throw err;
-                            console.log('Store Manager User created successfully!');
-                        });
-
-                        //Save store_manager_user in mall_manager
-                        User.findOne({email:storeManagerEmail},function(err, user_saved){
-                            if (err) throw err;
-                            var savedStoreManager = user_saved;
-
-                            var mallManagerEmail = req.mall_manager_email;
-                            User.findOne({email:mallManagerEmail},function(err, mall_manager_user){
-                                if (err) throw err;
-                                var mallManagerUser = req.user;
-                                mallManagerUser.mall_stores_manager_users.push(savedStoreManager);
-                            });
-                        });
-                    }});
+            // Save new store manager user:
+            newStoreManagerUser.save(function (err){
+                if (err)throw err;
+                console.log('Store Manager User created successfully!');
+                //insterStoreManagerToMallManagerUsersArray(req,newStoreManagerUser);
             });
         }
     }));
 }
 
+function connectStoreToMallManager(req, newStore) {
+    var mallManagerEmail = req.user.email;
+    User.findOne({email:mallManagerEmail}).exec(function(err, mall_manager_user){
+        if (err) throw err;
+        var mallManagerStoresArray = mall_manager_user.stores;
+        mallManagerStoresArray.push(newStore);
+        console.log('Store was connected to Mall manager!');
+        mall_manager_user.save();
+    });
+}
+
 
 function deleteStore(req) {
+    var currMallManagerEmail = req.user.email;
     var storeName = req.body.store_name;
-    var storeManagerEmail = req.body.store_manager_email;
-    //var storeManagerUserName = req.body.store_manager_username;
-    //var storeManagerPassword = req.body.store_manager_password;
-    //var storeId = req.body.store_id;
-    //var storeLocation = req.body.store_location;
 
-    //Delete User from DB:
-    User.find({email: storeManagerEmail}).remove().exec(function (err, data) {
-        if (err) {
-            throw err;
-        }
-    });
+    var storeObject;
 
     //Delete Store from DB:
-    Store.find({name: storeName}).remove().exec(function (err, data) {
-        if (err) {
-            throw err;
-        }
-    });
+    //1. Search in the DB:
+    Store.findOne({name: storeName})
+        .populate()
+        .exec(function (err, store) {
+            if (err) throw err;
+            storeObject = store;
+
+            //2. Delete Store Manager User:
+            var storeManagerUser = store.store_manager_user;
+            User.findOneAndRemove(storeManagerUser, function (err) {
+                if (err)  throw err;
+            });
+
+            //3.Disconnect Store Manager from the Mall Manager:
+            User.findOne({email: currMallManagerEmail})
+                .exec(function (err, mallManager) {
+                    if (err)  throw err;
+                    mallManager.stores.pop(storeObject);
+                    mallManager.save();
+
+                    //4. Delete Store:
+                    Store.findOneAndRemove({name: storeName}, function (err) {
+                        if (err)  throw err;
+                    });
+                    console.log('Store was successfully deleted!');
+                });
+        });
 }
 
 function createMallManager(req){
@@ -202,17 +217,10 @@ function createMallManager(req){
     newMallManagerUser.name = "Azrieli Manager";
     newMallManagerUser.username= mallManagerUserName;
     newMallManagerUser.admin = true;
-    newMallManagerUser.mall_stores_manager_users;
 
-    //Save it into the DB:
-    User.find({role:"store_manager"},function(err,users) {
-        if (err) throw err;
-        newMallManagerUser.mall_stores_manager_users = users;
-
-        newMallManagerUser.save(function (err, done) {
-            if (err)throw err;
-            console.log('Mall Manager User created successfully!');
-        });
+    newMallManagerUser.save(function (err, done) {
+        if (err)throw err;
+        console.log('Mall Manager User created successfully!');
     });
 }
 
@@ -229,3 +237,77 @@ router.get('/shopping-cart',function(req,res,next){
 });
 
 module.exports = router;
+
+
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
+}
+
+/*
+
+
+function getStores1(req,done){
+    var currMallManagerUser = req.user;
+    availableStores = [];
+    var mallManagerStoreManagers = currMallManagerUser.mall_stores_manager_users;
+    for(var i=0; i< mallManagerStoreManagers.length; i++){
+        User.findOne(mallManagerStoreManagers[i]).exec(function (err,user) {
+                if(err) throw err;
+                if(user == null){
+                    done();
+                }else{
+                    var storeIDFound = user.store_id;
+                    Store.findOne({store_id:storeIDFound}, function (err,storeFound) {
+                        availableStores.push(storeFound);
+                        if(i == mallManagerStoreManagers.length)
+                            done();
+                    });
+                }
+            }
+        )
+    }
+}
+
+function getStores2(req,done){
+    var currMallManagerUserEmail = req.user.email;
+    availableStores = [];
+    var iterations = 0;
+    User.findOne({email:currMallManagerUserEmail})
+        .populate()
+        .exec(function(err, mall_manager_user) {
+            if (err) throw err;
+            var mallManagerStoreManagers = mall_manager_user.mall_stores_manager_users;
+            if(mallManagerStoreManagers.length == 0){
+                done();
+            }else{
+                for (var i = 0; i < mallManagerStoreManagers.length; i++) {
+                    User.findOne(mallManagerStoreManagers[i])
+                        .populate('store')
+                        .exec(function (err,user) {
+                            iterations++;
+                            var currStore = user.store;
+                            availableStores.push(currStore);
+                            if(iterations == mallManagerStoreManagers.length)
+                                done();
+                        });
+                }
+            }
+        });
+}
+*/
+
+/*function insterStoreManagerToMallManagerUsersArray(req, newStoreManagerUser) {
+ var mallManagerEmail = req.user.email;
+ User.findOne({email:mallManagerEmail}).exec(function(err, mall_manager_user){
+ if (err) throw err;
+ var mallStoresManagerUsers = mall_manager_user._doc.mall_stores_manager_users;
+ mallStoresManagerUsers.push(newStoreManagerUser);
+ console.log('Store Manager was connected to Mall manager!');
+ mall_manager_user.save();
+ });
+ }*/
