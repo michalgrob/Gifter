@@ -72,10 +72,11 @@ function sendMailsToGuests(guestsMailsArray,res) {//todo check after sendgrid ap
     });
 
     var mailOptions = {
-        from: 'sadna.gifter@gmail.com',
-        to: 'sapirv@gmail.com',//'sapirv@gmail.com,michalgrob@gmail.com',
-        subject: 'אחרון חביב להיום',
-        text: 'נסיון אחרון'
+        from: '"Gifter"<sadna.gifter@gmail.com>',
+        to: 'michalgrob@gmail.com',//'sapirv@gmail.com,michalgrob@gmail.com',
+        subject: 'תראי איזה יופי(:',
+        html: '<h1>Welcome</h1><p>That was easy!</p>'
+ //       text: 'נסיון אחרון'
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -177,7 +178,7 @@ function findClientEventDetails(req,res) {
                 guests: guests
             });
         }
-      //  sendMailsToGuests([],res);
+   //    sendMailsToGuests([],res);
         res.render('wishlistMyEventsPage.ejs', {
             LogedInUser: req.user ? req.user.username : 'guest',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
