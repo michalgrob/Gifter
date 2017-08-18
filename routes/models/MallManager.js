@@ -4,12 +4,12 @@
 
 var mongoose = require('mongoose');
 var User = require('./User');
+var Store = require('./Store');
 
 var mallManagerSchema = new mongoose.Schema({
-    mall_stores_manager_users: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'StoreManager'
-    }],
+    stores: [{type: mongoose.Schema.Types.ObjectId, ref: 'Store'}],
     mall_name :String
+    //    mall_stores_manager_users: [{type: mongoose.Schema.Types.ObjectId, ref: 'StoreManager'}],
 })
 
 // Define StoreManager as a discriminator of user. It's role is 'store_manager'.

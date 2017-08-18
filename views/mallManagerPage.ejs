@@ -45,7 +45,6 @@
                             <th><em class="fa fa-cog"></em></th>
                             <th class="hidden-xs">Store ID</th>
                             <th>Store Name</th>
-                            <th>Store Manager Email</th>
                             <th>Store Location</th>
                         </tr>
                         </thead>
@@ -85,9 +84,8 @@
             table+= '<button type="button" onclick="editStore(' + r + ')" class="btn btn-default"><em class="fa fa-pencil"></em></button>';
             table+= '<button type="button" onclick="deleteStore(' + r + ')" class="btn btn-danger"><em class="fa fa-trash"></em></button>';
             table+= '</td>';
-            table+= '<td class="hidden-xs" id="store_id_field">' + r + '</td>';
+            table+= '<td class="hidden-xs" id="store_id_field">' + av_stores[r].store_id + '</td>';
             table+= '<td id="store_name_field">' + av_stores[r].name + '</td>';
-            table+= '<td id="store_manager_email_field">' + 'admin@super-pharm.co.il' + '</td>';
             table+= '<td id="store_location_field">' + av_stores[r].location + '</td>';
 
             table+= '</tr>';
@@ -102,12 +100,10 @@
     {
         var rowElement = document.getElementById("row-" + rowNum);
         var storeName = rowElement.getElementsByTagName("td")[2].textContent;
-        var storeManagerEmail = rowElement.getElementsByTagName("td")[3].textContent;
 
         var isDeletionConfirmed = showDeleteConfirmationDialog(storeName);
         if(isDeletionConfirmed){
-            post('/mallManager/deleteStore', {store_name: storeName, store_manager_email:storeManagerEmail});
-            alert("The store: " + storeName + " was deleted!");
+            post('/mallManager/deleteStore', {store_name: storeName});
         }
     }
 </script>
@@ -266,7 +262,7 @@
                 </div>
             </div>
             <div class="form-group ">
-                <button type="submit" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
+                <button type="submit" onclick="toggleCreateNewStorePopupVisibility(false);" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
             </div>
         </form>
     </div>

@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var Gift = require('./Gift');
+var StoreManager = require('./StoreManager');
 var bcrypt   = require('bcrypt-nodejs');
 
 var Schema = mongoose.Schema;
