@@ -50,11 +50,14 @@ router.get('/redirect_user_by_role', function(req,res) {
                 break;
 
             case 'store_manager':
-                res.render('storeInfoPage', {
+                res.redirect('/stores');
+                break;
+/*                res.render('storeManagerPage', {
                     etitle: "present",
                     LogedInUser: req.user ? req.user.username : 'guest',
-                    CartQty: req.session.cart ? req.session.cart.totalQty : 0
-                });//userName
+                    CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+                    available_gifts: ["stam"]
+                });//userName*/
                 break;
             case 'client':
                 res.render('mainPage', {

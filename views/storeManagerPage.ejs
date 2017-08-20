@@ -4,8 +4,8 @@
     <div class="row">
 
         <p></p>
-        <h1>Mall Stores</h1>
-        <p>A list of all the stores inside the mall.</p>
+        <h1>Store Manager</h1>
+        <p>A list of all the gifts in the store.</p>
         <p> </p><p> </p>
 
         <div class="col-md-10 col-md-offset-1">
@@ -14,10 +14,10 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col col-xs-6">
-                            <h3 class="panel-title">Store List</h3>
+                            <h3 class="panel-title">Gifts List</h3>
                         </div>
                         <div class="col col-xs-6 text-right">
-                            <button type="button" onclick="toggleCreateNewStorePopupVisibility(true)" class="btn btn-sm btn-primary btn-create">Create A New Store</button>
+                            <button type="button" onclick="toggleAddNewGiftPopupVisibility(true)" class="btn btn-sm btn-primary btn-create">Add New Gift</button>
                         </div>
                         <div class="col col-xs-6 text-right">
                             <form method="get" action="/mallManager">
@@ -25,31 +25,14 @@
                             </form>
                         </div>
                     </div>
-                    <input type="text" id="searchInput" onkeyup="searchStores()" placeholder="Search for stores..." title="Type in a name" >
+                    <input type="text" id="searchInput" onkeyup="searchGifts()" placeholder="Search for stores.." title="Type in a name" >
                 </div>
-                <div class="panel-body">
-                    <table id="stores_table" class="table table-striped table-bordered table-list" style="table-layout:fixed">
-                        <thead>
-                        <tr>
-                            <th><em class="fa fa-cog" align="center"></em></th>
-                            <th class="hidden-xs">Store ID</th>
-                            <th>Store Name</th>
-                            <th>Store Location</th>
-                        </tr>
-                        </thead>
-                        <tbody id="stores_table_body">
-                        <!--                        <tr>
-                                                    <td align="center">
-                                                        <a class="btn btn-default"><em class="fa fa-pencil"></em></a>
-                                                        <a class="btn btn-danger"><em class="fa fa-trash"></em></a>
-                                                    </td>
-                                                    <td class="hidden-xs">1</td>
-                                                    <td>John Doe</td>
-                                                    <td>johndoe@example.com</td>
-                                                </tr>-->
-                        </tbody>
-                    </table>
+                <div class="panel-body" style="margin: auto">
 
+                    <div class="container" style="display: inline;">
+                        <div id="gifts_container_row" class="row">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,48 +41,66 @@
 
 
 <script>
+    window.onload = loadGifts();
 
-    window.onload = loadStores();
-
-    function  loadStores() {
-        var table = '';
-        var av_stores = <%- JSON.stringify(available_stores) %>;
-        var rowsNumber = av_stores.length;
-        for(var r = 0; r < rowsNumber; r++)
+    function loadGifts() {
+        var content = '';
+        var av_gifts = <%- JSON.stringify(available_gifts) %>;
+        var giftsNumber = av_gifts.length;
+        for(var i = 0; i < giftsNumber; i++)
         {
-            table+= '<tr id="row-' + r + '">';
-
-            table+= '<td align="center">';
-            table+= '<button id="edit_button" type="button" onclick="editStore(' + r + ')" class="btn btn-default"><em class="fa fa-pencil"></em></button>';
-            table+= '<button id="delete_button" type="button" onclick="deleteStore(' + r + ')" class="btn btn-danger"><em class="fa fa-trash"></em></button>';
-            table+= '</td>';
-            table+= '<td class="hidden-xs" id="store_id_field">' + av_stores[r].store_id + '</td>';
-            table+= '<td id="store_name_field">' + av_stores[r].name + '</td>';
-            table+= '<td id="store_location_field">' + av_stores[r].location + '</td>';
-
-            table+= '</tr>';
+            content+='<div id="row-' + i + '" class="col-sm-12 col-xs-12 col-md-4 col-lg-3" style="display: inline-block;">';
+            content+=   '<div class="thumbnail bootsnipp-thumb">';
+            content+=       '<div style="display: inline">';
+            content+=           '<p class="lead snipp-title" >';
+            content+=               '<h3 style="vertical-align: top">' + av_gifts[i].name + '</h3>';
+            content+=           '</p>';
+            content+=       '</div>';
+            content+=   '<div style="overflow:hidden;height:150px;margin-left: auto;margin-right: auto;">';
+            content+=       '<a style="height:100%;width:100%;margin-left: auto;margin-right: auto;">';
+            content+=           '<img src="' + av_gifts[i].ImageUrl + '">';
+            content+=       '</a>';
+            content+=   '</div>';
+            content+=   '<div>';
+            content+=       '<p class="lead snipp-title">';
+            content+=           '<h4>Price: ' + av_gifts[i].price + ' </h4>';
+            content+=       '</p>';
+            content+=   '</div>';
+            content+=   '<div class="row" style="display: inline;margin-left: auto;margin-right: auto;">';
+            content+=        '<a href="#" class="btn btn-primary a-btn-slide-text">';
+            content+=           '<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>';
+            content+=           '<span>Edit</span>';
+            content+=        '</a>';
+            content+=        '<span>  </span>';
+            content+=        '<a href="#" class="btn btn-primary a-btn-slide-text" onclick="deleteGift(' + i + ')">';
+            content+=           '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
+            content+=           '<span>Delete</span>';
+            content+=        '</a>';
+            content+=   '</div>';
+            content+='</div>';
+            content+='</div>';
         }
-        var tbody = document.getElementById("stores_table_body");
-        tbody.innerHTML = table;
+
+        var gifts_container_row = document.getElementById("gifts_container_row");
+        gifts_container_row.innerHTML = content;
     }
 </script>
 
 <script type="text/javascript" >
-    function deleteStore(rowNum)
+    function deleteGift(rowNum)
     {
         var rowElement = document.getElementById("row-" + rowNum);
         var storeName = rowElement.getElementsByTagName("td")[2].textContent;
-
         var isDeletionConfirmed = showDeleteConfirmationDialog(storeName);
         if(isDeletionConfirmed){
-            post('/mallManager/deleteStore', {store_name: storeName});
+            post('/mallManager/deleteGift', {store_name: storeName});
         }
     }
 </script>
 
 <script type="text/javascript" >
-    function showDeleteConfirmationDialog(storeName){
-        var x = confirm("Are you sure you want to delete the store: " + storeName + "?");
+    function showDeleteConfirmationDialog(giftName){
+        var x = confirm("Are you sure you want to delete the gift: " + giftName + "?");
         if (x)
             return true;
         else
@@ -108,11 +109,11 @@
 </script>
 
 <script type="text/javascript" >
-    function editStore(rowNum)
+    function editGift(rowNum)
     {
         var rowElement = document.getElementById("row-" + rowNum);
         var storeName = rowElement.getElementsByTagName("td")[2].textContent;
-        alert("editStore  store: " + storeName + " number: " + rowNum + "!");
+        alert("editGift  store: " + storeName + " number: " + rowNum + "!");
     }
 </script>
 
@@ -143,36 +144,30 @@
 </script>
 
 <script type="text/javascript">
-    function searchStores() {
-        var input, filter, storesTableBodyElement, trs, tdStoreName, i,table;
+    function searchGifts() {
+        var input, filter, giftsContinerElement, divs, giftName, i,table;
         input = document.getElementById("searchInput");
         filter = input.value.toUpperCase();
-        storesTableBodyElement = document.getElementById("stores_table_body");
-        table = document.getElementById("stores_table");
-        trs = storesTableBodyElement.getElementsByTagName("tr");
-        for (i = 0; i < trs.length; i++) {
-            tdStoreName = trs[i].getElementsByTagName("td")[2].textContent;
-            console.log(tdStoreName);
-            if (tdStoreName.toUpperCase().indexOf(filter) > -1) {
-                trs[i].style.display = "";
+        divs = document.getElementsByClassName("col-sm-12 col-xs-12 col-md-4 col-lg-3");
+        console.log(divs);
+        for (i = 0; i < divs.length; i++) {
+            giftName = divs[i].getElementsByTagName("h3").textContent || divs[i].getElementsByTagName("h3").innerText;
+            console.log(divs[i].getElementsByTagName("h3"));
+            if (giftName.toUpperCase().indexOf(filter) > -1) {
+                divs[i].style.display = "";
             } else {
-                trs[i].style.display = "none";
+                divs[i].style.display = "none";
             }
         }
     }
 </script>
 
-
-
-
-
-
-<!--------------------------------------------------------Create New Store Popup--------------------------------------------------------------->
+<!--------------------------------------------------------Add New Gift Popup--------------------------------------------------------------->
 
 <div id="popup_create_new_store" class="modal">
     <div class="modal-content animate" >
         <div class="imgcontainer">
-            <span onclick="toggleCreateNewStorePopupVisibility(false)" class="close" title="Close Popup">&times;</span>
+            <span onclick="toggleAddNewGiftPopupVisibility(false)" class="close" title="Close Popup">&times;</span>
             <img class="img-circle" src="img/gifter.jpg" alt="Create New Store" class="avatar">
         </div>
         <form name="singnupForm" class="form-horizontal" method="post" action="/mallManager/createNewStore" >
@@ -249,14 +244,14 @@
                 </div>
             </div>
             <div class="form-group ">
-                <button type="submit" onclick="toggleCreateNewStorePopupVisibility(false);" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
+                <button type="submit" onclick="toggleAddNewGiftPopupVisibility(false);" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function toggleCreateNewStorePopupVisibility(isToShowPopup) {
+    function toggleAddNewGiftPopupVisibility(isToShowPopup) {
         var popupCreateNewStore = document.getElementById('popup_create_new_store');
         if(isToShowPopup){
             popupCreateNewStore.style.display = "block";
@@ -267,7 +262,7 @@
 
     window.onclick = function(event) {
         if (event.target == document.getElementById('popup_create_new_store')) {
-            toggleCreateNewStorePopupVisibility(false);
+            toggleAddNewGiftPopupVisibility(false);
         }
     }
 </script>

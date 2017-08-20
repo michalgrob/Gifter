@@ -12,6 +12,43 @@ var StoreManager=require('./models/StoreManager');
 var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
+var availableGifts = new Array();
+
+
+// Get/Post Requests:
+
+router.get('/', function(req, res, next) {
+    getGifts(req, function () {
+        res.render('storeManagerPage', {
+            etitle: "present",
+            LogedInUser: req.user ? req.user.username : 'guest',
+            CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+            available_gifts: availableGifts
+        });
+    });
+});
+
+function getGifts(req,done){
+    var currStoreManager = req.user.email;
+    availableGifts = [];
+    var iterations = 0;
+    User.findOne({email:currStoreManager})
+        .populate('store.gifts')
+        .exec(function(err, store_manager_user) {
+            if (err) throw err;
+            var store = store_manager_user.store;
+            Store.findOne(store)
+                .populate('gifts')
+                .exec(function (err, store) {
+                    var gifts = store.gifts;
+                    for (var i = 0; i < gifts.length; i++) {
+                        availableGifts.push(gifts[i]);
+                    }
+                    done();
+                })
+        });
+}
+
 
 //michal 17/7/17/stores/showStoreGifts
 router.post('/showStoreGifts', function(req,res,next){
