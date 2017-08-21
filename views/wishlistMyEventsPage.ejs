@@ -1,4 +1,46 @@
 <% layout('boilerplate') %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
 
 <div class="jumbotron">
     <div class="container text-center">
@@ -47,12 +89,51 @@
                             <th><%=events[i].title%></th>
                             <th> <%=events[i].description%></th>
                             <th><%=events[i].event_date%></th>
-                            <th><%=events[i].guests.length%>guest
-                                <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">-->
-                                    <!--Launch demo modal-->
-                                <!--</button>-->
+                            <th><%=events[i].guests.length%> guests <br>
+                                <button id="myBtn" onclick="showModal('myModal<%=events[i].id%>')">Show Guests</button>
+
+                                <!-- The Modal -->
+                                <div id='myModal<%=events[i].id%>' class="modal">
+
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <span class="close">&times;</span>
+                                        <h4>Your Guests List:</h4><br>
+                                        <p><% for (var j=0; j<events[i].guests.length; j++){%>
+                                            <b>  <%= events[i].guests[j].username %> :</b> <%= events[i].guests[j].email %> <br>
+                                            <%}%>
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
                             </th>
-                            <th><%=events[i].gifts.length%>wishlist</th>
+                            <th><%=events[i].gifts.length%> wishlist<br>
+                                <button id="myBtnGifts" onclick="showModal('myModalGifts<%=events[i].id%>')">Show Guests</button>
+
+                                <!-- The Modal -->
+                                <div id='myModalGifts<%=events[i].id%>' class="modal">
+
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <span class="close">&times;</span>
+                                        <h4>Your WishList:</h4><br>
+                                        <ul class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
+                                            <% for (var k=0; k<events[i].gifts.length; k++){%>
+                                            <li class="w3-padding-15">
+                                                <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
+
+                                                <span class="w3-large">  <%= events[i].gifts[k].name %> </span><br>
+                                                <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
+                                                <%= events[i].gifts[k].price %>
+                                            </li>
+                                        <%}%>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </th>
                         </tr>
                         <%}%>
                         </tbody>
@@ -63,36 +144,28 @@
         </div>
     </div>
 </div>
-<!--&lt;!&ndash; Modal &ndash;&gt;-->
-<!--<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">-->
-    <!--<div class="modal-dialog" role="document">-->
-        <!--<div class="modal-content">-->
-            <!--<div class="modal-header">-->
-                <!--<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>-->
-                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-                    <!--<span aria-hidden="true">&times;</span>-->
-                <!--</button>-->
-            <!--</div>-->
-            <!--<div class="modal-body">-->
-                <!--...-->
-            <!--</div>-->
-            <!--<div class="modal-footer">-->
-                <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-
-
-
-
-
 
 <script  type="text/javascript">
+    var modal;
+    var span = document.getElementsByClassName("close")[0];
 
-//    $("#myModal").modal("show");
-//    $("#myModal").css("z-index", "1500");
+    function showModal(eventId) {
+        modal = document.getElementById(eventId);
+
+        modal.style.display = "block";
+
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    //    $("#myModal").modal("show");
+    //    $("#myModal").css("z-index", "1500");
 
 </script>

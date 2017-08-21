@@ -84,10 +84,9 @@ function sendMailsToGuests(guestsMailsArray,res) {
 
     var mailOptions = {
         from: '"Gifter"<sadna.gifter@gmail.com>',
-        to: mailString,//'sapirv@gmail.com,michalgrob@gmail.com',
-        subject: 'תראי איזה יופי(:',
-        html: '<h1>Welcome</h1><p>That was easy!</p>'
- //       text: 'נסיון אחרון'
+        to: 'sapirv@gmail.com',//,michalgrob@gmail.com',
+        subject: 'WOWW someone invites you!!',
+        html: '<div class="jumbotron text-xs-center"><h1 class="display-3">Thank You!</h1><p class="lead"><strong>Please check your email</strong> for further instructions on how to complete your account setup.</p><hr><p>Having trouble? <a href="">Contact us</a></p><p class="lead"><a class="btn btn-primary btn-sm" href="https://bootstrapcreative.com/" role="button">Continue to homepage</a></p></div>'//       text: 'נסיון אחרון'
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -120,7 +119,7 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
-        sendMailsToGuests(guestsMailsArray,res);//todo
+       // sendMailsToGuests(guestsMailsArray,res);//todo
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
     });
 }
@@ -189,7 +188,7 @@ function findClientEventDetails(req,res) {
                 guests: guests
             });
         }
-   //    sendMailsToGuests([],res);
+    //  sendMailsToGuests([],res);
         res.render('wishlistMyEventsPage.ejs', {
             LogedInUser: req.user ? req.user.username : 'guest',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
