@@ -106,8 +106,8 @@
                                                 <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
 
                                                 <span class="w3-large">  <%= events[i].gifts[k].name %> </span>
-                                                <span onclick="markAsMine(this)"class="w3-button w3-white w3-xlarge w3-right">
-                                                    <i id='<%=events[i].id%>;<%=events[i].gifts[k].id%>' style="margin-right: 0px;" class="fa fa-hand-o-up" aria-hidden="true"></i>
+                                                <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)"class="w3-button w3-white w3-xlarge w3-right">
+                                                    <i  style="margin-right: 0px;" class="fa fa-hand-o-up" aria-hidden="true"></i>
                                                 </span>
                                                 <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
                                                 <%= events[i].gifts[k].price %>
@@ -149,20 +149,59 @@
         }
     }
 
-    //    $("#myModal").modal("show");
-    //    $("#myModal").css("z-index", "1500");
+
     function markAsMine(element) {
         // element.parentElement.style.display='none'
-        var elementId=element.getAttribute("id");
+        var eventId = element.getAttribute("id");
+        var giftId = element.getAttribute("name");
+
 
         $.ajax({
             type: "POST",
-            url: "/wishlist/",
+            dataType: "json",
+            data: {
+                giftId: giftId,
+                eventId: eventId,
+            },
+            url: "/wishlist/markGift",
+            success: function (data) {
+                console.log("vv");
+                console.log(data);
+                ajaxUpdateCart(giftId);
+            },
+            error: function (err) {
+                console.log(err);
+                console.log("xx");
+            }
+
+
+        });
+    }
+
+    ////////copied from shopping cart
+    function incQty() {
+        var qty = parseInt($("#cartQty").text());
+        $("#cartQty").text(qty+1);
+        alert("gift added to cart successfully");
+
+
+    }
+
+
+
+    function ajaxUpdateCart(giftId) {
+        $.ajax({
+            type: "GET",
+            url: "/shoppingCart/add-to-cart/"+giftId.toString(),
             //data: "game-name=" + GAME_NAME,
             success: function (status) {
-                ajaxUpdateCart(giftId);
+                incQty();
+
             }
 
         })
     }
+
+
+
 </script>

@@ -39,7 +39,7 @@ var eventSchema = new Schema({
 eventSchema.pre('save', function(next) {
     var self = this;
     Event.find({title : self.title}, function (err, docs) {
-        if (!docs.length){
+        if (!docs.length || docs[0].id==self.id){
             // get the current date
             var currentDate = new Date();
 

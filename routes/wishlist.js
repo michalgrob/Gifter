@@ -20,6 +20,9 @@ var moment = require('moment');
 var nodemailer = require('nodemailer');
 
 
+router.post('/markGift',function (req,res,next) {
+    markUserInGiftEvent(req,res);
+});
 router.get('/', function(req, res, next) {
     res.render('wishlistMainPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
@@ -183,7 +186,7 @@ function findFriendsEventDetails(req,res) {
         .populate({
             path: 'friendsEvents',
             populate: {
-                path:'hostUser gifts.gift '
+                path:'hostUser gifts.gift gifts.markedBy'
             }
         }).exec(function(err,client) {
 
@@ -297,4 +300,39 @@ function createGiftsArray(gifts) {
         array.push({isMarked: false, markedBy: null,  gift :gifts[i].id});
     }
     return array;
+}
+
+function  markUserInGiftEvent(req,res){
+    var markedByUserId = req.user.id;
+    var giftIdToMark = req.body.giftId;
+    var eventId = req.body.eventId;
+
+    Event.findById(eventId)
+        .populate({
+            path: 'gifts.gift',
+        }).exec(function(err,event) {
+
+            for(var i=0;i<event.gifts.length;i++){
+                if(event.gifts[i].gift.id == giftIdToMark){
+                    event.gifts[i]._doc.markedBy = markedByUserId;
+                    event.gifts[i]._doc.isMarked = true;
+                    break;
+                }
+            }
+
+var x=0;
+        event.save(function (err) {
+            if (err){
+                console.log(err);
+                throw err;
+            }
+
+            res.send();
+        });
+
+    });
+
+
+
+
 }
