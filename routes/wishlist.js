@@ -327,7 +327,7 @@ var x=0;
                 throw err;
             }
 
-            res.send();
+            res.send({s: "s"});
         });
 
     });
