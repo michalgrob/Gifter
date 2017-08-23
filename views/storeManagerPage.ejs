@@ -20,7 +20,14 @@
                             <button type="button" onclick="toggleAddNewGiftPopupVisibility(true)" class="btn btn-sm btn-primary btn-create">Add New Gift</button>
                         </div>
                         <div class="col col-xs-6 text-right">
-                            <form method="get" action="/mallManager">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <button type="button" class="btn btn-default btn-file" data-provides="fileinput">Import Gifts From CSV
+                                        <input type="file" />
+                                    </button>
+                                </div>
+                        </div>
+                        <div class="col col-xs-6 text-right">
+                            <form method="get" action="/stores">
                                 <button type="submit" class="btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
                             </form>
                         </div>
@@ -67,15 +74,15 @@
             content+=       '</p>';
             content+=   '</div>';
             content+=   '<div class="row" style="display: inline;margin-left: auto;margin-right: auto;">';
-            content+=        '<a href="#" class="btn btn-primary a-btn-slide-text">';
+            content+=        '<button href="#" class="btn btn-primary a-btn-slide-text">';
             content+=           '<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>';
             content+=           '<span>Edit</span>';
-            content+=        '</a>';
+            content+=        '</button>';
             content+=        '<span>  </span>';
-            content+=        '<a href="#" class="btn btn-primary a-btn-slide-text" onclick="deleteGift(' + i + ')">';
+            content+=        '<button href="#" class="btn btn-primary a-btn-slide-text" type="button" onclick="deleteGift(' + i + ')">';
             content+=           '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
             content+=           '<span>Delete</span>';
-            content+=        '</a>';
+            content+=        '</button>';
             content+=   '</div>';
             content+='</div>';
             content+='</div>';
@@ -87,13 +94,16 @@
 </script>
 
 <script type="text/javascript" >
-    function deleteGift(rowNum)
+
+    function deleteGift(giftIndex)
     {
-        var rowElement = document.getElementById("row-" + rowNum);
-        var storeName = rowElement.getElementsByTagName("td")[2].textContent;
-        var isDeletionConfirmed = showDeleteConfirmationDialog(storeName);
+        var av_gifts = <%- JSON.stringify(available_gifts) %>;
+        var selectedGift = av_gifts[giftIndex];
+        var selectedGiftName = selectedGift.name;
+        var selectedGiftID = selectedGift.prod_id;
+        var isDeletionConfirmed = showDeleteConfirmationDialog(selectedGiftName);
         if(isDeletionConfirmed){
-            post('/mallManager/deleteGift', {store_name: storeName});
+            post('/stores/deleteGift', {gift_id: selectedGiftID});
         }
     }
 </script>
@@ -164,85 +174,92 @@
 
 <!--------------------------------------------------------Add New Gift Popup--------------------------------------------------------------->
 
-<div id="popup_create_new_store" class="modal">
+<div id="popup_add_new_gift" class="modal">
     <div class="modal-content animate" >
         <div class="imgcontainer">
             <span onclick="toggleAddNewGiftPopupVisibility(false)" class="close" title="Close Popup">&times;</span>
-            <img class="img-circle" src="img/gifter.jpg" alt="Create New Store" class="avatar">
+            <img class="img-circle" src="img/gifter.jpg" alt="Add New Gift" class="avatar">
         </div>
         <form name="singnupForm" class="form-horizontal" method="post" action="/mallManager/createNewStore" >
             <!--onsubmit="return validationUserInput()"-->
-
             <div class="form-group">
-                <label for="name" class="cols-sm-2 control-label" >Store Name</label>
+                <label for="name" class="cols-sm-2 control-label" >Gift Name</label>
                 <div class="cols-sm-10">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="store_name" id="store_name"  placeholder="Enter your Name"required/>
+                        <span class="input-group-addon"><i class="fa fa-gift" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="gift_name" id="gift_name"  placeholder="Enter gift name"required/>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="email" class="cols-sm-2 control-label">Store Email</label>
+                <label for="username" class="cols-sm-2 control-label">Gift Id</label>
                 <div class="cols-sm-10">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="store_manager_email" id="store_manager_email"  placeholder="Enter your Email"required/>
+                        <span class="input-group-addon"><i class="fa fa-id-badge" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="giftId" id="giftId"  placeholder="Enter gift ID as given from Manager"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Price</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-usd" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="price" id="price"  placeholder="Enter gift price"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Gender</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-venus-mars" aria-hidden="true"></i></span>
+                        <div id="gender"  class="Info">
+                            <input type="radio" id="male" name="gender" value = 'male'/>Male <br />
+                            <input type="radio" id="female" name="gender" value = 'female'/>Female  <br />
+                            <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter <br />
+                        </div>
                     </div>
                 </div>
             </div>
 
 
             <div class="form-group">
-                <label for="username" class="cols-sm-2 control-label">store Username</label>
+                <label for="username" class="cols-sm-2 control-label">Age</label>
                 <div class="cols-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="store_manager_username" id="store_manager_username"  placeholder="Enter store Username"required/>
+                    <div class="input-group" data-role="rangeslider">
+                        <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
+                        <label for="price-min"> min age: </label>
+                        <input type="text" name="minAge" id="minAge" ><br>
+                        <label for="price-max">max age: </label>
+                        <input type="text" name="maxAge" id="maxAge" ><br>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="password" class="cols-sm-2 control-label">Password</label>
+                <label for="username" class="cols-sm-2 control-label">Interests</label>
                 <div class="cols-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                        <input type="password" class="form-control" name="store_manager_password" id="store_manager_password"  placeholder="Enter your Password"required/>
+                    <div class="input-group" data-role="rangeslider">
+                        <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
+                        <select class="my-select-box" multiple="multiple">
+                            <optgroup id="add_new_gift_interests" label="All Interests">
+                                <option value="me">Maine</option>
+                                <option value="ny">New York</option>
+                                <option value="nj">New Jersey</option>
+                                <option value="vt">Vermont</option>
+                            </optgroup>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="confirm" class="cols-sm-2 control-label">Confirm Password</label>
-                <div class="cols-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                        <input type="password" class="form-control" name="confirm" id="confirm"  placeholder="Confirm your Password"required/>
-                    </div>
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label for="username" class="cols-sm-2 control-label">Store Id</label>
-                <div class="cols-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="store_id" id="store_id"  placeholder="Enter store id as given grom Manager"required/>
-                    </div>
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label for="username" class="cols-sm-2 control-label">Store Location</label>
-                <div class="cols-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="store_location" id="store_location"  placeholder="Enter store location inside the mall"required/>
-                    </div>
-                </div>
-            </div>
+
             <div class="form-group ">
                 <button type="submit" onclick="toggleAddNewGiftPopupVisibility(false);" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
             </div>
@@ -252,7 +269,7 @@
 
 <script>
     function toggleAddNewGiftPopupVisibility(isToShowPopup) {
-        var popupCreateNewStore = document.getElementById('popup_create_new_store');
+        var popupCreateNewStore = document.getElementById('popup_add_new_gift');
         if(isToShowPopup){
             popupCreateNewStore.style.display = "block";
         }else{
@@ -261,8 +278,28 @@
     }
 
     window.onclick = function(event) {
-        if (event.target == document.getElementById('popup_create_new_store')) {
+        if (event.target == document.getElementById('popup_add_new_gift')) {
             toggleAddNewGiftPopupVisibility(false);
         }
     }
 </script>
+
+<!--<script>
+    function updateInterests(){
+        var interestsArray =
+        var interestsSelect = document.getElementById('add_new_gift_interests');
+        var content = '';
+        for(var i=0; i<interestsArray.length; i++){
+            content=+ '<option value="' + interestsArray[i] + '">' + interestsArray[i] + '</option>';
+        }
+        interestsSelect.innerHTML = content;
+    }
+</script>
+
+<script>
+    (function($) {
+        $(function() {
+            $('.my-select-box').fSelect();
+        });
+    })(jQuery);
+</script>-->

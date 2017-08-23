@@ -13,7 +13,16 @@ var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
 var availableGifts = new Array();
+var cloudinary = require('cloudinary');
 
+cloudinary.config({
+    cloud_name: 'gifter-mta',
+    api_key: '295691767823962',
+    api_secret: 'oQi03-LFvbNzwueYMUDR8pizdR8'
+},function (err) {
+    if(err) throw err;
+    console.log("connected to cloudinary!")
+});
 
 // Get/Post Requests:
 
@@ -25,6 +34,13 @@ router.get('/', function(req, res, next) {
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
             available_gifts: availableGifts
         });
+    });
+});
+
+router.post('/deleteGift', function(req,res,next){
+    deleteGift(req,function () {
+        sleep(1000);
+        res.redirect("/users/redirect_user_by_role");
     });
 });
 
@@ -47,6 +63,55 @@ function getGifts(req,done){
                     done();
                 })
         });
+}
+
+function deleteGift(req,done) {
+    var currGiftID = req.body.gift_id;
+    var currStore = req.user.store;
+
+    var storeObject, giftObject;
+
+    //Delete Gift from DB:
+    //1. Search Store in the DB:
+    Store.findOne(currStore)
+        .populate('gifts')
+        .exec(function (err, store) {
+            if (err) throw err;
+            storeObject = store;
+
+            giftObject = store.gifts.find(function (element) {
+                return element.prod_id == currGiftID;
+            });
+            var giftMongodbID = giftObject._id;
+
+            //2. Search Gift in the DB:
+            Gift.findOne({_id: giftMongodbID})
+                .populate()
+                .exec(function (err, gift){
+                    if (err) throw err;
+                    giftObject = gift;
+
+                    //3.Disconnect Gift from Store:
+                    var storeGiftsContainer = storeObject.gifts;
+                    storeGiftsContainer.pop(giftObject);
+                    storeObject.save();
+
+                    //4. Delete select Gift from DB:
+                    Gift.findOneAndRemove({_id: giftMongodbID}, function (err) {
+                        if (err)  throw err;
+                        done();
+                    });
+                });
+        });
+}
+
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
 }
 
 
@@ -330,7 +395,6 @@ function getAllStoreGifts(storeName,req, res){
         }
         res.render('storeGiftsPage.ejs',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0,gifts: storeGifts});//('storeGiftsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest'});//gifts: gifts,etitle:req.user.username ,
     })
-
 }
 
 function createNewStore(req){
