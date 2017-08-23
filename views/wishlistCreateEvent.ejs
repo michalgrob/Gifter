@@ -87,8 +87,8 @@
                 <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"required><br>
 
                 <label class="col-sm-3"style="margin:12px; ">Guests: </label>
-                <input class="form-control"type="text" name="eventGuests" id="eventGuests" value=""required>
-                <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" required>
+                <input class="form-control"type="text" name="eventGuests" id="eventGuests" value="">
+                <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" >
                 <ul id='list' name="guestsList"></ul>
 
             </div>
@@ -181,7 +181,7 @@
             var guestList = Array.from(document.querySelectorAll('#list>li'));
 
             for (var i = 0; i < guestList.length; i++) {
-                guestArrayData.push({email: guestList[i].textContent, id: guestList[i].getAttribute("id")});
+                guestArrayData.push({email: guestList[i].textContent, id: guestList[i].getAttribute("id"),username:guestList[i].getAttribute("name")});
             }
 
             var gifts = [];
@@ -307,10 +307,10 @@
             $.ajax({
                 type: "GET",
                 url: "/wishlist/checkIfGuestIsRegister/" + guestMail,
-                success: function (id) {
-                    if (id != "0") {
-                        addGuests(id);
-                        console.log(id);
+                success: function (user) {
+                    if (user.id != "0") {
+                        addGuests(user.id,user.username);
+                        console.log(user.id);
                     }
                     else {
                         alert(guestMail + " isn't register");
@@ -320,9 +320,10 @@
         }
     }
 
-    function addGuests(id) {//validation mail!!todo
+    function addGuests(id,username) {//validation mail!!todo
         var node = document.createElement("Li");
-        node.setAttribute("id",id.toString())
+        node.setAttribute("id",id.toString());
+        node.setAttribute("name",username);
         var text = document.getElementById("eventGuests").value; //.value gets input values
         var textnode = document.createTextNode(text);
         node.appendChild(textnode);

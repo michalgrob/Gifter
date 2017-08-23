@@ -63,16 +63,7 @@ function createGuestsMailsArray(guests) {
     }
     return array;
 }
-function sendMailsToGuests(guestsMailsArray,res) {
-    var mailString="";
-    for (var m=0; m<guestsMailsArray.length;m++)
-    {
-        mailString+=guestsMailsArray[m];
-    if(m!=guestsMailsArray.length-1)
-    {
-        mailString+=",";
-    }
-    }
+function sendMailsToGuests(eventId,guests,hostUser,title,event_date,res) {
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -81,20 +72,41 @@ function sendMailsToGuests(guestsMailsArray,res) {
             pass: 'sadnagifter12'
         }
     });
+    for (var i = 0; i < guests.length; i++) {
+        var htmlMsg=createHtmlMsg(guests[i],eventId,hostUser,title,event_date);
+        var mailOptions = {
+            from: '"Gifter"<sadna.gifter@gmail.com>',
+            to: guests[i].email,//,michalgrob@gmail.com',
+            subject: 'WOW '+hostUser+' invites you to his event!!',
+            html: htmlMsg};
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    }
+}
+function createHtmlMsg(guest,eventId,hostUser,title,event_date)
+{
+    var date=moment(event_date).format( 'dddd, MMMM Do YYYY, h:mm:ss a');
+    var msg='<div class="jumbotron text-xs-center">' +
+        '<h1 class="display-3">HELLO '+ guest.username+' !</h1>' +
+        '<h5 class="lead">' +
+        '<strong>'+hostUser+' invites you to "'+title+'" and create a wishlist.</strong><br> ' +
+        'Event id : '+eventId+'<br>' +
+        'Event on : '+date+'</h5>'+
+        '<hr>' +
+        '<h4>Having fun! ' +
+        '<a href="">You are more then welcome to get to our site and see more details about '+hostUser+'</a>' +
+        '</h4>' +
+        '<h5 class="lead">'
+    '<a class="btn btn-primary btn-sm" href=https://sadna-gifter.herokuapp.com/wishlist/myEvents+ role="button">Continue to event</a>' +
+    '</h5>' +
+    '</div>'
 
-    var mailOptions = {
-        from: '"Gifter"<sadna.gifter@gmail.com>',
-        to: 'sapirv@gmail.com',//,michalgrob@gmail.com',
-        subject: 'WOWW someone invites you!!',
-        html: '<div class="jumbotron text-xs-center"><h1 class="display-3">Thank You!</h1><p class="lead"><strong>Please check your email</strong> for further instructions on how to complete your account setup.</p><hr><p>Having trouble? <a href="">Contact us</a></p><p class="lead"><a class="btn btn-primary btn-sm" href="https://bootstrapcreative.com/" role="button">Continue to homepage</a></p></div>'//       text: 'נסיון אחרון'
-    };
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
+    return msg;
 }
 function createNewEvent(req,res) {//todo check gifts array
 
@@ -119,8 +131,12 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
-       // sendMailsToGuests(guestsMailsArray,res);//todo
+        sendMailsToGuests(newEvent.id,guests,req.user.username,title,event_date,res);//todo
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
+
+        // res.redirect('');
+
+
     });
 }
 function updateEventInHost(eventId,hostUser,eventGuestsUsers){
@@ -156,7 +172,8 @@ function checkIfGuestIsRegister(guestMail,res){
             res.send("0");
         }
         else {
-            res.send(user.id);
+            var user={id:user.id,username:user.username};
+            res.send(user);
         }
     })
 }
@@ -188,7 +205,7 @@ function findClientEventDetails(req,res) {
                 guests: guests
             });
         }
-    //  sendMailsToGuests([],res);
+        //  sendMailsToGuests([],res);
         res.render('wishlistMyEventsPage.ejs', {
             LogedInUser: req.user ? req.user.username : 'guest',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
