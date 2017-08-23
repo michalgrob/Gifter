@@ -30,7 +30,7 @@ router.get('/', function(request, response, next) {
         if (err) throw err;
         var orders_json = [];
         orders.forEach(function(order) {
-                orders_json.push({ interest: order.name});
+                orders_json.push({ interest: order.name ,category: order._doc.category});
         });
 
         response.render('giftsPage', {orders: orders_json,etitle : "present", LogedInUser: request.user ? request.user.username : 'guest',CartQty: request.session.cart ? request.session.cart.totalQty : 0  });

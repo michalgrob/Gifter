@@ -20,12 +20,16 @@ var moment = require('moment');
 var nodemailer = require('nodemailer');
 
 
+router.post('/markGift',function (req,res,next) {
+    markUserInGiftEvent(req,res);
+});
 router.get('/', function(req, res, next) {
     res.render('wishlistMainPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/myFriendsEvents', function(req, res, next) {
-    res.render('wishlistMyFriendsEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
+    findFriendsEventDetails(req,res);
+    //res.render('wishlistFriendsEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/myEvents', function(req, res, next){
@@ -63,16 +67,7 @@ function createGuestsMailsArray(guests) {
     }
     return array;
 }
-function sendMailsToGuests(guestsMailsArray,res) {
-    var mailString="";
-    for (var m=0; m<guestsMailsArray.length;m++)
-    {
-        mailString+=guestsMailsArray[m];
-    if(m!=guestsMailsArray.length-1)
-    {
-        mailString+=",";
-    }
-    }
+function sendMailsToGuests(eventId,guests,hostUser,title,event_date,res) {
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -81,28 +76,48 @@ function sendMailsToGuests(guestsMailsArray,res) {
             pass: 'sadnagifter12'
         }
     });
+    for (var i = 0; i < guests.length; i++) {
+        var htmlMsg=createHtmlMsg(guests[i],eventId,hostUser,title,event_date);
+        var mailOptions = {
+            from: '"Gifter"<sadna.gifter@gmail.com>',
+            to: guests[i].email,//,michalgrob@gmail.com',
+            subject: 'WOW '+hostUser+' invites you to his event!!',
+            html: htmlMsg};
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    }
+}
+function createHtmlMsg(guest,eventId,hostUser,title,event_date)
+{
+    var date=moment(event_date).format( 'dddd, MMMM Do YYYY, h:mm:ss a');
+    var msg='<div class="jumbotron text-xs-center">' +
+        '<h1 class="display-3">HELLO '+ guest.username+' !</h1>' +
+        '<h5 class="lead">' +
+        '<strong>'+hostUser+' invites you to "'+title+'" and create a wishlist.</strong><br> ' +
+        'Event id : '+eventId+'<br>' +
+        'Event on : '+date+'</h5>'+
+        '<hr>' +
+        '<h4>Having fun! ' +
+        '<a href="">You are more then welcome to get to our site and see more details about '+hostUser+'</a>' +
+        '</h4>' +
+        '<h5 class="lead">'
+    '<a class="btn btn-primary btn-sm" href=https://sadna-gifter.herokuapp.com/wishlist/myEvents+ role="button">Continue to event</a>' +
+    '</h5>' +
+    '</div>'
 
-    var mailOptions = {
-        from: '"Gifter"<sadna.gifter@gmail.com>',
-        to: mailString,//'sapirv@gmail.com,michalgrob@gmail.com',
-        subject: 'תראי איזה יופי(:',
-        html: '<h1>Welcome</h1><p>That was easy!</p>'
- //       text: 'נסיון אחרון'
-    };
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
+    return msg;
 }
 function createNewEvent(req,res) {//todo check gifts array
 
     var guests = JSON.parse(req.body.guests);
     var title=req.body.eventTitle;
     var description = req.body.eventDescription;
-    var gifts = createGuestsIdsArray(JSON.parse(req.body.gifts));
+    var gifts = createGiftsArray(JSON.parse(req.body.gifts));//createGuestsIdsArray(JSON.parse(req.body.gifts));
     var hostUser = req.user.id;
     var eventGuestsUsers = createGuestsIdsArray(guests);
     var guestsMailsArray=createGuestsMailsArray(guests);
@@ -120,8 +135,12 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
-        sendMailsToGuests(guestsMailsArray,res);//todo
+        sendMailsToGuests(newEvent.id,guests,req.user.username,title,event_date,res);//todo
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
+
+        // res.redirect('');
+
+
     });
 }
 function updateEventInHost(eventId,hostUser,eventGuestsUsers){
@@ -157,10 +176,46 @@ function checkIfGuestIsRegister(guestMail,res){
             res.send("0");
         }
         else {
-            res.send(user.id);
+            var user={id:user.id,username:user.username};
+            res.send(user);
         }
     })
 }
+function findFriendsEventDetails(req,res) {
+    User.findById(req.user.id)
+        .populate({
+            path: 'friendsEvents',
+            populate: {
+                path:'hostUser gifts.gift gifts.markedBy'
+            }
+        }).exec(function(err,client) {
+
+        var FriendsEvents=[];
+        var events=client._doc.friendsEvents;
+
+        for(var i=0;i<events.length;i++) {
+            var hosttUser=events[i].hostUser;
+            var gifts=generateEventGiftsToArray(events[i]);
+
+
+            FriendsEvents.push({
+                id: events[i].id,
+                title: events[i]._doc.title,
+                description: events[i]._doc.description,
+                event_date: moment(events[i]._doc.event_date).format( 'dddd, MMMM Do YYYY, h:mm:ss a'),
+                gifts: gifts,
+                host: hosttUser.username
+            });
+        }
+        //  sendMailsToGuests([],res);
+        res.render('wishlistFriendsEventsPage.ejs', {
+            LogedInUser: req.user ? req.user.username : 'guest',
+            CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+            events: FriendsEvents,
+        });
+    });
+}
+
 
 function findClientEventDetails(req,res) {
 
@@ -168,12 +223,12 @@ function findClientEventDetails(req,res) {
         .populate({
             path: 'myEvents',
             populate: {
-                path:'eventGuestsUsers gifts'
+                path:'eventGuestsUsers gifts.gift gifts.markedBy'
             }
         }).exec(function(err,client) {
 
         var ClientEvents=[];
-        var events=client._doc.myEvents;
+        var events = client._doc.myEvents;
 
         for(var i=0;i<events.length;i++) {
             var guests = generateEventGuestToArray(events[i]);
@@ -189,7 +244,7 @@ function findClientEventDetails(req,res) {
                 guests: guests
             });
         }
-   //    sendMailsToGuests([],res);
+        //  sendMailsToGuests([],res);
         res.render('wishlistMyEventsPage.ejs', {
             LogedInUser: req.user ? req.user.username : 'guest',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
@@ -219,15 +274,65 @@ function generateEventGiftsToArray(event) {
     var gifts=[];
 
     for (var j = 0; j < giftsEvent.length; j++) {
-        gifts.push({
-            id: giftsEvent[j].id,
-            name: giftsEvent[j]._doc.name,
-            price: giftsEvent[j]._doc.price,
-            store_name: giftsEvent[j]._doc.store_name,
-            ImageUrl: giftsEvent[j]._doc.ImageUrl
+        var markedBy = -1;
+        if(giftsEvent[j].markedBy!=null){
+            markedBy = giftsEvent[j].markedBy._doc.username;
+        }
 
-        })
+        gifts.push({
+            id: giftsEvent[j].gift.id,
+            name: giftsEvent[j].gift._doc.name,
+            price: giftsEvent[j].gift._doc.price,
+            store_name: giftsEvent[j].gift._doc.store_name,
+            ImageUrl: giftsEvent[j].gift._doc.ImageUrl,
+            isMarked: giftsEvent[j].isMarked,
+            markedBy: markedBy
+
+        });
     }
     return gifts;
 }
 
+function createGiftsArray(gifts) {
+    var array=[];
+
+    for(var i=0;i<gifts.length;i++){
+        array.push({isMarked: false, markedBy: null,  gift :gifts[i].id});
+    }
+    return array;
+}
+
+function  markUserInGiftEvent(req,res){
+    var markedByUserId = req.user.id;
+    var giftIdToMark = req.body.giftId;
+    var eventId = req.body.eventId;
+
+    Event.findById(eventId)
+        .populate({
+            path: 'gifts.gift',
+        }).exec(function(err,event) {
+
+            for(var i=0;i<event.gifts.length;i++){
+                if(event.gifts[i].gift.id == giftIdToMark){
+                    event.gifts[i]._doc.markedBy = markedByUserId;
+                    event.gifts[i]._doc.isMarked = true;
+                    break;
+                }
+            }
+
+var x=0;
+        event.save(function (err) {
+            if (err){
+                console.log(err);
+                throw err;
+            }
+
+            res.send({s: "s"});
+        });
+
+    });
+
+
+
+
+}

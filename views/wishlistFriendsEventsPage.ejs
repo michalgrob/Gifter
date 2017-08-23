@@ -44,7 +44,7 @@
 
 <div class="jumbotron">
     <div class="container text-center">
-        <h1>MY EVENTS</h1>
+        <h1>MY FRIENDS EVENTS</h1>
 
     </div>
 </div>
@@ -78,7 +78,7 @@
                             <th>Title</th>
                             <th>Description:</th>
                             <th>Date</th>
-                            <th>Guests</th>
+                            <th>Host</th>
                             <th>WishList</th>
                         </tr>
                         </thead>
@@ -89,26 +89,7 @@
                             <th><%=events[i].title%></th>
                             <th> <%=events[i].description%></th>
                             <th><%=events[i].event_date%></th>
-                            <th><%=events[i].guests.length%> guests <br>
-                                <button id="myBtn" onclick="showModal('myModal<%=events[i].id%>')">Show Guests</button>
-
-                                <!-- The Modal -->
-                                <div id='myModal<%=events[i].id%>' class="modal">
-
-                                    <!-- Modal content -->
-                                    <div class="modal-content">
-                                        <span class="close">&times;</span>
-                                        <h4>Your Guests List:</h4><br>
-                                        <p><% for (var j=0; j<events[i].guests.length; j++){%>
-                                            <b>  <%= events[i].guests[j].username %> :</b> <%= events[i].guests[j].email %> <br>
-                                            <%}%>
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </th>
+                            <th><%=events[i].host%></th>
                             <th><%=events[i].gifts.length%> wishlist<br>
                                 <button id="myBtnGifts" onclick="showModal('myModalGifts<%=events[i].id%>')">Show Gifts</button>
 
@@ -124,16 +105,14 @@
                                             <li class="w3-padding-15">
                                                 <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
 
-                                                <span class="w3-large">  <%= events[i].gifts[k].name %> </span><br>
+                                                <span class="w3-large">  <%= events[i].gifts[k].name %> </span>
+                                                <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)"class="w3-button w3-white w3-xlarge w3-right">
+                                                    <i  style="margin-right: 0px;" class="fa fa-hand-o-up" aria-hidden="true"></i>
+                                                </span>
                                                 <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
                                                 <%= events[i].gifts[k].price %>
-                                                <%if (events[i].gifts[k].isMarked == true){%>
-                                                <i class="fa fa-check-circle-o" aria-hidden="true">someone bought it for u :)</i>
-                                                <%}else{%>
-                                                <i class="fa fa-gift" aria-hidden="true"></i>
-                                                <%}%>
                                             </li>
-                                        <%}%>
+                                            <%}%>
                                         </ul>
                                     </div>
                                 </div>
@@ -170,7 +149,59 @@
         }
     }
 
-    //    $("#myModal").modal("show");
-    //    $("#myModal").css("z-index", "1500");
+
+    function markAsMine(element) {
+        // element.parentElement.style.display='none'
+        var eventId = element.getAttribute("id");
+        var giftId = element.getAttribute("name");
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            data: {
+                giftId: giftId,
+                eventId: eventId,
+            },
+            url: "/wishlist/markGift",
+            success: function (data) {
+                console.log("vv");
+                console.log(data);
+                ajaxUpdateCart(giftId);
+            },
+            error: function (err) {
+                console.log(err);
+                console.log("xx");
+            }
+
+
+        });
+    }
+
+    ////////copied from shopping cart
+    function incQty() {
+        var qty = parseInt($("#cartQty").text());
+        $("#cartQty").text(qty+1);
+        alert("gift added to cart successfully");
+
+
+    }
+
+
+
+    function ajaxUpdateCart(giftId) {
+        $.ajax({
+            type: "GET",
+            url: "/shoppingCart/add-to-cart/"+giftId.toString(),
+            //data: "game-name=" + GAME_NAME,
+            success: function (status) {
+                incQty();
+
+            }
+
+        })
+    }
+
+
 
 </script>
