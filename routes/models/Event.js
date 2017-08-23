@@ -8,7 +8,11 @@ var User = require('./User');
 var eventSchema = new Schema({
     title: String,
     description: String,
-    gifts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}],
+    gifts: [{
+        isMarked: Boolean, //TRUE FOR GUEST WHO CHOSE THIS GIFT,
+        markedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+        gift: {type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}
+    }],
     hostUser: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     eventGuestsUsers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     created_at: Date,

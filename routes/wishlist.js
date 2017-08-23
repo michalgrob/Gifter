@@ -25,7 +25,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/myFriendsEvents', function(req, res, next) {
-    res.render('wishlistMyFriendsEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
+    findFriendsEventDetails(req,res);
+    //res.render('wishlistFriendsEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/myEvents', function(req, res, next){
@@ -113,7 +114,7 @@ function createNewEvent(req,res) {//todo check gifts array
     var guests = JSON.parse(req.body.guests);
     var title=req.body.eventTitle;
     var description = req.body.eventDescription;
-    var gifts = createGuestsIdsArray(JSON.parse(req.body.gifts));
+    var gifts = createGiftsArray(JSON.parse(req.body.gifts));//createGuestsIdsArray(JSON.parse(req.body.gifts));
     var hostUser = req.user.id;
     var eventGuestsUsers = createGuestsIdsArray(guests);
     var guestsMailsArray=createGuestsMailsArray(guests);
@@ -177,6 +178,41 @@ function checkIfGuestIsRegister(guestMail,res){
         }
     })
 }
+function findFriendsEventDetails(req,res) {
+    User.findById(req.user.id)
+        .populate({
+            path: 'friendsEvents',
+            populate: {
+                path:'hostUser gifts.gift '
+            }
+        }).exec(function(err,client) {
+
+        var FriendsEvents=[];
+        var events=client._doc.friendsEvents;
+
+        for(var i=0;i<events.length;i++) {
+            var hosttUser=events[i].hostUser;
+            var gifts=generateEventGiftsToArray(events[i]);
+
+
+            FriendsEvents.push({
+                id: events[i].id,
+                title: events[i]._doc.title,
+                description: events[i]._doc.description,
+                event_date: moment(events[i]._doc.event_date).format( 'dddd, MMMM Do YYYY, h:mm:ss a'),
+                gifts: gifts,
+                host: hosttUser.username
+            });
+        }
+        //  sendMailsToGuests([],res);
+        res.render('wishlistFriendsEventsPage.ejs', {
+            LogedInUser: req.user ? req.user.username : 'guest',
+            CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+            events: FriendsEvents,
+        });
+    });
+}
+
 
 function findClientEventDetails(req,res) {
 
@@ -184,12 +220,12 @@ function findClientEventDetails(req,res) {
         .populate({
             path: 'myEvents',
             populate: {
-                path:'eventGuestsUsers gifts'
+                path:'eventGuestsUsers gifts.gift gifts.markedBy'
             }
         }).exec(function(err,client) {
 
         var ClientEvents=[];
-        var events=client._doc.myEvents;
+        var events = client._doc.myEvents;
 
         for(var i=0;i<events.length;i++) {
             var guests = generateEventGuestToArray(events[i]);
@@ -235,15 +271,30 @@ function generateEventGiftsToArray(event) {
     var gifts=[];
 
     for (var j = 0; j < giftsEvent.length; j++) {
-        gifts.push({
-            id: giftsEvent[j].id,
-            name: giftsEvent[j]._doc.name,
-            price: giftsEvent[j]._doc.price,
-            store_name: giftsEvent[j]._doc.store_name,
-            ImageUrl: giftsEvent[j]._doc.ImageUrl
+        var markedBy = -1;
+        if(giftsEvent[j].markedBy!=null){
+            markedBy = giftsEvent[j].markedBy._doc.username;
+        }
 
-        })
+        gifts.push({
+            id: giftsEvent[j].gift.id,
+            name: giftsEvent[j].gift._doc.name,
+            price: giftsEvent[j].gift._doc.price,
+            store_name: giftsEvent[j].gift._doc.store_name,
+            ImageUrl: giftsEvent[j].gift._doc.ImageUrl,
+            isMarked: giftsEvent[j].isMarked,
+            markedBy: markedBy
+
+        });
     }
     return gifts;
 }
 
+function createGiftsArray(gifts) {
+    var array=[];
+
+    for(var i=0;i<gifts.length;i++){
+        array.push({isMarked: false, markedBy: null,  gift :gifts[i].id});
+    }
+    return array;
+}
