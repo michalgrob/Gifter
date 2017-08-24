@@ -16,9 +16,18 @@ var availableGifts = new Array();
 var cloudinary = require('cloudinary');
 var path = require('path');
 var multer = require('multer');
+var mkdirp = require('mkdirp');
+
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,'../gifter/public/upload/temp/');
+        var path = '../gifter/public/upload/temp/';
+        mkdirp(path, function (err) {
+            if (err) console.error(err)
+            else{
+                console.log('folder' + path + ' created succesfully!');
+                cb(null,path);
+            }
+        });
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
