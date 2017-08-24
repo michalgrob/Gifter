@@ -265,48 +265,29 @@ function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
                 var storeInterests = csvData[i][7].split(";");
                 addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL);
             }
+        deleteFolderRecursive('../gifter/public/upload/temp/');
         });
 }
 
 router.post('/importCSV',upload.single('csv_file'),function(req, res, next) {
     req.body.csvFilePath = '../gifter/public/upload/temp/' + req.file.originalname;
     importGiftsFromCSV(req);
-/*    if(req.file){
-        var file = req.file,
-            name = file.originalname,
-            type = file.mimetype;
-        var uploadpath = __dirname + '/public/upload/tmp/' + name;
-        file.mv(uploadpath,function(err){
-            if(err){
-                console.log("File Upload Failed",name,err);
-                res.send("Error Occured!")
-            }
-            else {
-                console.log("File Uploaded",name);
-                res.send('Done! Uploading files')
+});
+
+function deleteFolderRecursive(path) {
+    if( fs.existsSync(path) ) {
+        fs.readdirSync(path).forEach(function(file,index){
+            var curPath = path + "/" + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
             }
         });
-    }*/
-
-
-/*    var upload = multer({ storage : storage}).any();
-
-    upload(req,res,function(err) {
-        if(err) {
-            console.log(err);
-            return res.end("Error uploading file.");
-        } else {
-            console.log(req.body);
-            req.files.forEach( function(f) {
-                console.log(f);
-                // and move file to final destination...
-            });
-            res.end("File has been uploaded");
-        }
-    });
-    //importGiftsFromCSV(req);
-    console.log(req.file.filename);*/
-});
+        if(path != '../gifter/public/upload/temp/')
+            fs.rmdirSync(path);
+    }
+};
 
 /*router.post('/importCSV', function(req, res, next) {
     var path = req.body.path;
