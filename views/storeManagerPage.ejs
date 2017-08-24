@@ -20,11 +20,12 @@
                             <button type="button" onclick="toggleAddNewGiftPopupVisibility(true)" class="btn btn-sm btn-primary btn-create">Add New Gift</button>
                         </div>
                         <div class="col col-xs-6 text-right">
+                            <form method="post" action="/stores/importCSV" enctype="multipart/form-data">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                                    <button type="button" class="btn btn-default btn-file" data-provides="fileinput">Import Gifts From CSV
-                                        <input type="file" />
-                                    </button>
+                                    <input type="file" id="fileInput" style="display:none;" onchange="this.form.submit()" name="csv_file" />
+                                    <button type="button" class="btn btn-default btn-file" data-provides="fileinput" onclick="document.getElementById('fileInput').click();"><i class="fa fa-upload" aria-hidden="true"></i>Import Gifts From CSV</button>
                                 </div>
+                            </form>
                         </div>
                         <div class="col col-xs-6 text-right">
                             <form method="get" action="/stores">

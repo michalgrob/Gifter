@@ -14,6 +14,19 @@ var csv = require('fast-csv');
 var passport = require('passport');
 var availableGifts = new Array();
 var cloudinary = require('cloudinary');
+var path = require('path');
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null,'../gifter/public/upload/temp/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+var upload = multer({ storage: storage });
+
+
 
 cloudinary.config({
     cloud_name: 'gifter-mta',
@@ -217,11 +230,97 @@ router.get('/storeInfo', function(req, res, next) {
 
 });
 
-router.post('/importCSV', function(req, res, next) {
-    var path = req.body.path;
-    var store_name = req.body.store_name;
-    var store_id = req.body.store_id;
+function importGiftsFromCSV(req) {
+    var currStore = req.user.store;
+    var csvFilePath = req.body.csvFilePath;
+    //Get Store Data (ID, Name):
+    Store.findOne(currStore).exec(function (err, store) {
+        if (err) throw err;
+        readDataFromCSVfileAndInsertToDB(store,csvFilePath);
+    });
+}
 
+function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
+
+    //Store Data:
+    var store_id = store.store_id;
+    var store_name = store.name;
+
+    var csvData = [];
+    var stream = fs.createReadStream(csvFilePath).pipe(csv());
+
+    stream.on('data',function (data) {
+        csvData.push(data);
+    });
+
+    stream.on('end',function () {
+            for (i = 1; i < csvData.length; i++) {
+                var prodId = csvData[i][0];
+                var giftName = csvData[i][1];
+                var minAge = csvData[i][2];
+                var maxAge = csvData[i][3];
+                var gender = csvData[i][4];
+                var price = csvData[i][5];
+                var imgURL = csvData[i][6];
+                var storeInterests = csvData[i][7].split(";");
+                addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL);
+            }
+        });
+}
+
+router.post('/importCSV',upload.single('csv_file'),function(req, res, next) {
+    req.body.csvFilePath = '../gifter/public/upload/temp/' + req.file.originalname;
+    importGiftsFromCSV(req);
+/*    if(req.file){
+        var file = req.file,
+            name = file.originalname,
+            type = file.mimetype;
+        var uploadpath = __dirname + '/public/upload/tmp/' + name;
+        file.mv(uploadpath,function(err){
+            if(err){
+                console.log("File Upload Failed",name,err);
+                res.send("Error Occured!")
+            }
+            else {
+                console.log("File Uploaded",name);
+                res.send('Done! Uploading files')
+            }
+        });
+    }*/
+
+
+/*    var upload = multer({ storage : storage}).any();
+
+    upload(req,res,function(err) {
+        if(err) {
+            console.log(err);
+            return res.end("Error uploading file.");
+        } else {
+            console.log(req.body);
+            req.files.forEach( function(f) {
+                console.log(f);
+                // and move file to final destination...
+            });
+            res.end("File has been uploaded");
+        }
+    });
+    //importGiftsFromCSV(req);
+    console.log(req.file.filename);*/
+});
+
+/*router.post('/importCSV', function(req, res, next) {
+    var path = req.body.path;
+    var currStore = req.user.store;
+
+
+    //Get Store Data (ID, Name):
+    Store.findOne(currStore).exec(function (err, store) {
+        if (err) throw err;
+        var store_id = store.store_id;
+        var store_name = store.store_name;
+    });
+
+    // Read data from CSV file, save it into the DB and connect it to the store.
     var csvData = [];
     fs.createReadStream(path).pipe(csv()).
     on('data',function (data) {
@@ -239,10 +338,10 @@ router.post('/importCSV', function(req, res, next) {
                 var storeInterests = csvData[i][7].split(";");
                 addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,next)
             }
+            sleep(500);
+            res.redirect("/users/redirect_user_by_role");
         });
-
-    res.render('mainPage', {etitle : "present",LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
-});
+});*/
 
 module.exports = router;
 
@@ -359,8 +458,9 @@ function relateGiftToStore(newGiftId,store_id,storeName,next) {
     Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},{new:true},function (err,store) {
         if(err ){ throw err;}
 
-        next();
-
+        if(next != null){
+            next();
+        }
     })
 }
 function deleteGiftFromGiftCollection(giftId,giftName) {

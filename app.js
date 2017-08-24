@@ -20,10 +20,15 @@ var importCSV = require('./routes/importCSV');
 var shoppingCart = require('./routes/shoppingCart');
 var mallManager = require('./routes/mallManager');
 var wishlist=require('./routes/wishlist');
-
 var app = express();
-
 app.engine('ejs',engine);
+
+/*var multer = require('multer');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));*/
+
 
 var router = express.Router();
 
