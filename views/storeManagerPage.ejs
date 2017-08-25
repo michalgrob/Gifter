@@ -181,7 +181,7 @@
             <span onclick="toggleAddNewGiftPopupVisibility(false)" class="close" title="Close Popup">&times;</span>
             <img class="img-circle" src="img/gifter.jpg" alt="Add New Gift" class="avatar">
         </div>
-        <form name="singnupForm" class="form-horizontal" method="post" action="/mallManager/createNewStore" >
+        <form name="addNewGiftForm" class="form-horizontal" method="post" action="/mallManager/createNewStore" >
             <!--onsubmit="return validationUserInput()"-->
             <div class="form-group">
                 <label for="name" class="cols-sm-2 control-label" >Gift Name</label>
@@ -283,6 +283,102 @@
             toggleAddNewGiftPopupVisibility(false);
         }
     }
+</script>
+
+<script type="text/javascript">
+    function ValidationAppForm(){
+        var gender=document.getElementsByName("gender");
+        var hobbies=document.getElementsByName("hobbies");
+        var giftName=document.addNewGiftForm.giftName;
+        var giftId=document.addNewGiftForm.giftId;
+        var maxAge=document.addNewGiftForm.maxAge;
+        var minAge=document.addNewGiftForm.minAge;
+        var price=document.addNewGiftForm.price;
+
+        var okayGender=false;
+        var okayHobbies=false;
+
+        //Check gift name:
+        if (giftName.value=="")
+        {
+            alert("gift name  please");
+            document.addNewGiftForm.giftName.focus() ;
+            return false;
+        }
+
+        //Check gift ID:
+        if (isNaN(giftId.value)||(giftId.value==""))
+        {
+            alert("prod id  please - must be a number");
+            document.addNewGiftForm.giftId.focus() ;
+            return false;
+        }
+
+        //Check min/max age:
+        if (isNaN(maxAge.value)||isNaN(minAge.value)||minAge.value==""||maxAge.value=="")
+        {
+            alert("enter ages please - must be a number");
+            document.addNewGiftForm.minAge.focus() ;
+            document.addNewGiftForm.maxAge.focus() ;
+            return false;
+        }
+
+        if(maxAge.value<=0||minAge.value<=0)
+        {
+            alert("Age cannot be a negative value/ zero...")
+            document.addNewGiftForm.minAge.focus() ;
+            document.addNewGiftForm.maxAge.focus() ;
+            return false;
+        }
+
+        if (maxAge.value<minAge.value)
+        {
+            alert("Max age mase be bigger then min age !");
+            document.Form.minAge.focus() ;
+            document.Form.maxAge.focus() ;
+            return false;
+        }
+
+        //Check price:
+        if(isNaN(price.value)||price.value=="")
+        {
+            alert("The price must to be a number");
+            document.addNewGiftForm.price.focus() ;
+            return false;
+        }
+
+        //Check interests:
+        for(var j=0;j < hobbies.length; j++)
+        {
+            if(hobbies[j].checked)
+            {
+                okayHobbies=true;
+                break;
+            }
+        }
+
+        if(!okayHobbies)
+        {
+            alert("Enter the interests please...");
+            return false;
+        }
+
+        // Check gender:
+        for(var i=0;i < gender.length;i++) {
+            if(gender[i].checked)
+            {
+                okayGender=true;
+                break;
+            }
+        }
+
+        if(!okayGender)
+        {
+            alert("Enter the gender please...");
+            return false;
+        }
+    }
+
 </script>
 
 <!--<script>
