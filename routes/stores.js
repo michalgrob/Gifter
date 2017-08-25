@@ -13,7 +13,7 @@ var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
 var availableGifts = new Array();
-var cloudinary = require('cloudinary');
+//var cloudinary = require('cloudinary');
 var path = require('path');
 var multer = require('multer');
 var mkdirp = require('mkdirp');
@@ -37,14 +37,14 @@ var upload = multer({ storage: storage });
 
 
 
-cloudinary.config({
-    cloud_name: 'gifter-mta',
-    api_key: '295691767823962',
-    api_secret: 'oQi03-LFvbNzwueYMUDR8pizdR8'
-},function (err) {
-    if(err) throw err;
-    console.log("connected to cloudinary!")
-});
+// cloudinary.config({
+//     cloud_name: 'gifter-mta',
+//     api_key: '295691767823962',
+//     api_secret: 'oQi03-LFvbNzwueYMUDR8pizdR8'
+// },function (err) {
+//     if(err) throw err;
+//     console.log("connected to cloudinary!");
+// });
 
 // Get/Post Requests:
 
