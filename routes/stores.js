@@ -115,7 +115,7 @@ function deleteGift(req,done) {
 
                     //3.Disconnect Gift from Store:
                     var storeGiftsContainer = storeObject.gifts;
-                    storeGiftsContainer.pop(giftObject);
+                    storeGiftsContainer.pull(giftObject);
                     storeObject.save();
 
                     //4. Delete select Gift from DB:
@@ -370,6 +370,7 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
 
     interest.find({},function (err,interests) {
         if(err) throw err;
+
         var newGift = new Gift();
         newGift.name = giftName;
         newGift.prod_id = prodId;
@@ -380,33 +381,21 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
         newGift.minAge= minAge;
         newGift.maxAge=maxAge;
         newGift.ImageUrl=imgURL;
-        /////////////////
-        for(var i=0;i<storeInterests.length;i++)
-        {
 
-          //  if(interest.name==storeInterests[i])
-           // {
-           //     isfound=true;
-                newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
-            //    break;
-          //  }
+        for(var i=0;i<storeInterests.length;i++) {
+            newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
         }
-        //////////////
 
         interests.forEach(function (interest) {
-                var isfound=false;
-            for(var i=0;i<storeInterests.length;i++)
-            {
-
-                if(interest.name==storeInterests[i])
-                {
+            var isfound=false;
+            for(var i=0;i<storeInterests.length;i++) {
+                if(interest.name==storeInterests[i]) {
                     isfound=true;
                     newGift.interests.push({interest: interest.name, dynamicScore: 1});
                     break;
                 }
             }
-            if(!isfound)
-            {
+            if(!isfound){
 
                 newGift.interests.push({interest: interest.name, dynamicScore: 0});
 

@@ -148,12 +148,6 @@ function getStores(req,done){
 
 
 function createSingleStore(mallManagerEmail,storeId,storeName,storeLocation,storeManagerUserName,storeManagerEmail,storeManagerPassword){
-/*    var storeName = req.body.store_name;
-    var storeManagerEmail = req.body.store_manager_email;
-    var storeManagerUserName = req.body.store_manager_username;
-    var storeManagerPassword = req.body.store_manager_password;
-    var storeId = req.body.store_id;
-    var storeLocation = req.body.store_location;*/
 
     //Create new Store:
     var newStore = new Store({
@@ -190,12 +184,12 @@ function createSingleStore(mallManagerEmail,storeId,storeName,storeLocation,stor
                         if (err) throw err;
                         console.log('The Store: ' + newStore.name + ' saved successfully!');
                         connectStoreToMallManager(mallManagerEmail,newStore);
-                    });
 
-                    // Save new store manager user:
-                    newStoreManagerUser.save(function (err){
-                        if (err)throw err;
-                        console.log('Store Manager User: ' + newStoreManagerUser.name + ' created successfully!');
+                        // Save new store manager user:
+                        newStoreManagerUser.save(function (err){
+                            if (err)throw err;
+                            console.log('Store Manager User: ' + newStoreManagerUser.name + ' created successfully!');
+                        });
                     });
                 }
             });
@@ -253,9 +247,10 @@ function deleteStore(req, done) {
 
             //4.Disconnect Store Manager from the Mall Manager:
             User.findOne({email: currMallManagerEmail})
+                .populate('stores')
                 .exec(function (err, mallManager) {
                     if (err)  throw err;
-                    mallManager.stores.pop(store);
+                    mallManager.stores.pull(storeObject);
                     mallManager.save();
 
                     //5. Delete Store:
