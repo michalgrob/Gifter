@@ -24,6 +24,8 @@ var availableStores = new Array();
 var path = require('path');
 var multer = require('multer');
 var mkdirp = require('mkdirp');
+var utf8 = require('to-utf-8');
+
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -90,7 +92,12 @@ function importStoresFromCSV(req,res) {
     var csvData = [];
 
     //Create Stream:
-    var stream = fs.createReadStream(csvFilePath).pipe(csv());
+    var stream = fs.createReadStream(csvFilePath,{
+        flags: 'r',
+        encoding: 'utf8'
+    })
+    .pipe(utf8())
+        .pipe(csv());
 
     //Read data from CSV file and store it in 'csvData' parameter:
     stream.on('data',function (data) {

@@ -16,6 +16,7 @@ var availableGifts = new Array();
 var path = require('path');
 var multer = require('multer');
 var mkdirp = require('mkdirp');
+var utf8 = require('to-utf-8');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -158,7 +159,12 @@ function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
     var store_name = store.name;
 
     var csvData = [];
-    var stream = fs.createReadStream(csvFilePath).pipe(csv());
+    var stream = fs.createReadStream(csvFilePath,{
+        flags: 'r',
+        encoding: 'utf8'
+    })
+        .pipe(utf8())
+        .pipe(csv());
 
     stream.on('data',function (data) {
         csvData.push(data);
