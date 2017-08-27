@@ -13,10 +13,10 @@ var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
 var availableGifts = new Array();
-//var cloudinary = require('cloudinary');
 var path = require('path');
 var multer = require('multer');
 var mkdirp = require('mkdirp');
+var utf8 = require('to-utf-8');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -36,15 +36,16 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 
+//var cloudinary = require('cloudinary');
 
-// cloudinary.config({
-//     cloud_name: 'gifter-mta',
-//     api_key: '295691767823962',
-//     api_secret: 'oQi03-LFvbNzwueYMUDR8pizdR8'
-// },function (err) {
-//     if(err) throw err;
-//     console.log("connected to cloudinary!");
-// });
+/*cloudinary.config({
+    cloud_name: 'gifter-mta',
+    api_key: '295691767823962',
+    api_secret: 'oQi03-LFvbNzwueYMUDR8pizdR8'
+},function (err) {
+    if(err) throw err;
+    console.log("connected to cloudinary!")
+});*/
 
 // Get/Post Requests:
 
@@ -115,7 +116,7 @@ function deleteGift(req,done) {
 
                     //3.Disconnect Gift from Store:
                     var storeGiftsContainer = storeObject.gifts;
-                    storeGiftsContainer.pop(giftObject);
+                    storeGiftsContainer.pull(giftObject);
                     storeObject.save();
 
                     //4. Delete select Gift from DB:
@@ -135,6 +136,70 @@ function sleep(milliseconds) {
         }
     }
 }
+
+router.post('/importCSV',upload.single('csv_file'),function(req, res, next) {
+    req.body.csvFilePath = '../gifter/public/upload/temp/' + req.file.originalname;
+    importGiftsFromCSV(req);
+});
+
+function importGiftsFromCSV(req) {
+    var currStore = req.user.store;
+    var csvFilePath = req.body.csvFilePath;
+    //Get Store Data (ID, Name):
+    Store.findOne(currStore).exec(function (err, store) {
+        if (err) throw err;
+        readDataFromCSVfileAndInsertToDB(store,csvFilePath);
+    });
+}
+
+function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
+
+    //Store Data:
+    var store_id = store.store_id;
+    var store_name = store.name;
+
+    var csvData = [];
+    var stream = fs.createReadStream(csvFilePath,{
+        flags: 'r',
+        encoding: 'utf8'
+    })
+        .pipe(utf8())
+        .pipe(csv());
+
+    stream.on('data',function (data) {
+        csvData.push(data);
+    });
+
+    stream.on('end',function () {
+        for (i = 1; i < csvData.length; i++) {
+            var prodId = csvData[i][0];
+            var giftName = csvData[i][1];
+            var minAge = csvData[i][2];
+            var maxAge = csvData[i][3];
+            var gender = csvData[i][4];
+            var price = csvData[i][5];
+            var imgURL = csvData[i][6];
+            var storeInterests = csvData[i][7].split(";");
+            addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL);
+        }
+        deleteFolderRecursive('../gifter/public/upload/temp/');
+    });
+}
+
+function deleteFolderRecursive(path) {
+    if( fs.existsSync(path) ) {
+        fs.readdirSync(path).forEach(function(file,index){
+            var curPath = path + "/" + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        if(path != '../gifter/public/upload/temp/')
+            fs.rmdirSync(path);
+    }
+};
 
 
 //michal 17/7/17/stores/showStoreGifts
@@ -239,64 +304,7 @@ router.get('/storeInfo', function(req, res, next) {
 
 });
 
-function importGiftsFromCSV(req) {
-    var currStore = req.user.store;
-    var csvFilePath = req.body.csvFilePath;
-    //Get Store Data (ID, Name):
-    Store.findOne(currStore).exec(function (err, store) {
-        if (err) throw err;
-        readDataFromCSVfileAndInsertToDB(store,csvFilePath);
-    });
-}
 
-function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
-
-    //Store Data:
-    var store_id = store.store_id;
-    var store_name = store.name;
-
-    var csvData = [];
-    var stream = fs.createReadStream(csvFilePath).pipe(csv());
-
-    stream.on('data',function (data) {
-        csvData.push(data);
-    });
-
-    stream.on('end',function () {
-            for (i = 1; i < csvData.length; i++) {
-                var prodId = csvData[i][0];
-                var giftName = csvData[i][1];
-                var minAge = csvData[i][2];
-                var maxAge = csvData[i][3];
-                var gender = csvData[i][4];
-                var price = csvData[i][5];
-                var imgURL = csvData[i][6];
-                var storeInterests = csvData[i][7].split(";");
-                addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL);
-            }
-        deleteFolderRecursive('../gifter/public/upload/temp/');
-        });
-}
-
-router.post('/importCSV',upload.single('csv_file'),function(req, res, next) {
-    req.body.csvFilePath = '../gifter/public/upload/temp/' + req.file.originalname;
-    importGiftsFromCSV(req);
-});
-
-function deleteFolderRecursive(path) {
-    if( fs.existsSync(path) ) {
-        fs.readdirSync(path).forEach(function(file,index){
-            var curPath = path + "/" + file;
-            if(fs.lstatSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        if(path != '../gifter/public/upload/temp/')
-            fs.rmdirSync(path);
-    }
-};
 
 /*router.post('/importCSV', function(req, res, next) {
     var path = req.body.path;
@@ -368,6 +376,7 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
 
     interest.find({},function (err,interests) {
         if(err) throw err;
+
         var newGift = new Gift();
         newGift.name = giftName;
         newGift.prod_id = prodId;
@@ -378,33 +387,21 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
         newGift.minAge= minAge;
         newGift.maxAge=maxAge;
         newGift.ImageUrl=imgURL;
-        /////////////////
-        for(var i=0;i<storeInterests.length;i++)
-        {
 
-          //  if(interest.name==storeInterests[i])
-           // {
-           //     isfound=true;
-                newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
-            //    break;
-          //  }
+        for(var i=0;i<storeInterests.length;i++) {
+            newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
         }
-        //////////////
 
         interests.forEach(function (interest) {
-                var isfound=false;
-            for(var i=0;i<storeInterests.length;i++)
-            {
-
-                if(interest.name==storeInterests[i])
-                {
+            var isfound=false;
+            for(var i=0;i<storeInterests.length;i++) {
+                if(interest.name==storeInterests[i]) {
                     isfound=true;
                     newGift.interests.push({interest: interest.name, dynamicScore: 1});
                     break;
                 }
             }
-            if(!isfound)
-            {
+            if(!isfound){
 
                 newGift.interests.push({interest: interest.name, dynamicScore: 0});
 

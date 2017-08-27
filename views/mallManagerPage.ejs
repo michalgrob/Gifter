@@ -24,11 +24,21 @@
                                 <button type="submit" class="btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
                             </form>
                         </div>
+                        <div class="col col-xs-6 text-right">
+                            <form method="post" action="/mallManager/importCSV" enctype="multipart/form-data">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <input type="file" id="fileInput" style="display:none;" onchange="this.form.submit()" name="csv_file" />
+                                    <button type="button" class="btn btn-default btn-file" data-provides="fileinput" onclick="document.getElementById('fileInput').click();"><i class="fa fa-upload" aria-hidden="true"></i>Import Stores From CSV</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+<!--
                     <input type="text" id="searchInput" onkeyup="searchStores()" placeholder="Search for stores..." title="Type in a name" >
+-->
                 </div>
                 <div class="panel-body">
-                    <table id="stores_table" class="table table-striped table-bordered table-list" style="table-layout:fixed">
+                    <table id="stores_table" class="table table-striped table-bordered" style="table-layout:fixed">
                         <thead>
                         <tr>
                             <th><em class="fa fa-cog" align="center"></em></th>
@@ -143,6 +153,12 @@
 </script>
 
 <script type="text/javascript">
+    $(document).ready(function() {
+        $('#stores_table').DataTable();
+    } );
+</script>
+
+<!--<script type="text/javascript">
     function searchStores() {
         var input, filter, storesTableBodyElement, trs, tdStoreName, i,table;
         input = document.getElementById("searchInput");
@@ -160,7 +176,7 @@
             }
         }
     }
-</script>
+</script>-->
 
 
 

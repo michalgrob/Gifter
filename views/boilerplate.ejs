@@ -40,8 +40,6 @@
 </head>
 <body id="page-top">
 <%include header.ejs%>
-<%- body %>
-<%include footer.ejs%>
 <!-- jQuery -->
 <script src="/vendor/jquery/jquery.min.js"></script>
 
@@ -54,8 +52,13 @@
 <script src="/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 
 
+<script src="/datatables.net/js/jquery.dataTables.js"></script>
 
 <!-- Theme JavaScript -->
 <script src="/js/creative.min.js"></script>
+
+<%- body %>
+<%include footer.ejs%>
+
 </body>
 </html>
