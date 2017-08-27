@@ -3,14 +3,19 @@
 
 
 <% layout('boilerplate') %>
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>ADDING GIFT</h1>
+        <h4>Please fill the following details <br> And add a newgift to your store</h4>
+
+    </div>
+</div>
 <body style="background-color: #fafafa;">
-<img src="/img/red.jpg" style="width:120%; margin-top: -.5% ">
+
 
 
 
 <div style="margin-top:81px; text-align:center;">
-    <h1>ADDING GIFT:</h1>
-    <br>
 
     <script type="text/javascript">
         function ValidationAppForm()
@@ -113,24 +118,26 @@
         }
 
     </script>
-<!---->
-    <!--<div style="background-color:#2e2e2e; height:9%">-->
+
     <form name="Form" method="post" action="/stores/addGift" >
         <div class="form-group" style="width: 60%;margin-left: 18%" >
             <div id="store_name" class="Info">
                 <h4>Enter store information:</h4>
+                <!--<label class="col-sm-3"style="margin:12px; ">Title: </label>-->
+                <!--<input class="form-control"type="text" name="eventTitle" id="eventTitle" value=""required><br>-->
+
                 <label> store name: </label>
                 <input type="text" name="storeName" id="storeName" value=""><br>
                 <label style="margin-left: 2.5%">  store  id: </label>
-                <input type="text" name="storeId" id="storeId" ><br>
+                <input class="form-control" type="text" name="storeId" id="storeId" ><br>
             </div>
             <hr>
             <div id="gift_name" class="Info">
                 <h4>Enter gift information:</h4>
                 <label>gift name: </label>
-                <input type="text" name="giftName" id="giftName" ><br>
+                <input class="form-control"type="text" name="giftName" id="giftName" ><br>
                 <label>product id: </label>
-                <input type="text" name="giftId" id="giftId" ><br>
+                <input class="form-control"type="text" name="giftId" id="giftId" ><br>
             </div>
             <hr>
             <div id="gender"  class="Info">
@@ -144,9 +151,9 @@
                 <h4>Enter age:</h4>
                 <div data-role="rangeslider">
                     <label for="price-min"> min age: </label>
-                    <input type="text" name="minAge" id="minAge" ><br>
+                    <input class="form-control"type="text" name="minAge" id="minAge" ><br>
                     <label for="price-max">max age: </label>
-                    <input type="text" name="maxAge" id="maxAge" ><br>
+                    <input class="form-control"type="text" name="maxAge" id="maxAge" ><br>
                 </div>
             </div>
             <hr>
@@ -154,7 +161,7 @@
                 <h4>Enter price:</h4>
 
                 <label >price: </label>
-                <input type="text" name="price" id="price" ><br>
+                <input class="form-control"type="text" name="price" id="price" ><br>
             </div>
             <hr>
             <div id="hobbis" class="Info">
