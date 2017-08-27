@@ -98,6 +98,7 @@
             <input id="myBtn" class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you'style="margin-left:41%;text-align: center" name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
         </div>
         <div>
+            <br>
             <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit"style="margin-left:44%;text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
         </div>
 
@@ -299,6 +300,7 @@
     }
     function ajaxCheckIfGuestIsRegister() {
         var guestMail = document.getElementById("eventGuests").value;
+        guestMail=guestMail.toLowerCase();
         if (checkIfAlreadyChoose(guestMail)==true) {
             alert(guestMail + " already invites to your event");
         }
@@ -324,7 +326,7 @@
         var node = document.createElement("Li");
         node.setAttribute("id",id.toString());
         node.setAttribute("name",username);
-        var text = document.getElementById("eventGuests").value; //.value gets input values
+        var text = document.getElementById("eventGuests").value.toLowerCase();; //.value gets input values
         var textnode = document.createTextNode(text);
         node.appendChild(textnode);
         document.getElementById("list").appendChild(node);
