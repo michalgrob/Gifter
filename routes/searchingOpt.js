@@ -28,13 +28,50 @@ router.get('/', function(request, response, next) {
     //AddUrlToGift();
     interest.find({},function(err,orders) {
         if (err) throw err;
-        var orders_json = [];
+        var orders1_json = [];
+        var orders2_json = [];
+        var orders3_json = [];
+        var orders4_json = [];
+        var orders5_json = [];
+        var orders6_json = [];
         orders.forEach(function(order) {
-                orders_json.push({ interest: order.name ,category: order._doc.category});
+            // orders_json.push({ interest: order.name ,category: order._doc.category});
+
+            switch(order._doc.category) {
+                case 1:
+                    orders1_json.push({ interest: order.name});
+                    break;
+                case 2:
+                    orders2_json.push({ interest: order.name});
+                    break;
+                case 3:
+                    orders3_json.push({ interest: order.name});
+                    break;
+                case 4:
+                    orders4_json.push({ interest: order.name});
+                    break;
+                case 5:
+                    orders5_json.push({ interest: order.name});
+                    break;
+                case 6:
+                    orders6_json.push({ interest: order.name});
+                    break;
+                default:
+                    orders1_json.push({ interest: order.name});
+                    break;
+            }
         });
 
-        response.render('giftsPage', {orders: orders_json,etitle : "present", LogedInUser: request.user ? request.user.username : 'guest',CartQty: request.session.cart ? request.session.cart.totalQty : 0  });
-       // response.send('giftsPage', {orders: orders_json});
+        response.render('giftsPage', {
+            orders1: orders1_json,
+            orders2: orders2_json,
+            orders3: orders3_json,
+            orders4: orders4_json,
+            orders5: orders5_json,
+            orders6: orders6_json,
+            etitle : "present",
+            LogedInUser: request.user ? request.user.username : 'guest',
+            CartQty: request.session.cart ? request.session.cart.totalQty : 0  })
     });
 });
 

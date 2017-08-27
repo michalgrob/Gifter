@@ -19,6 +19,7 @@
     }
 
     window.onload = function(){
+
         // Initialize Sliders
         var sliderSections = document.getElementsByClassName("range-slider");
 
@@ -43,6 +44,7 @@
                 }
             }
         }
+
     }
     function getValAge(){
         // Get slider values
@@ -92,6 +94,7 @@
         //    if (okayGender&&okayHobbies) return true;
 
     }
+
 
 
 </script>
@@ -157,14 +160,68 @@
             <hr>
             <div id="hobbis" class="Info">
                 <h4>Choose hobbis:</h4>
-                <% for(var i=0; i<orders.length; i++) {%>
-                <tr>
-                    <td></td>
-                    <input type="checkbox" value = <%= orders[i].interest.toString() %> name="hobbies"/>  <%= orders[i].interest %><br />
-                </tr>
-                <% } %>
-
-
+                <hr>
+                <div id="category1">
+                    <h4>Leisure:</h4>
+                    <% for(var i=0; i<orders1.length; i++) {%>
+                    <tr>
+                        <td></td>
+                        <input type="checkbox" value = <%= orders1[i].interest.toString() %> name="hobbies"/>  <%= orders1[i].interest %><br />
+                    </tr>
+                    <% } %>
+                </div>
+                <hr>
+                <div id="category2">
+                    <h4>Sports & Outdoors:</h4>
+                    <% for(var i=0; i<orders2.length; i++) {%>
+                    <tr>
+                        <td></td>
+                        <input type="checkbox" value = <%= orders2[i].interest.toString() %> name="hobbies"/>  <%= orders2[i].interest %><br />
+                    </tr>
+                    <% } %>
+                </div>
+                <hr>
+                <div id="category3">
+                    <h4>Fashion:</h4>
+                    <% for(var i=0; i<orders3.length; i++) {%>
+                    <tr>
+                        <td></td>
+                        <input type="checkbox" value = <%= orders3[i].interest.toString() %> name="hobbies"/>  <%= orders3[i].interest %><br />
+                    </tr>
+                    <% } %>
+                </div>
+                <hr>
+                <div id="category4">
+                    <h4>Home & Garden:</h4>
+                    <% for(var i=0; i<orders4.length; i++) {%>
+                    <tr>
+                        <td></td>
+                        <input type="checkbox" value = <%= orders4[i].interest.toString() %> name="hobbies"/>  <%= orders4[i].interest %><br />
+                    </tr>
+                    <% } %>
+                </div>
+                <hr>
+                <div id="category5">
+                    <h4>Indoor Hobbies:</h4>
+                    <% for(var i=0; i<orders5.length; i++) {%>
+                    <tr>
+                        <td></td>
+                        <input type="checkbox" value = <%= orders5[i].interest.toString() %> name="hobbies"/>  <%= orders5[i].interest %><br />
+                    </tr>
+                    <% } %>
+                </section>
+                    <hr>
+                <div id="category6">
+                    <h4>Life Style:</h4>
+                    <% for(var i=0; i<orders6.length; i++) {%>
+                    <tr>
+                        <td></td>
+                        <input type="checkbox" value = <%= orders6[i].interest.toString() %> name="hobbies"/>  <%= orders6[i].interest %><br />
+                    </tr>
+                    <% } %>
+                </div>
+            </div>
+            <div>
             </div>
             <hr>
 
@@ -177,9 +234,9 @@
         <!--<input type="submit" value="Send" name="submit">-->
         <input class="btn btn-primary btn-xl page-scroll"type="submit" value = 'GO GO GO ' name="submit"onclick="return ValidationAppForm()">
 
+</div>
     </form>
     <!---->
-
 
 </div>
 <!--</body>-->
