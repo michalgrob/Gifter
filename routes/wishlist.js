@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/myFriendsEvents', function(req, res, next) {
-    findFriendsEventDetails(req,res);
+    findFriendsEventDetails(req,res,1);
     //res.render('wishlistFriendsEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
@@ -47,6 +47,9 @@ router.get('/checkIfGuestIsRegister/:guestMail',function (req,res,next) {
 
 router.post('/addEvent',function (req,res,next) {
     createNewEvent(req,res);
+});
+router.get('/refreshMyFriendsEventsGifts', function(req, res, next) {
+    findFriendsEventDetails(req,res,2);
 });
 
 module.exports = router;
@@ -181,7 +184,7 @@ function checkIfGuestIsRegister(guestMail,res){
         }
     })
 }
-function findFriendsEventDetails(req,res) {
+function findFriendsEventDetails(req,res,sign) {
     User.findById(req.user.id)
         .populate({
             path: 'friendsEvents',
@@ -208,11 +211,17 @@ function findFriendsEventDetails(req,res) {
             });
         }
         //  sendMailsToGuests([],res);
-        res.render('wishlistFriendsEventsPage.ejs', {
-            LogedInUser: req.user ? req.user.username : 'guest',
-            CartQty: req.session.cart ? req.session.cart.totalQty : 0,
-            events: FriendsEvents,
-        });
+        if(sign ==1){
+
+            res.render('wishlistFriendsEventsPage.ejs', {
+                LogedInUser: req.user ? req.user.username : 'guest',
+                CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+                events: FriendsEvents,
+            });
+        }
+        else{//sign==2
+           res.send(JSON.parse(JSON.stringify(FriendsEvents))) ;
+        }
     });
 }
 
