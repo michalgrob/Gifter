@@ -159,14 +159,14 @@
 
 <script type="text/javascript">
     function searchGifts() {
-        var input, filter, giftsContinerElement, divs, giftName, i,table;
+        var input, filter, divs, giftName, i,table;
         input = document.getElementById("searchInput");
         filter = input.value.toUpperCase();
-        divs = document.getElementsByClassName("col-sm-12 col-xs-12 col-md-4 col-lg-3");
-        console.log(divs);
+        var gifts_container_row = document.getElementById("gifts_container_row");
+        divs = gifts_container_row.childNodes
+        //divs = document.getElementsByClassName("col-sm-12 col-xs-12 col-md-4 col-lg-3");
         for (i = 0; i < divs.length; i++) {
-            giftName = divs[i].getElementsByTagName("h3").textContent || divs[i].getElementsByTagName("h3").innerText;
-            console.log(divs[i].getElementsByTagName("h3"));
+            giftName = divs[i].getElementsByTagName("h3")[0].textContent;
             if (giftName.toUpperCase().indexOf(filter) > -1) {
                 divs[i].style.display = "";
             } else {
@@ -251,6 +251,12 @@
                         <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
                         <select class="my-select-box" multiple="multiple">
                             <optgroup id="add_new_gift_interests" label="All Interests">
+                                <option value="me">Maine</option>
+                                <option value="ny">New York</option>
+                                <option value="nj">New Jersey</option>
+                                <option value="vt">Vermont</option>
+                            </optgroup>
+                            <optgroup id="add_new_gift_interests" label="Interests1">
                                 <option value="me">Maine</option>
                                 <option value="ny">New York</option>
                                 <option value="nj">New Jersey</option>

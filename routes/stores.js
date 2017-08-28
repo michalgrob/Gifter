@@ -374,48 +374,56 @@ function addNewStore1(storeName,location,gifts){
 
 function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,next) {
 
-    interest.find({},function (err,interests) {
-        if(err) throw err;
+    //If the gift doesn't exist in DB - Save it into the DB:
+    Gift.findOne({name:giftName},(function(err,gift){
+        if (err) throw err;
+        if (gift) {
+            console.log('The Gift: ' + giftName + ' already exists!!!');
+        }else {
+            interest.find({},function (err,interests) {
+                if(err) throw err;
 
-        var newGift = new Gift();
-        newGift.name = giftName;
-        newGift.prod_id = prodId;
-        newGift.price = price;
-        newGift.gender = gender;
-        newGift.store_id = store_id;
-        newGift.store_name = storeName;
-        newGift.minAge= minAge;
-        newGift.maxAge=maxAge;
-        newGift.ImageUrl=imgURL;
+                var newGift = new Gift();
+                newGift.name = giftName;
+                newGift.prod_id = prodId;
+                newGift.price = price;
+                newGift.gender = gender;
+                newGift.store_id = store_id;
+                newGift.store_name = storeName;
+                newGift.minAge= minAge;
+                newGift.maxAge=maxAge;
+                newGift.ImageUrl=imgURL;
 
-        for(var i=0;i<storeInterests.length;i++) {
-            newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
-        }
-
-        interests.forEach(function (interest) {
-            var isfound=false;
-            for(var i=0;i<storeInterests.length;i++) {
-                if(interest.name==storeInterests[i]) {
-                    isfound=true;
-                    newGift.interests.push({interest: interest.name, dynamicScore: 1});
-                    break;
+                for(var i=0;i<storeInterests.length;i++) {
+                    newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
                 }
-            }
-            if(!isfound){
 
-                newGift.interests.push({interest: interest.name, dynamicScore: 0});
+                interests.forEach(function (interest) {
+                    var isfound=false;
+                    for(var i=0;i<storeInterests.length;i++) {
+                        if(interest.name==storeInterests[i]) {
+                            isfound=true;
+                            newGift.interests.push({interest: interest.name, dynamicScore: 1});
+                            break;
+                        }
+                    }
+                    if(!isfound){
 
-            }
-        })
+                        newGift.interests.push({interest: interest.name, dynamicScore: 0});
 
-        newGift.save(function(err) {
-            if (err) throw err;
+                    }
+                })
 
-            console.log('Gift saved successfully!');
-            var giftMongoId=newGift._id;
-            relateGiftToStore(giftMongoId,store_id,storeName,next);
-        });
-    })
+                newGift.save(function(err) {
+                    if (err) throw err;
+
+                    console.log('Gift saved successfully!');
+                    var giftMongoId=newGift._id;
+                    relateGiftToStore(giftMongoId,store_id,storeName,next);
+                });
+            })
+        }
+    }));
 }
 //Leisure	,Sports&Outdoors	,Fashion	,Home&Garden	,Indoor Hobbies	, Life Style
 
