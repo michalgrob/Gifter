@@ -53,7 +53,7 @@ router.get('/', function(req, res, next) {
     getGifts(req, function () {
         res.render('storeManagerPage', {
             etitle: "present",
-            LogedInUser: req.user ? req.user.username : 'guest',
+            LogedInUser: req.user ? req.user : '',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
             available_gifts: availableGifts
         });

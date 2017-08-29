@@ -52,12 +52,12 @@ router.get('/redirect_user_by_role', function(req,res) {
             case 'store_manager':
                 res.redirect('/stores');
                 break;
-                /*                res.render('storeManagerPage', {
-                 etitle: "present",
-                 LogedInUser: req.user ? req.user.username : 'guest',
-                 CartQty: req.session.cart ? req.session.cart.totalQty : 0,
-                 available_gifts: ["stam"]
-                 });//userName*/
+/*                res.render('storeManagerPage', {
+                    etitle: "present",
+                    LogedInUser: req.user ? req.user.username : 'guest',
+                    CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+                    available_gifts: ["stam"]
+                });//userName*/
                 break;
             case 'client':
                 var x=0;
@@ -71,7 +71,7 @@ router.get('/redirect_user_by_role', function(req,res) {
 
                         res.render('mainPage', {
                             etitle: "gifter",
-                            LogedInUser: req.user ? req.user.username : 'guest',
+                            LogedInUser: req.user ? req.user : '',
                             CartQty:  user._doc.shoppingCart.length
                         });
                     });
@@ -80,7 +80,7 @@ router.get('/redirect_user_by_role', function(req,res) {
             default:
                 res.render('mainPage', {
                     etitle: "gifter",
-                    LogedInUser: req.user ? req.user.username : 'guest',
+                    LogedInUser: req.user ? req.user : '',
                     CartQty: req.session.cart ? req.session.cart.totalQty : 0
                 });
                 break;
@@ -88,7 +88,7 @@ router.get('/redirect_user_by_role', function(req,res) {
     } else {
         res.render('mainPage', {
             etitle: "gifter",
-            LogedInUser: req.user ? req.user.username : 'guest',
+            LogedInUser: req.user ? req.user : '',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0
         });
     }
@@ -96,12 +96,12 @@ router.get('/redirect_user_by_role', function(req,res) {
 
 
 
-/*    if (req.user.email == "admin")
- res.redirect('/');//('/admin');
- else if (req.user.role == 'storeManager')
- res.redirect('/stores/storeInfo');//res.render('storeInfoPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
- else
- res.redirect('/');*/
+    /*    if (req.user.email == "admin")
+     res.redirect('/');//('/admin');
+     else if (req.user.role == 'storeManager')
+     res.redirect('/stores/storeInfo');//res.render('storeInfoPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
+     else
+     res.redirect('/');*/
 
 // router.get('/logout', function(req, res){
 //     req.logout();

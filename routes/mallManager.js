@@ -51,7 +51,7 @@ router.get('/', function(req, res, next) {
     getStores(req, function () {
         res.render('mallManagerPage', {
             etitle: "present",
-            LogedInUser: req.user ? req.user.username : 'guest',
+            LogedInUser: req.user ? req.user : '',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0,
             available_stores: availableStores
         });
