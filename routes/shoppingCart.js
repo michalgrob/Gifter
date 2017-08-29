@@ -14,6 +14,12 @@ var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
 
+router.post('/remove-from-cart/:id',function (req,res,next) {
+    removeGiftFromCart(req,res);
+});
+
+
+
 router.get('/add-to-cart/:id', function(req, res, next) {
     var giftId = req.params.id;
     var cart = new Cart(req.session.cart ? req.session.cart : {});
@@ -91,4 +97,35 @@ function updateUserShoppingCart(userId,giftId,gift,res)
         });
     });
 }
+
+function removeGiftFromCart(req,res) {
+    var giftId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+    User.findById(req.user.id).populate('shoppingCart').exec(function(err,user) {
+        if(err){
+            return err;
+        }
+        var shoppingCart = user.shoppingCart;
+        for(var i=0; i<shoppingCart.length; i++){
+            if(shoppingCart[i].id == giftId){
+               var gift = shoppingCart[i];
+                cart.remove(gift,gift.id);
+                user.shoppingCart.splice(i,1);//gift.id);
+                break;
+            }
+        }
+
+        req.session.cart = cart;
+
+        user.save(function (err){
+
+            if(err){throw err;}
+            res.send();
+        });
+
+    });
+
+}
+
 module.exports = router;
