@@ -67,7 +67,20 @@ router.get('/redirect_user_by_role', function(req,res) {
                     .exec(function(err,user) {
                         if (err){
                             console.log(err);
+                            throw err;
                         }
+
+                        var gifts=user._doc.shoppingCart;
+                        var cart = new Cart({});
+
+                        for(var i = 0; i < gifts.length; i++){
+                            cart.add(gifts[i]._doc,gifts[i].id);
+                        }
+
+                        req.session.cart = cart;
+                        console.log(req.session.cart);
+                        var totPrice = cart.totalPrice;
+                        var totalQty = cart.totalQty;
 
                         res.render('mainPage', {
                             etitle: "gifter",
