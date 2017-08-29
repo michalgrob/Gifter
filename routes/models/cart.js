@@ -9,6 +9,14 @@ module.exports = function Cart (oldCart) {
     this.totalQty = oldCart.totalQty || 0;
     this.totalPrice = oldCart.totalPrice || 0;
 
+    this.remove = function (item,id) {
+        var storedItem = this.items[id];
+        this.totalPrice -= storedItem.item.price;
+        storedItem.qty--;
+        storedItem.price = storedItem.item.price * storedItem.qty;
+        this.totalQty--;
+        this.totalPrice += storedItem.item.price;
+    };
 
     this.add = function (item, id) {
         var storedItem = this.items[id];
