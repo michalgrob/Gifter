@@ -70,7 +70,7 @@ router.get('/redirect_user_by_role', function(req,res) {
             default:
                 res.render('mainPage', {
                     etitle: "gifter",
-                    LogedInUser: req.user ? req.user.username : 'guest',
+                    LogedInUser: req.user ? req.user : '',
                     CartQty: req.session.cart ? req.session.cart.totalQty : 0
                 });
                 break;
@@ -78,7 +78,7 @@ router.get('/redirect_user_by_role', function(req,res) {
     } else {
         res.render('mainPage', {
             etitle: "gifter",
-            LogedInUser: req.user ? req.user.username : 'guest',
+            LogedInUser: req.user ? req.user : '',
             CartQty: req.session.cart ? req.session.cart.totalQty : 0
         });
     }
