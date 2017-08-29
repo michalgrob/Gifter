@@ -90,7 +90,7 @@ function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req,fr
             res.render('resultPage', {
                 gifts: giftsTotalScore,
                 searchInterest: userInterests,
-                LogedInUser: req.user ? req.user.username : 'guest',
+                LogedInUser: req.user ? req.user : '',
                 CartQty: req.session.cart ? req.session.cart.totalQty : 0
             });
         }

@@ -24,7 +24,7 @@ router.post('/markGift',function (req,res,next) {
     markUserInGiftEvent(req,res);
 });
 router.get('/', function(req, res, next) {
-    res.render('wishlistMainPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
+    res.render('wishlistMainPage.ejs', { LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/myFriendsEvents', function(req, res, next) {
@@ -48,7 +48,7 @@ router.get('/myEvents', function(req, res, next){
 });
 
 router.get('/createEvent', function(req, res, next) {
-    res.render('wishlistCreateEvent.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
+    res.render('wishlistCreateEvent.ejs', { LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
 });
 
 router.get('/checkIfGuestIsRegister/:guestMail',function (req,res,next) {
@@ -228,7 +228,7 @@ function findFriendsEventDetails(req,res,sign) {
         if(sign ==1){
 
             res.render('wishlistFriendsEventsPage.ejs', {
-                LogedInUser: req.user ? req.user.username : 'guest',
+                LogedInUser: req.user ? req.user : '',
                 CartQty: req.session.cart ? req.session.cart.totalQty : 0,
                 events: FriendsEvents,
             });
@@ -270,7 +270,7 @@ function findClientEventDetails(req,res,sign) {
         //  sendMailsToGuests([],res);
         if(sign ==1) {
             res.render('wishlistMyEventsPage.ejs', {
-                LogedInUser: req.user ? req.user.username : 'guest',
+                LogedInUser: req.user ? req.user : '',
                 CartQty: req.session.cart ? req.session.cart.totalQty : 0,
                 events: ClientEvents,
             });

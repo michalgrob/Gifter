@@ -40,14 +40,14 @@ router.get('/shopping-cart',function(req,res,next){
     }
     else{//guest
         if(!req.session.cart){
-            return res.render('shoppingCartPage',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: null});
+            return res.render('shoppingCartPage',{LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: null});
         }
         var cart = new Cart(req.session.cart);
         var gifts = cart.generateArray();
         req.session.cart = cart;
         console.log(req.session.cart);
         var totPrice = cart.totalPrice;
-        res.render('shoppingCartPage',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: gifts,totalPrice: totPrice});
+        res.render('shoppingCartPage',{LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: gifts,totalPrice: totPrice});
 
     }
 });
@@ -69,7 +69,7 @@ function findUserSoppingCart(userId,req,res) {
         var totalQty = cart.totalQty;
         var products = cart.generateArray();
         res.render('shoppingCartPage', {
-            LogedInUser: req.user ? req.user.username : 'guest',
+            LogedInUser: req.user ? req.user : '',
             CartQty: totalQty ,
             products: products,
             totalPrice: totPrice
