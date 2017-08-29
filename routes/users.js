@@ -60,11 +60,14 @@ router.get('/redirect_user_by_role', function(req,res) {
                 });//userName*/
                 break;
             case 'client':
-                res.render('mainPage', {
-                    etitle: "gifter",
-                    LogedInUser: req.user ? req.user.username : 'guest',
-                    CartQty: req.session.cart ? req.session.cart.totalQty : 0
-                });
+                    //  User.findById(userId).populate('shoppingCart').exec(function(err,user) {
+                      //    var gifts = user._doc.shoppingCart;
+                          res.render('mainPage', {
+                              etitle: "gifter",
+                              LogedInUser: req.user ? req.user.username : 'guest',
+                              CartQty: req.session.cart ? req.session.cart.totalQty : 0
+                          });
+                      //});
                 break;
 
             default:
