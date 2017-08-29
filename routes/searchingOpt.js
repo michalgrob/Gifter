@@ -70,7 +70,7 @@ router.get('/', function(request, response, next) {
             orders5: orders5_json,
             orders6: orders6_json,
             etitle : "present",
-            LogedInUser: request.user ? request.user.username : 'guest',
+            LogedInUser: request.user ? request.user : '',
             CartQty: request.session.cart ? request.session.cart.totalQty : 0  })
     });
 });
@@ -114,7 +114,7 @@ router.post('/', function(req, res, next) {
 
   //  insertdbInterest(check1,check0);
     res.send('After to Hello World!');
-    res.render('searchingOpt', {etitle : "present",LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
+    res.render('searchingOpt', {etitle : "present",LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
 
 });
 

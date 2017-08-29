@@ -13,6 +13,7 @@ var fs = require('fs');
 var csv = require('fast-csv');
 var passport = require('passport');
 var availableGifts = new Array();
+var availableInterests = new Array();
 var path = require('path');
 var multer = require('multer');
 var mkdirp = require('mkdirp');
@@ -51,11 +52,14 @@ var upload = multer({ storage: storage });
 
 router.get('/', function(req, res, next) {
     getGifts(req, function () {
-        res.render('storeManagerPage', {
-            etitle: "present",
-            LogedInUser: req.user ? req.user : '',
-            CartQty: req.session.cart ? req.session.cart.totalQty : 0,
-            available_gifts: availableGifts
+        getAvailableInterests(function () {
+            res.render('storeManagerPage', {
+                etitle: "present",
+                LogedInUser: req.user ? req.user : '',
+                CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+                available_gifts: availableGifts,
+                available_interests: availableInterests
+            });
         });
     });
 });
@@ -86,6 +90,16 @@ function getGifts(req,done){
                     done();
                 })
         });
+}
+
+function getAvailableInterests(done) {
+    availableInterests = [];
+    interest.find({}).exec(function(err, interests) {
+        interests.forEach(function(inter) {
+            availableInterests.push(inter.name);
+        });
+        done();
+    });
 }
 
 function deleteGift(req,done) {
@@ -208,7 +222,7 @@ router.post('/showStoreGifts', function(req,res,next){
 });
 
 router.get('/storeManager-sign-up', function (req, res, next) {
-    res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
+    res.render('storeSignUp.ejs', { LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 });
 
 // process the signup form/stores/storeManagerSignUp
@@ -235,7 +249,7 @@ router.get('/storeDeleteGift', function(req, res, next) {
                 price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
         }
 
-        res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
+        res.render('storeDeleteGiftPage', {gifts: giftsTotalScore,etitle: "delete gift",LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0});
 
     });
 
@@ -270,7 +284,7 @@ router.get('/storeAddGift', function(req, res, next) {
             orders_json.push({interest: order.name});
         });
 
-        res.render('storeAddGiftPage', {orders: orders_json, etitle: "add gift ", LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
+        res.render('storeAddGiftPage', {orders: orders_json, etitle: "add gift ", LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 
 
     });
@@ -300,7 +314,7 @@ router.get('/storeInfo', function(req, res, next) {
 
     //getAllStoreGifts(req.user.name,req, res)
 
-    res.render('storeInfoPage', {LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
+    res.render('storeInfoPage', {LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 
 });
 
@@ -488,7 +502,7 @@ function getAllStoreGifts(storeName,req, res){
         for(var i=0;i<gifts.length;i++){
             storeGifts.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl});
         }
-        res.render('storeGiftsPage.ejs',{LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0,gifts: storeGifts});//('storeGiftsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest'});//gifts: gifts,etitle:req.user.username ,
+        res.render('storeGiftsPage.ejs',{LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0,gifts: storeGifts});//('storeGiftsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest'});//gifts: gifts,etitle:req.user.username ,
     })
 }
 

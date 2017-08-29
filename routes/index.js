@@ -31,7 +31,7 @@ router.post('/', function(req, res, next) {
     //  insertdb(lname,fname);
     res.send('POST to Hello World!');
 
-    res.render('index', {etitle : "present",CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
+    res.render('index', {etitle : "present",LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 });
 router.get('/profile', isLoggedIn, function(req, res) {
     res.redirect('/');//res.render('profile.ejs', { user: req.user });

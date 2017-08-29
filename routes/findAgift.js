@@ -38,7 +38,7 @@ router.get('/', function(request, response, next) {
             }
         });*/
         // Uses views/orders.ejs
-        response.render('giftsPage', {orders: orders_json,LogedInUser: "Guest",CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
+        response.render('giftsPage', {orders: orders_json,LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
        // response.send('giftsPage', {orders: orders_json});
     });
 });
@@ -73,7 +73,7 @@ router.post('/', function(req, res, next) {
     ////////////////////////////////////
     insertdbInterest(check1,check0);
     res.send('POST to Hello World!');
-    res.render('findAgift', {etitle : "present",LogedInUser: "Guest",CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
+    res.render('findAgift', {etitle : "present",LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 });
 
 });
 
