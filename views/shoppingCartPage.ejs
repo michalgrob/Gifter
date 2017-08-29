@@ -2,12 +2,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <!---->
-<div class="jumbotron">
-    <div class="text-center">
-        <h1 style="color: #067c8d">SHOPPING BAG</h1>
+<header>
+    <div class="header-content">
+        <div class="jumbotron">
+            <div class="text-center">
+                <h1 style="color: #067c8d">SHOPPING BAG</h1>
+            </div>
+        </div>
     </div>
-</div>
-
+</header>
 <div style="margin-top:81px;">
     <%if (products){%>
 
@@ -15,50 +18,50 @@
 
     <ul class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
         <!--<div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">-->
-            <%for (var i=0;i<products.length;i++){%>
-                <li class="w3-padding-15">
-                     <span onclick="this.parentElement.style.display='none'"class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
-                    <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
-                    <!--<li class="list-group-item">-->
-                    <span class="badge w3-right"><%=products[i].qty%></span>
-                    <span class="w3-large"><%=products[i].item.name%><br><%=products[i].item.store_name%></span>
+        <%for (var i=0;i<products.length;i++){%>
+        <li class="w3-padding-15">
+            <span onclick="this.parentElement.style.display='none'"class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
+            <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
+            <!--<li class="list-group-item">-->
+            <span class="badge w3-right"><%=products[i].qty%></span>
+            <span class="w3-large"><%=products[i].item.name%><br><%=products[i].item.store_name%></span>
 
 
-                    <span class="label label-success"><%=products[i].price%>nis</span>
-                    <div class="btn-group">
-                        <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> more
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Reduce by</a> </li>
-                            <li><a href="#">Remove All</a> </li>
-                        </ul>
-                    </div>
-                </li>
-                <%}%>
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"><br>
-            <strong>Total: <%=totalPrice%> nis</strong>
+            <span class="label label-success"><%=products[i].price%>nis</span>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> more
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Reduce by</a> </li>
+                    <li><a href="#">Remove All</a> </li>
+                </ul>
+            </div>
+        </li>
+        <%}%>
+    </ul>
+</div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"><br>
+        <strong>Total: <%=totalPrice%> nis</strong>
 
-        </div>
     </div>
-    <div class="row">
-        <br>
-        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
-            <button class="btn btn-primary btn-xl page-scroll">CheackOut-will be map</button>
-        </div>
+</div>
+<div class="row">
+    <br>
+    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+        <button class="btn btn-primary btn-xl page-scroll">CheackOut-will be map</button>
     </div>
-    <%}%>
+</div>
+<%}%>
 
-    <%if (!products){%>
-    <div class="row">
-        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
-            <h2>No Items In cart</h2>
-        </div>
+<%if (!products){%>
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+        <h2>No Items In cart</h2>
     </div>
-    <%}%>
+</div>
+<%}%>
 
 
 </div>
