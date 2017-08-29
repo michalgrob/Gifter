@@ -4,7 +4,7 @@
 
 <div class="jumbotron">
     <div class="container text-center">
-        <h1>MY FRIENDS EVENTS</h1>
+        <h1 style="color: #067c8d">MY FRIENDS WISHLISTS</h1>
 
     </div>
 </div>
@@ -63,25 +63,25 @@
                                         <h4>Your WishList:</h4><br>
                                         <ul id='giftsList<%=events[i].id%>' class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
                                             <% for (var k=0; k<events[i].gifts.length; k++){%>
-                                           <li class="w3-padding-15">
+                                            <li class="w3-padding-15">
                                                 <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
 
-                                        <span class="w3-large">  <%= events[i].gifts[k].name %> </span>
-
-                                            <%if (events[i].gifts[k].isMarked == true){%>
-                                               <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' class="w3-button w3-white w3-xlarge w3-right">
+                                                <span class="w3-large">  <%= events[i].gifts[k].name %> </span><br>
+                                                <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
+                                                <span> <%= events[i].gifts[k].price %></span><br>
+                                                <%if (events[i].gifts[k].isMarked == true){%>
+                                                <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' class="w3-button w3-white w3-xlarge w3-right">
                                             <i class="fa fa-check-circle-o" aria-hidden="true"> someone bought it already </i>
-                                               </span>
-                                                   <%}else{%>
-                                               <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" class="w3-button w3-white w3-xlarge w3-right">
+                                               </span><br>
+                                                <%}else{%>
+                                                <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" class="w3-button w3-white w3-xlarge w3-right">
                                                 <i  style="margin-right: 0px;" class="fa fa-hand-o-up" aria-hidden="true">add gift to your shopping cart</i>
                                             </span>
-                                                   <%}%>
+                                                <%}%>
 
-                                        <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
-                                        <%= events[i].gifts[k].price %>
-                                        </li>
-                                        <%}%>
+
+                                            </li>
+                                            <%}%>
                                         </ul>
                                     </div>
                                 </div>
@@ -98,17 +98,10 @@
     </div>
 </div>
 
-<!--Create data table-->
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#my_events_table').DataTable();
-    } );
-</script>
-
 <script  type="text/javascript">
     var modal;
     var span = document.getElementsByClassName("close")[0];
-///
+
     function showModal(eventId) {
         modal = document.getElementById(eventId);
 
@@ -153,7 +146,7 @@
 
         });
     }
-//
+    //
     ////////copied from shopping cart
     function incQty() {
         var qty = parseInt($("#cartQty").text());
@@ -209,59 +202,69 @@
         var giftListId = 'giftsList'+eventId;
         $("#"+giftListId).empty();
 
-         for (var k=0; k<event.gifts.length; k++){
-             var newLi = document.createElement("li");
-             newLi.setAttribute("class","w3-padding-15");
+        for (var k=0; k<event.gifts.length; k++){
+            var newLi = document.createElement("li");
+            newLi.setAttribute("class","w3-padding-15");
 
-             var newImg =  document.createElement("img");
-             newImg.setAttribute("style","width:60px;");
-             var imgUrl = event.gifts[k].ImageUrl;
-             newImg.setAttribute("src",imgUrl);
-             newImg.setAttribute("class","w3-left w3-circle w3-margin-right");
-             newImg.setAttribute("alt","");
-             newLi.appendChild(newImg);
+            var newImg =  document.createElement("img");
+            newImg.setAttribute("style","width:60px;");
+            var imgUrl = event.gifts[k].ImageUrl;
+            newImg.setAttribute("src",imgUrl);
+            newImg.setAttribute("class","w3-left w3-circle w3-margin-right");
+            newImg.setAttribute("alt","");
+            newLi.appendChild(newImg);
 
-             var newSpan =  document.createElement("span");
-             newSpan.setAttribute("style","width:60px;");
-             newSpan.setAttribute("class","w3-large");
-             newSpan.textContent = event.gifts[k].name;
-             newLi.appendChild(newSpan);
+            var newSpan =  document.createElement("span");
+            newSpan.setAttribute("style","width:60px;");
+            newSpan.setAttribute("class","w3-large");
+            newSpan.textContent = event.gifts[k].name;
+            newLi.appendChild(newSpan);
 
-             var newI =  document.createElement("i");
-             newI.setAttribute("style","margin-right: 0px;");
-             newI.setAttribute("aria-hidden","true");
+            var br1 =  document.createElement("br");
+            newLi.appendChild(br1);
 
-             var newSpan2 =  document.createElement("span");
-             newSpan2.setAttribute("id",eventId);
-             newSpan2.setAttribute("name",event.gifts[k].id);
-             newSpan2.setAttribute("class","w3-button w3-white w3-xlarge w3-right");
+            var newSpan3 =  document.createElement("span");
+            newSpan3.setAttribute("class","w3-large");
+            newSpan3.textContent = event.gifts[k].store_name;
+            newLi.appendChild(newSpan3);
 
-             if (event.gifts[k].isMarked == true){
+            var br2 =  document.createElement("br");
+            newLi.appendChild(br2);
 
-                 console.log(event.gifts[k].isMarked);
-                 newI.setAttribute("class","fa fa-check-circle-o");
-                 newI.textContent = "someone bought it already";
+            var newI =  document.createElement("i");
+            newI.setAttribute("style","margin-right: 0px;");
+            newI.setAttribute("aria-hidden","true");
 
-             }
-             else if(event.gifts[k].isMarked == false){
-                 console.log(event.gifts[k].isMarked);
-                 newSpan2.setAttribute("onclick","markAsMine(this)");
-                 newI.setAttribute("class","fa fa-hand-o-up");
-                 newI.textContent = "add gift to your shopping cart";
-             }
+            var newSpan2 =  document.createElement("span");
+            newSpan2.setAttribute("id",eventId);
+            newSpan2.setAttribute("name",event.gifts[k].id);
+            newSpan2.setAttribute("class","w3-button w3-white w3-xlarge w3-right");
+
+            if (event.gifts[k].isMarked == true){
+
+                console.log(event.gifts[k].isMarked);
+                newI.setAttribute("class","fa fa-check-circle-o");
+                newI.textContent = "someone bought it already";
+
+            }
+            else if(event.gifts[k].isMarked == false){
+                console.log(event.gifts[k].isMarked);
+                newSpan2.setAttribute("onclick","markAsMine(this)");
+                newI.setAttribute("class","fa fa-hand-o-up");
+                newI.textContent = "add gift to your shopping cart";
+            }
 
 
-             newSpan2.appendChild(newI);
-             newLi.appendChild(newSpan2);
+            newSpan2.appendChild(newI);
+            var br3 =  document.createElement("br");
+            newSpan2.appendChild(br3);
+            newLi.appendChild(newSpan2);
 
-             var newSpan3 =  document.createElement("span");
-             newSpan3.setAttribute("class","w3-large");
-             newSpan3.textContent = event.gifts[k].store_name;
-             newLi.appendChild(newSpan3);
 
-             document.getElementById(giftListId).appendChild(newLi);
 
-         }
+            document.getElementById(giftListId).appendChild(newLi);
+
+        }
 
 
     }

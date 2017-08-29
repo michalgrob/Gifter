@@ -40,7 +40,7 @@ router.get('/myFriendsEvents', function(req, res, next) {
 router.get('/myEvents', function(req, res, next){
 
     if( req.user){
-        findClientEventDetails(req,res);
+        findClientEventDetails(req,res,1);
     }
     else{
         res.redirect('/users/login');
@@ -63,6 +63,9 @@ router.get('/refreshMyFriendsEventsGifts', function(req, res, next) {
     findFriendsEventDetails(req,res,2);
 });
 
+router.get('/refreshMyEvents', function(req, res, next){
+        findClientEventDetails(req,res,2);
+});
 module.exports = router;
 
 function createGuestsIdsArray(guests) {
@@ -237,7 +240,7 @@ function findFriendsEventDetails(req,res,sign) {
 }
 
 
-function findClientEventDetails(req,res) {
+function findClientEventDetails(req,res,sign) {
 
     User.findById(req.user.id)
         .populate({
@@ -265,11 +268,16 @@ function findClientEventDetails(req,res) {
             });
         }
         //  sendMailsToGuests([],res);
-        res.render('wishlistMyEventsPage.ejs', {
-            LogedInUser: req.user ? req.user.username : 'guest',
-            CartQty: req.session.cart ? req.session.cart.totalQty : 0,
-            events: ClientEvents,
-        });
+        if(sign ==1) {
+            res.render('wishlistMyEventsPage.ejs', {
+                LogedInUser: req.user ? req.user.username : 'guest',
+                CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+                events: ClientEvents,
+            });
+        }
+        else{//sign==2
+            res.send(JSON.parse(JSON.stringify(ClientEvents))) ;
+        }
     });
 }
 
