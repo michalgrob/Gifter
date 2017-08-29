@@ -63,100 +63,102 @@
             display: block;
         }
     }</style>
+<div style=" background-color: #fafafa;">
+    <div class="jumbotron">
+        <div class="text-center">
+            <h1>CREATE EVENT</h1>
+            <h4>Create your own event<br> And invites your best</h4>
+        </div>
+    </div>
 
-        <div class="jumbotron">
-            <div class="text-center">
-                <h1>CREATE EVENT</h1>
-                <h4>Create your own event<br> And invites your best</h4>
+    <div style="margin-top:81px;">
+        <!--<div style="background-color:#2e2e2e; height:9%">-->
+        <form name="Form"  >
+            <!--method="post" action="/wishlist/addEvent"-->
+            <div  style="width: 60%;margin-left: 275px; " >
+                <div id="eventDetails" class="Info">
+
+                    <label class="col-sm-3"style="margin:12px; ">Title: </label>
+                    <input class="form-control"type="text" name="eventTitle" id="eventTitle" value=""required><br>
+
+                    <label class="col-sm-3"style="margin:12px; ">Description: </label>
+                    <input class="form-control"type="text" name="eventDescription" id="eventDescription"required ><br>
+
+                    <label class="col-sm-3"style="margin:1.5%">Date:</label>
+                    <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"required><br>
+
+                    <label class="col-sm-3"style="margin:12px; ">Guests: </label>
+                    <input class="form-control"type="text" name="eventGuests" id="eventGuests" value="">
+                    <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" >
+                    <ul id='list' name="guestsList"></ul>
+
+                </div>
+
             </div>
-        </div>
-
-<div style="margin-top:81px;background-color: #fafafa;">
-    <!--<div style="background-color:#2e2e2e; height:9%">-->
-    <form name="Form"  >
-        <!--method="post" action="/wishlist/addEvent"-->
-        <div  style="width: 60%;margin-left: 275px; " >
-            <div id="eventDetails" class="Info">
-
-                <label class="col-sm-3"style="margin:12px; ">Title: </label>
-                <input class="form-control"type="text" name="eventTitle" id="eventTitle" value=""required><br>
-
-                <label class="col-sm-3"style="margin:12px; ">Description: </label>
-                <input class="form-control"type="text" name="eventDescription" id="eventDescription"required ><br>
-
-                <label class="col-sm-3"style="margin:12px; ">Date:</label>
-                <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 485px"required><br>
-
-                <label class="col-sm-3"style="margin:12px; ">Guests: </label>
-                <input class="form-control"type="text" name="eventGuests" id="eventGuests" value="">
-                <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" >
-                <ul id='list' name="guestsList"></ul>
-
+            <div>
+                <input id="myBtn" class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you'style="margin-left:41%;text-align: center" name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
+            </div>
+            <div>
+                <br>
+                <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit"style="margin-left:44%;text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
             </div>
 
-        </div>
-        <div>
-            <input id="myBtn" class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you'style="margin-left:41%;text-align: center" name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
-        </div>
-        <div>
-            <br>
-            <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit"style="margin-left:44%;text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
-        </div>
+            <div id="myModal" class="modal">
 
-        <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Create your Wishlist</p>
 
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <p>Some text in the Modal..</p>
+                    <section id="giftsResultSection" style="display:none">
 
-                <section id="giftsResultSection" style="display:none;">
+                        <div class="row">
 
-                    <div class="row">
-                        <h1>left</h1>
-                        <div class="no-padding " id="portfolio">
-                            <!--<label>Sort By: </label>-->
-                            <!--<select id="sort" onchange="sortResult(this)">&ndash;&gt;-->
-                            <!--<option value="">Choose:</option>-->
-                            <!--<option value="sortByResult">best results</option>-->
-                            <!--<option value="sortByPrice">price</option>-->
-                            <!--<option value="sortByStore">store</option>-->
-                            <!--</select>-->
+                            <div class="no-padding " id="portfolio">
+                                <!--<label>Sort By: </label>-->
+                                <!--<select id="sort" onchange="sortResult(this)">&ndash;&gt;-->
+                                <!--<option value="">Choose:</option>-->
+                                <!--<option value="sortByResult">best results</option>-->
+                                <!--<option value="sortByPrice">price</option>-->
+                                <!--<option value="sortByStore">store</option>-->
+                                <!--</select>-->
 
-                            <!--<div class="container-fluid">-->
-                            <div id="gifts-list" style="width:80%; margin-left: 5%;"
-                                 class="row no-gutter popup-gallery col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+                                <!--<div class="container-fluid">-->
+                                <div id="gifts-list" style="width:80%; margin-left: 5%;"
+                                     class="row no-gutter popup-gallery col-sm-2 col-md-2 col-md-offset-3 col-sm-offset-3">
 
+                                </div>
                             </div>
                         </div>
+
+                    </section>
+                </div>
+
+            </div >
+            <div  class="col-md-12 col-xs-12 col-centered" style="margin-left:50px;">
+                <h1 style="margin-left:12%">Your Wishlist</h1>
+
+                <div class="row">
+
+                    <div style="margin-left:450px;"class="col-md-12 col-xs-12 col-centered">
+
+                        <!--class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"-->
+                        <ul id="list-group" name="chosenGifts" class="list-group "style="width:80%; margin-left: -25%;">
+
+                        </ul>
                     </div>
-
-                </section>
-            </div>
-
-        </div>
-        <div  class="col-md-12 col-xs-12 col-centered" style="margin-left:50px ">
-            <h1>right</h1>
-            <div class="row">
-
-                <div style="margin-left:450px;"class="col-md-12 col-xs-12 col-centered">
-
-                    <!--class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"-->
-                    <ul id="list-group" name="chosenGifts" class="list-group "style="width:80%; margin-left: -25%;">
-
-                    </ul>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-
 <script type="text/javascript">
     function ValidationAppForm() {
         var title=document.Form.eventTitle
         var description=document.Form.eventDescription;
         var date=document.Form.eventDate;
         var guestList = Array.from(document.querySelectorAll('#list>li'));
+
         if (title.value=="")
         {
             document.Form.eventTitle.focus() ;
@@ -236,8 +238,8 @@
         // var giftsArr = gifts.toArray();
         for(var i=0; i<gifts.length; i++){
             var newDiv = document.createElement("div");
-            newDiv.setAttribute("style","background-color:white;height:200px;align-items: center;width:350px");
-            newDiv.setAttribute("class","w3-card-2");
+            newDiv.setAttribute("style","background-color:white;height:250px;align-items:center;width:250px");
+            newDiv.setAttribute("class","w3-card-2 col-sm-1");
             newDiv.setAttribute("data-storeId",gifts[i].store_id);
             newDiv.setAttribute("data-price",gifts[i].price);//
             newDiv.setAttribute("data-totalScore",gifts[i].tot);
