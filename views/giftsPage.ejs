@@ -2,7 +2,7 @@
 
 <% layout('boilerplate') %>
 
-<body style="background-color: #fafafa;">
+
 <script type="text/javascript">
 
     function getVals(){
@@ -99,13 +99,13 @@
 
 </script>
 
-
-        <div class="jumbotron">
-            <div class="text-center">
-                <h1 style="color: #067c8d">LET'S FIND THE BEST</h1>
-                <h4>Now please choose according to your friend</h4>
-            </div>
-        </div>
+<body style="background-color: #fafafa;">
+<div class="jumbotron">
+    <div class="text-center">
+        <h1 style="color: #067c8d">LET'S FIND THE BEST</h1>
+        <h4>Now please choose according to your friend</h4>
+    </div>
+</div>
 
 <div style="margin-top:81px; text-align:center;background-color: #fafafa;">
 
@@ -159,9 +159,10 @@
             <hr>
             <div id="hobbis" class="Info">
                 <h4>Choose hobbis:</h4>
-                <hr>
-                <div id="category1">
+
+                <div id="category1"class="col-md-2">
                     <h4>Leisure:</h4>
+                    <hr>
                     <% for(var i=0; i<orders1.length; i++) {%>
                     <tr>
                         <td></td>
@@ -169,9 +170,10 @@
                     </tr>
                     <% } %>
                 </div>
-                <hr>
-                <div id="category2">
+
+                <div id="category2"class="col-md-2">
                     <h4>Sports & Outdoors:</h4>
+                    <hr>
                     <% for(var i=0; i<orders2.length; i++) {%>
                     <tr>
                         <td></td>
@@ -179,9 +181,10 @@
                     </tr>
                     <% } %>
                 </div>
-                <hr>
-                <div id="category3">
+
+                <div id="category3"class="col-md-2">
                     <h4>Fashion:</h4>
+                    <hr>
                     <% for(var i=0; i<orders3.length; i++) {%>
                     <tr>
                         <td></td>
@@ -189,9 +192,10 @@
                     </tr>
                     <% } %>
                 </div>
-                <hr>
-                <div id="category4">
+
+                <div id="category4"class="col-md-2">
                     <h4>Home & Garden:</h4>
+                    <hr>
                     <% for(var i=0; i<orders4.length; i++) {%>
                     <tr>
                         <td></td>
@@ -199,43 +203,49 @@
                     </tr>
                     <% } %>
                 </div>
-                <hr>
-                <div id="category5">
+
+                <div id="category5"class="col-md-2">
                     <h4>Indoor Hobbies:</h4>
+                    <hr>
                     <% for(var i=0; i<orders5.length; i++) {%>
                     <tr>
                         <td></td>
                         <input type="checkbox" value = <%= orders5[i].interest.toString() %> name="hobbies"/>  <%= orders5[i].interest %><br />
                     </tr>
                     <% } %>
-                    </section>
+                </div>
+                <div id="category6"class="col-md-2">
+                    <h4>Life Style:</h4>
                     <hr>
-                    <div id="category6">
-                        <h4>Life Style:</h4>
-                        <% for(var i=0; i<orders6.length; i++) {%>
-                        <tr>
-                            <td></td>
-                            <input type="checkbox" value = <%= orders6[i].interest.toString() %> name="hobbies"/>  <%= orders6[i].interest %><br />
-                        </tr>
-                        <% } %>
-                    </div>
+                    <% for(var i=0; i<orders6.length; i++) {%>
+                    <tr>
+                        <td></td>
+                        <input type="checkbox" value = <%= orders6[i].interest.toString() %> name="hobbies"/>  <%= orders6[i].interest %><br />
+                    </tr>
+                    <% } %>
                 </div>
-                <div>
-                </div>
-                <hr>
-
-                <br>
-                <!--<div id="Search" class="Info">
-                <input type="button" name="submit" value="Let's Find It" onclick="findApresent()"   class="btn btn-success"	/><br />
-                </div>-->
+            </div>
+            <div>
             </div>
 
-            <!--<input type="submit" value="Send" name="submit">-->
-            <input class="btn btn-primary btn-xl page-scroll"type="submit" value = 'GO GO GO ' name="submit"onclick="return ValidationAppForm()">
 
+            <br>
+            <!--<div id="Search" class="Info">
+            <input type="button" name="submit" value="Let's Find It" onclick="findApresent()"   class="btn btn-success"	/><br />
+            </div>-->
+        </div>
+
+        <!--<input type="submit" value="Send" name="submit">-->
+
+        <div class="col-sm-12">
+
+
+        <input class="btn btn-primary btn-xl page-scroll"type="submit" value = 'GO GO GO' name="submit"onclick="return ValidationAppForm()">
+       <br>
         </div>
     </form>
     <!---->
 
 </div>
+</body>
 <!--</body>-->

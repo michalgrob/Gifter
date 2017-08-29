@@ -328,7 +328,7 @@ function createGiftsArray(gifts) {
         array.push({isMarked: false, markedBy: null,  gift :gifts[i].id});
     }
     return array;
-}
+}//
 
 function  markUserInGiftEvent(req,res){
     var markedByUserId = req.user.id;

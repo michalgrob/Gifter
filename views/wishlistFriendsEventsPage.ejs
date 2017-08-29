@@ -12,7 +12,7 @@
 
 <div id="mySidenav" class="sidenav" style="position: fixed">
     <!--<a href="#" id="about">About</a><br>-->
-    <a href="/wishlist/myEvents" id="myEventsSidenav">To My Events</a><br><br><br>
+    <a href="/wishlist/myEvents" id="myEventsSidenav">To My Wishlists</a><br><br><br>
     <!--<a href="/wishlist/myFriendsEvents" id="myEventsSidenav">My Friends Events</a><br>-->
     <!--<a href="#" id="contact">Contact</a>-->
 </div>
@@ -72,13 +72,13 @@
                                                 <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
                                                 <span> <%= events[i].gifts[k].price %></span><br>
                                                 <%if (events[i].gifts[k].isMarked == true){%>
-                                                <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' class="w3-button w3-white w3-xlarge w3-right">
-                                            <i class="fa fa-check-circle-o" aria-hidden="true"> someone bought it already </i>
-                                               </span><br>
+                                                <span  class="w3-button w3-white w3-xlarge w3-right"></span><br>
+                                            <i id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' class="fa fa-check-circle-o" aria-hidden="true"> someone bought it already </i>
+
                                                 <%}else{%>
-                                                <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" class="w3-button w3-white w3-xlarge w3-right">
-                                                <i  style="margin-right: 0px;" class="fa fa-hand-o-up" aria-hidden="true">add gift to your shopping cart</i>
-                                            </span>
+                                                <span  class="w3-button w3-white w3-xlarge w3-right"></span>
+                                                <button  id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" style="margin-right: 0px;" type = "button" class=" btn-xs fa fa-hand-o-up" aria-hidden="true"></button>
+
                                                 <%}%>
 
 
