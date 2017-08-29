@@ -94,20 +94,19 @@
         //    if (okayGender&&okayHobbies) return true;
 
     }
-//b
+    //b
 
 
 </script>
 
-<!--<body style="background-color: #fafafa;">-->
 
+        <div class="jumbotron">
+            <div class="text-center">
+                <h1 style="color: #067c8d">LET'S FIND THE BEST</h1>
+                <h4>Now please choose according to your friend</h4>
+            </div>
+        </div>
 
-<div class="jumbotron">
-    <div class="text-center">
-        <h1>LET'S FIND THE BEST</h1>
-        <h4>Now please choose according to your friend</h4>
-    </div>
-</div>
 <div style="margin-top:81px; text-align:center;background-color: #fafafa;">
 
     <form style="background-color: #fafafa;margin-top:6%" name="AppForm" method="post" action="/searchingResult" >
@@ -209,32 +208,32 @@
                         <input type="checkbox" value = <%= orders5[i].interest.toString() %> name="hobbies"/>  <%= orders5[i].interest %><br />
                     </tr>
                     <% } %>
-                </section>
+                    </section>
                     <hr>
-                <div id="category6">
-                    <h4>Life Style:</h4>
-                    <% for(var i=0; i<orders6.length; i++) {%>
-                    <tr>
-                        <td></td>
-                        <input type="checkbox" value = <%= orders6[i].interest.toString() %> name="hobbies"/>  <%= orders6[i].interest %><br />
-                    </tr>
-                    <% } %>
+                    <div id="category6">
+                        <h4>Life Style:</h4>
+                        <% for(var i=0; i<orders6.length; i++) {%>
+                        <tr>
+                            <td></td>
+                            <input type="checkbox" value = <%= orders6[i].interest.toString() %> name="hobbies"/>  <%= orders6[i].interest %><br />
+                        </tr>
+                        <% } %>
+                    </div>
                 </div>
-            </div>
-            <div>
-            </div>
-            <hr>
+                <div>
+                </div>
+                <hr>
 
-            <br>
-            <!--<div id="Search" class="Info">
-            <input type="button" name="submit" value="Let's Find It" onclick="findApresent()"   class="btn btn-success"	/><br />
-            </div>-->
+                <br>
+                <!--<div id="Search" class="Info">
+                <input type="button" name="submit" value="Let's Find It" onclick="findApresent()"   class="btn btn-success"	/><br />
+                </div>-->
+            </div>
+
+            <!--<input type="submit" value="Send" name="submit">-->
+            <input class="btn btn-primary btn-xl page-scroll"type="submit" value = 'GO GO GO ' name="submit"onclick="return ValidationAppForm()">
+
         </div>
-
-        <!--<input type="submit" value="Send" name="submit">-->
-        <input class="btn btn-primary btn-xl page-scroll"type="submit" value = 'GO GO GO ' name="submit"onclick="return ValidationAppForm()">
-
-</div>
     </form>
     <!---->
 

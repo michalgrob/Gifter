@@ -11,7 +11,7 @@ var eventSchema = new Schema({
     gifts: [{
         isMarked: Boolean, //TRUE FOR GUEST WHO CHOSE THIS GIFT,
         markedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        gift: {type: mongoose.Schema.Types.ObjectId, ref: 'Gift'}
+        gift: {type: mongoose.Schema.Types.ObjectId, ref: 'Gift'},
     }],
     hostUser: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     eventGuestsUsers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
@@ -20,20 +20,7 @@ var eventSchema = new Schema({
     event_date: Date
 });
 
-// eventSchema.methods.addGift = function(gift) {
-//     // add some stuff to the users name
-//     this.gift.push(gift);
-// };
-//
-// eventSchema.methods.getGifts = function(gift){
-//     if(gifts.count>0)
-//     {
-//         return this.gifts;
-//     }
-//     else{
-//         console.log('No Gifts in event');
-//     }
-// };
+
 
 
 eventSchema.pre('save', function(next) {
@@ -49,7 +36,7 @@ eventSchema.pre('save', function(next) {
             // if created_at doesn't exist, add to that field
             if (!self.created_at)
                 self.created_at = currentDate;
-
+            console.log("event saved successfully");
             next();
         }else{
             console.log('event name exists: ',self.title);

@@ -6,10 +6,11 @@
 
 <div class="jumbotron">
     <div class="container text-center">
-        <h1>MY EVENTS</h1>
+        <h1 style="color: #067c8d">MY WISHLISTS</h1>
 
     </div>
 </div>
+
 <div id="mySidenav" class="sidenav" style="position: fixed">
     <!--<a href="#" id="about">About</a><br>-->
     <!--<a href="/wishlist/myEvents" id="myEventsSidenav">My Events</a><br><br><br>-->
@@ -30,6 +31,8 @@
                         </div>
                         <div class="col col-xs-6 text-right">
                             <a href="/wishlist/createEvent" class="btn btn-sm btn-primary btn-create">Create A New Event</a>
+                        </div>
+                        <div class="col col-xs-6 text-right">
                         </div>
                     </div>
                 </div>
@@ -83,7 +86,7 @@
                                     <div class="modal-content">
                                         <span class="close">&times;</span>
                                         <h4>Your WishList:</h4><br>
-                                        <ul class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
+                                        <ul id='giftsList<%=events[i].id%>' class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
                                             <% for (var k=0; k<events[i].gifts.length; k++){%>
                                             <li class="w3-padding-15">
                                                 <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
@@ -97,7 +100,7 @@
                                                 <i class="fa fa-gift" aria-hidden="true"></i>
                                                 <%}%>
                                             </li>
-                                        <%}%>
+                                            <%}%>
                                         </ul>
                                     </div>
                                 </div>
@@ -141,7 +144,103 @@
         }
     }
 
-    //    $("#myModal").modal("show");
-    //    $("#myModal").css("z-index", "1500");
+
+
+    var refreshRate = 25000; //mili seconds
+
+    $(function() {
+        //prevent IE from caching ajax calls
+        $.ajaxSetup({cache: false});
+        //The users list is refreshed automatically every second
+        setInterval(ajaxEventsList, refreshRate);
+
+    });
+
+    function ajaxEventsList() {
+        $.ajax({
+            type: "GET",
+            url: "/wishlist/refreshMyEvents",
+            success: function (data) {
+                //incQty();
+                updateAllGiftsLists(data);
+
+            }
+        })
+    }
+
+    function updateAllGiftsLists(events){
+        for(var i=0;i<events.length; i++){
+            updateEventGiftsList(events[i].id,events[i]);
+        }
+    }
+
+    function updateEventGiftsList(eventId,event){
+        var giftListId = 'giftsList'+eventId;
+        $("#"+giftListId).empty();
+
+        for (var k=0; k<event.gifts.length; k++){
+            var newLi = document.createElement("li");
+            newLi.setAttribute("class","w3-padding-15");
+
+            var newImg =  document.createElement("img");
+            newImg.setAttribute("style","width:60px;");
+            var imgUrl = event.gifts[k].ImageUrl;
+            newImg.setAttribute("src",imgUrl);
+            newImg.setAttribute("class","w3-left w3-circle w3-margin-right");
+            newImg.setAttribute("alt","");
+            newLi.appendChild(newImg);
+
+            var newSpan =  document.createElement("span");
+            newSpan.setAttribute("style","width:60px;");
+            newSpan.setAttribute("class","w3-large");
+            newSpan.textContent = event.gifts[k].name;
+            newLi.appendChild(newSpan);
+
+
+            var br1 =  document.createElement("br");
+            newLi.appendChild(br1);
+
+            var newSpan3 =  document.createElement("span");
+            newSpan3.setAttribute("class","w3-large");
+            newSpan3.textContent = event.gifts[k].store_name;
+            newLi.appendChild(newSpan3);
+
+            var newI =  document.createElement("i");
+            newI.setAttribute("style","margin-right: 0px;");
+            newI.setAttribute("aria-hidden","true");
+
+            var newSpan2 =  document.createElement("span");
+            newSpan2.setAttribute("id",eventId);
+            newSpan2.setAttribute("name",event.gifts[k].id);
+            newSpan2.setAttribute("class","w3-button w3-white w3-xlarge w3-right");
+
+            if (event.gifts[k].isMarked == true){
+
+                console.log(event.gifts[k].isMarked);
+                newI.setAttribute("class","fa fa-check-circle-o");
+                newI.textContent = "someone bought for you";
+
+            }
+            else if(event.gifts[k].isMarked == false){
+                console.log(event.gifts[k].isMarked);
+                newI.setAttribute("class","fa fa-gift");
+            }
+
+
+            // newSpan2.appendChild(newI);
+            newLi.appendChild(newSpan2);
+            var br2 =  document.createElement("br");
+            newLi.appendChild(br2);
+
+            newLi.appendChild(newI);
+
+
+
+            document.getElementById(giftListId).appendChild(newLi);
+
+        }
+
+
+    }
 
 </script>
