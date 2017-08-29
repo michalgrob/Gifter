@@ -28,12 +28,23 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/myFriendsEvents', function(req, res, next) {
-    findFriendsEventDetails(req,res,1);
-    //res.render('wishlistFriendsEventsPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest',CartQty: req.session.cart ? req.session.cart.totalQty : 0 } );// req.flash('loginMessage')//
+   if( req.user){
+       findFriendsEventDetails(req,res,1);
+   }
+   else{
+       res.redirect('/users/login');
+   }
+
 });
 
 router.get('/myEvents', function(req, res, next){
-    findClientEventDetails(req,res);
+
+    if( req.user){
+        findClientEventDetails(req,res);
+    }
+    else{
+        res.redirect('/users/login');
+    }
 });
 
 router.get('/createEvent', function(req, res, next) {
@@ -316,6 +327,7 @@ function  markUserInGiftEvent(req,res){
     var giftIdToMark = req.body.giftId;
     var eventId = req.body.eventId;
 
+
     Event.findById(eventId)
         .populate({
             path: 'gifts.gift',
@@ -328,14 +340,13 @@ function  markUserInGiftEvent(req,res){
                     break;
                 }
             }
-
+event.markModified('gifts');
 var x=0;
         event.save(function (err) {
             if (err){
                 console.log(err);
                 throw err;
             }
-
             res.send({s: "s"});
         });
 

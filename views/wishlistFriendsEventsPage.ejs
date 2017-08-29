@@ -25,15 +25,10 @@
                             <h3 class="panel-title">Events List</h3>
                         </div>
                         <div class="col col-xs-6 text-right">
-                            <a href="/wishlist/createEvent" class="btn btn-sm btn-primary btn-create">Create A New Event</a>
                         </div>
                         <div class="col col-xs-6 text-right">
-                            <form method="get" action="/mallManager">
-                                <button type="submit" class="btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
-                            </form>
                         </div>
                     </div>
-                    <input type="text" id="searchInput" onkeyup="searchStores()" placeholder="Search for stores.." title="Type in a name" >
                 </div>
                 <div class="panel-body">
                     <table class="table table-striped table-bordered table-list">
@@ -72,9 +67,17 @@
                                                 <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
 
                                         <span class="w3-large">  <%= events[i].gifts[k].name %> </span>
-                                        <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)"class="w3-button w3-white w3-xlarge w3-right">
-                                                    <i  style="margin-right: 0px;" class="fa fa-hand-o-up" aria-hidden="true"></i>
-                                                </span>
+
+                                            <%if (events[i].gifts[k].isMarked == true){%>
+                                               <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' class="w3-button w3-white w3-xlarge w3-right">
+                                            <i class="fa fa-check-circle-o" aria-hidden="true"> someone bought it already </i>
+                                               </span>
+                                                   <%}else{%>
+                                               <span id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" class="w3-button w3-white w3-xlarge w3-right">
+                                                <i  style="margin-right: 0px;" class="fa fa-hand-o-up" aria-hidden="true">add gift to your shopping cart</i>
+                                            </span>
+                                                   <%}%>
+
                                         <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
                                         <%= events[i].gifts[k].price %>
                                         </li>
@@ -167,7 +170,7 @@
 
         })
     }
-    var refreshRate = 20000; //mili seconds
+    var refreshRate = 25000; //mili seconds
 
     $(function() {
         //prevent IE from caching ajax calls
@@ -197,7 +200,7 @@
 
     function updateEventGiftsList(eventId,event){
         var giftListId = 'giftsList'+eventId;
-        $("#giftListId").empty();
+        $("#"+giftListId).empty();
 
          for (var k=0; k<event.gifts.length; k++){
              var newLi = document.createElement("li");
@@ -208,25 +211,39 @@
              var imgUrl = event.gifts[k].ImageUrl;
              newImg.setAttribute("src",imgUrl);
              newImg.setAttribute("class","w3-left w3-circle w3-margin-right");
+             newImg.setAttribute("alt","");
              newLi.appendChild(newImg);
 
              var newSpan =  document.createElement("span");
              newSpan.setAttribute("style","width:60px;");
              newSpan.setAttribute("class","w3-large");
-             newSpan.textContent = event.gifts[k].name+ 'newwww';
+             newSpan.textContent = event.gifts[k].name;
              newLi.appendChild(newSpan);
 
              var newI =  document.createElement("i");
              newI.setAttribute("style","margin-right: 0px;");
-             newI.setAttribute("class","fa fa-hand-o-up");
              newI.setAttribute("aria-hidden","true");
-
 
              var newSpan2 =  document.createElement("span");
              newSpan2.setAttribute("id",eventId);
              newSpan2.setAttribute("name",event.gifts[k].id);
              newSpan2.setAttribute("class","w3-button w3-white w3-xlarge w3-right");
-             newSpan2.setAttribute("onclick","markAsMine(this)");
+
+             if (event.gifts[k].isMarked == true){
+
+                 console.log(event.gifts[k].isMarked);
+                 newI.setAttribute("class","fa fa-check-circle-o");
+                 newI.textContent = "someone bought it already";
+
+             }
+             else if(event.gifts[k].isMarked == false){
+                 console.log(event.gifts[k].isMarked);
+                 newSpan2.setAttribute("onclick","markAsMine(this)");
+                 newI.setAttribute("class","fa fa-hand-o-up");
+                 newI.textContent = "add gift to your shopping cart";
+             }
+
+
              newSpan2.appendChild(newI);
              newLi.appendChild(newSpan2);
 
@@ -235,7 +252,7 @@
              newSpan3.textContent = event.gifts[k].store_name;
              newLi.appendChild(newSpan3);
 
-             document.getElementById(giftListId);
+             document.getElementById(giftListId).appendChild(newLi);
 
          }
 
