@@ -52,22 +52,29 @@ router.get('/redirect_user_by_role', function(req,res) {
             case 'store_manager':
                 res.redirect('/stores');
                 break;
-/*                res.render('storeManagerPage', {
-                    etitle: "present",
-                    LogedInUser: req.user ? req.user.username : 'guest',
-                    CartQty: req.session.cart ? req.session.cart.totalQty : 0,
-                    available_gifts: ["stam"]
-                });//userName*/
+                /*                res.render('storeManagerPage', {
+                 etitle: "present",
+                 LogedInUser: req.user ? req.user.username : 'guest',
+                 CartQty: req.session.cart ? req.session.cart.totalQty : 0,
+                 available_gifts: ["stam"]
+                 });//userName*/
                 break;
             case 'client':
-                    //  User.findById(userId).populate('shoppingCart').exec(function(err,user) {
-                      //    var gifts = user._doc.shoppingCart;
-                          res.render('mainPage', {
-                              etitle: "gifter",
-                              LogedInUser: req.user ? req.user.username : 'guest',
-                              CartQty: req.session.cart ? req.session.cart.totalQty : 0
-                          });
-                      //});
+                var x=0;
+                User
+                    .findById(req.user.id)
+                    .populate('shoppingCart')
+                    .exec(function(err,user) {
+                        if (err){
+                            console.log(err);
+                        }
+
+                        res.render('mainPage', {
+                            etitle: "gifter",
+                            LogedInUser: req.user ? req.user.username : 'guest',
+                            CartQty:  user._doc.shoppingCart.length
+                        });
+                    });
                 break;
 
             default:
@@ -89,12 +96,12 @@ router.get('/redirect_user_by_role', function(req,res) {
 
 
 
-    /*    if (req.user.email == "admin")
-     res.redirect('/');//('/admin');
-     else if (req.user.role == 'storeManager')
-     res.redirect('/stores/storeInfo');//res.render('storeInfoPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
-     else
-     res.redirect('/');*/
+/*    if (req.user.email == "admin")
+ res.redirect('/');//('/admin');
+ else if (req.user.role == 'storeManager')
+ res.redirect('/stores/storeInfo');//res.render('storeInfoPage.ejs', { LogedInUser: req.user ? req.user.username : 'guest' });
+ else
+ res.redirect('/');*/
 
 // router.get('/logout', function(req, res){
 //     req.logout();

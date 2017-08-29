@@ -23,12 +23,12 @@
             <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
             <!--<li class="list-group-item">-->
             <span class="badge w3-right"><%=products[i].qty%></span>
-            <span class="w3-large"><%=products[i].item.name%><br><%=products[i].item.store_name%></span>
+            <span class="w3-large"><%=products[i].item.name %><br><%=products[i].item.store_name%></span>
 
 
-            <span class="label label-success"><%=products[i].price%>nis</span>
+            <span class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
             <div class="btn-group">
-                <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> more
+                <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> morea
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="#">Reduce by</a> </li>
