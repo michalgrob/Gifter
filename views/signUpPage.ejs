@@ -102,17 +102,21 @@
     <title><%=etitle %></title>
 </head>
 <body>
-<div class="container">
-    <div class="row main">
-        <div class="panel-heading">
-            <div class=" main-center">
+<section style="background-color: #fafafa">
+    <div class="container">
+        <div class="imgcontainer">
+            <!--<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>-->
+            <!--<img class="img-circle" src="/img/gifter.jpg" alt="Avatar" class="avatar">-->
+        </div>
+        <div style="text-align: center">
                 <!--<i class="fa fa-4x fa fa-gift text-primary sr-icons"></i>-->
                 <h1 class="title">Gifter Sign Up </h1>
                 <hr />
             </div>
         </div>
+    <div style="color: black ;background-color: #fafafa; align-items: center;margin-left: 25%;margin-right: 25%">
 
-        <div class="main-login main-center">
+        <!--<div class="main-login main-center">-->
             <form name="singnupForm" class="form-horizontal" method="post" action="/users/signup" onsubmit="return validationUserInput()">
 
                 <div class="form-group">
@@ -218,6 +222,7 @@
         </div>
     </div>
 </div>
+</section>
 <a href="/login" class="btn btn-default"><span class="fa fa-sign-in"></span> Login</a>
 <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Signup</a>
 

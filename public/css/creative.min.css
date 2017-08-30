@@ -38,7 +38,7 @@ button {
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 65%;
+
 }
 
 button:hover {
@@ -206,4 +206,99 @@ span.psw {
 .close:focus {
     color: red;
     cursor: pointer;
+}
+
+@media (max-width:790px) {
+    table tr th:nth-child(1),
+    .un{
+        display:none;
+    }
+    .table {
+        /*table-layout: fixed;*/
+        /*width: 100%;*/
+        font-size: xx-small;
+        text-align: left;
+    }
+    .myBtnGifts {
+        /*font:small-caption;*/
+        margin:0;
+    }
+    .myBtn{
+        text-align: left;
+        /*font:small-caption;*/
+        margin:0;
+    }
+    .events{
+        text-align: left;
+        margin-top: 85px;
+    }
+    .jumbotron{
+        margin-top: 50px;
+    }
+    .eventssidenav1{
+        margin-top: -150px;
+    }
+    .eventssidenav2{
+        margin-top: -150px;
+    }
+    .loginInput{
+        width: 200px;
+    }
+
+
+
+}
+@media (max-width:180px) {
+    .col-sm-3{
+        margin:3px;
+        /*margin-left: 80px;*/
+    }
+    .textDesc{
+        align:right;
+        /*margin: -50px;*/
+
+    }
+    .createEventDiv{
+        align:center;
+        width: 100%;
+    }
+}
+/*----------------------*/
+.createEventDiv{
+
+    width: 80%;
+    margin-left: 180px;
+    /*width: 80%;*/
+}
+.lebalDesc {
+    align:right;
+    /*margin:3px;*/
+    /*alignment: left;*/
+
+}
+.textDesc{
+    align:left;
+    /*margin:18px;*/
+}
+
+.loginInput
+{
+    width: 500px;
+}
+
+.button{
+    font:caption
+}
+
+.table {
+
+    table-layout: fixed;
+    width: 100%;
+    text-align: left;
+}
+
+.myBtnGifts {
+
+    /*font:caption;*/
+    margin:0;
 }

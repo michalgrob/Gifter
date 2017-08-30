@@ -80,20 +80,20 @@
         <!--<div style="background-color:#2e2e2e; height:9%">-->
         <form name="Form"  >
             <!--method="post" action="/wishlist/addEvent"-->
-            <div  style="width: 60%;margin-left: 20%; " >
+            <div class="createEventDiv" >
                 <div id="eventDetails" class="Info">
 
-                    <label class="col-sm-3"style="margin:1.5%; ">Title: </label>
-                    <input class="form-control"type="text" name="eventTitle" id="eventTitle" value=""required><br>
+                    <label class="lableDesc col-sm-3">Title: </label>
+                    <input class="textDesc form-control"type="text" name="eventTitle" id="eventTitle" value=""required><br>
 
-                    <label class="col-sm-3"style="margin:1.5%; ">Description: </label>
-                    <input class="form-control"type="text" name="eventDescription" id="eventDescription"required ><br>
+                    <label class="lableDesc col-sm-3">Description: </label>
+                    <input class="textDesc form-control" type="text" style="margin-top: -120px;"name="eventDescription" id="eventDescription"required ><br>
 
-                    <label class="col-sm-3"style="margin:1.5%">Date:</label>
-                    <input class="form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 60%"required><br>
+                    <label class="lableDesc col-sm-3">Date:</label>
+                    <input class="textDesc form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 60%"required><br>
 
-                    <label class="col-sm-3"style="margin:1.5%; ">Guests: </label>
-                    <input class="form-control"type="text" name="eventGuests" id="eventGuests" value="">
+                    <label class="lableDesc col-sm-3">Guests: </label>
+                    <input class="textDesc form-control"type="text" name="eventGuests" id="eventGuests" value="">
                     <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" >
                     <ul id='list' name="guestsList"></ul>
 
