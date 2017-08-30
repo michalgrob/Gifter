@@ -60,12 +60,10 @@
             document.getElementById("login_button").style.display="none";
 
             var userRole = loggedInUser.role;
-            console.log(userRole);
             switch(userRole){
                 case "mall_manager":
                 case "store_manager":
                     //hide shopping chart:
-                    console.log('hide shopping cart');
                     document.getElementById("shopping_cart").style.display="none";
                     break;
 

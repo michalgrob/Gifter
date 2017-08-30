@@ -64,13 +64,6 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.post('/deleteGift', function(req,res,next){
-    deleteGift(req,function () {
-        sleep(1000);
-        res.redirect("/users/redirect_user_by_role");
-    });
-});
-
 function getGifts(req,done){
     var currStoreManager = req.user.email;
     availableGifts = [];
@@ -101,6 +94,13 @@ function getAvailableInterests(done) {
         done();
     });
 }
+
+router.post('/deleteGift', function(req,res,next){
+    deleteGift(req,function () {
+        sleep(1000);
+        res.redirect("/users/redirect_user_by_role");
+    });
+});
 
 function deleteGift(req,done) {
     var currGiftID = req.body.gift_id;
@@ -193,7 +193,7 @@ function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
             var gender = csvData[i][4];
             var price = csvData[i][5];
             var imgURL = csvData[i][6];
-            var storeInterests = csvData[i][7].split(";");
+            var storeInterests = csvData[i][7].toLowerCase().split(";");
             addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL);
         }
         deleteFolderRecursive('../gifter/public/upload/temp/');
@@ -290,7 +290,50 @@ router.get('/storeAddGift', function(req, res, next) {
     });
 });
 
-router.post('/addGift', function(req, res, next) {
+router.post('/addNewGift', function(req, res, next) {
+    addNewGift(req, function () {
+            res.redirect('/');
+        }
+    );
+});
+
+function addNewGift(req, next) {
+    var giftId = req.body.gift_id;
+    var giftName = req.body.gift_name;
+    var minAge = req.body.min_age;
+    var maxAge = req.body.max_age;
+    var gender = req.body.gender;
+    var price = req.body.price;
+    var imgUrl = req.body.gift_img_url;
+    var selected_interests = (req.body.selected_interests).split(',');
+
+    var currStore = req.user.store;
+
+    //Get Store Data (ID, Name):
+    Store.findOne(currStore).exec(function (err, store) {
+        if (err) throw err;
+
+        //Store Data:
+        var storeId = store.store_id;
+        var storeName = store.name;
+
+        addOneGiftToStore(giftName,
+            storeName,
+            minAge,
+            maxAge,
+            gender,
+            price,
+            selected_interests,
+            giftId,
+            storeId,
+            imgUrl,
+            function(){
+                next();
+            });
+    });
+}
+
+/*router.post('/addGift', function(req, res, next) {
 
 
     var minAge=req.body.minAge;
@@ -306,10 +349,11 @@ router.post('/addGift', function(req, res, next) {
     addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,giftId,storeId,"https://steim.amazingcdn.space/catalog/product/cache/1/image/300x/9df78eab33525d08d6e5fb8d27136e95/1/0/108409063.jpg",function(){
         res.redirect('/stores/storeInfo');});
 
-        // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
+    // giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res);
     // res.render('resultPage');
 
-});
+});*/
+
 router.get('/storeInfo', function(req, res, next) {
 
     //getAllStoreGifts(req.user.name,req, res)
@@ -388,45 +432,78 @@ function addNewStore1(storeName,location,gifts){
 
 function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,next) {
 
+    // Make sure all interests are lower case:
+    for(var i=0;i<storeInterests.length;i++) {
+        storeInterests[i] = storeInterests[i].toLowerCase();
+    }
+
+
     //If the gift doesn't exist in DB - Save it into the DB:
     Gift.findOne({name:giftName},(function(err,gift){
         if (err) throw err;
+
+        //Check if the gift exists:
         if (gift) {
             console.log('The Gift: ' + giftName + ' already exists!!!');
         }else {
+
+            //Create gift object:
+            var newGift = new Gift();
+            newGift.name = giftName;
+            newGift.prod_id = prodId;
+            newGift.price = price;
+            newGift.gender = gender;
+            newGift.store_id = store_id;
+            newGift.store_name = storeName;
+            newGift.minAge= minAge;
+            newGift.maxAge=maxAge;
+            newGift.ImageUrl=imgURL;
+
+            //Add all intrests to the gift:
+            // gift intrests: score: 1
+            // non gift intrests: score: 0
+
             interest.find({},function (err,interests) {
                 if(err) throw err;
 
-                var newGift = new Gift();
-                newGift.name = giftName;
-                newGift.prod_id = prodId;
-                newGift.price = price;
-                newGift.gender = gender;
-                newGift.store_id = store_id;
-                newGift.store_name = storeName;
-                newGift.minAge= minAge;
-                newGift.maxAge=maxAge;
-                newGift.ImageUrl=imgURL;
+                var interestsWithScore1 = interests.filter(function (element) {
+                        for (var i = 0; i < storeInterests.length; i++) {
+                            if (element.name == storeInterests[i]) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    );
 
-                for(var i=0;i<storeInterests.length;i++) {
+                var interestsWithScore0 = interests.filter(function(e){return this.indexOf(e)<0;},interestsWithScore1);
+
+                interestsWithScore1.forEach(function (interest){
+                    newGift.interests.push({interest: interest.name, dynamicScore: 1});
+                });
+
+                interestsWithScore0.forEach(function (interest){
+                    newGift.interests.push({interest: interest.name, dynamicScore: 0});
+                });
+
+
+/*                for(var i=0;i<storeInterests.length;i++) {
                     newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
                 }
 
                 interests.forEach(function (interest) {
-                    var isfound=false;
+                    //var isfound=false;
                     for(var i=0;i<storeInterests.length;i++) {
                         if(interest.name==storeInterests[i]) {
-                            isfound=true;
+                            //isfound=true;
                             newGift.interests.push({interest: interest.name, dynamicScore: 1});
                             break;
                         }
                     }
-                    if(!isfound){
-
+/!*                    if(!isfound){
                         newGift.interests.push({interest: interest.name, dynamicScore: 0});
-
-                    }
-                })
+                    }*!/
+                })*/
 
                 newGift.save(function(err) {
                     if (err) throw err;
@@ -466,7 +543,6 @@ function findInterCategoryNumByName(category) {
 function relateGiftToStore(newGiftId,store_id,storeName,next) {
     Store.findOneAndUpdate({name: {$in:storeName}},{$push:{gifts:newGiftId}},{new:true},function (err,store) {
         if(err ){ throw err;}
-
         if(next != null){
             next();
         }
@@ -477,8 +553,6 @@ function deleteGiftFromGiftCollection(giftId,giftName) {
         if (err) {
             throw err;
         }
-
-
     });
 }
 function deleteGiftFromStoreCollection(giftId,giftName)

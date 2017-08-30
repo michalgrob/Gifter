@@ -184,7 +184,9 @@
             <span onclick="toggleAddNewGiftPopupVisibility(false)" class="close" title="Close Popup">&times;</span>
             <img class="img-circle" src="img/gifter.jpg" alt="Add New Gift" class="avatar">
         </div>
-        <form name="addNewGiftForm" class="form-horizontal" method="post" action="/mallManager/createNewStore" >
+<!--
+        <form name="addNewGiftForm" class="form-horizontal">
+-->
             <!--onsubmit="return validationUserInput()"-->
             <div class="form-group">
                 <label for="name" class="cols-sm-2 control-label" >Gift Name</label>
@@ -201,7 +203,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-id-badge" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="giftId" id="giftId"  placeholder="Enter gift ID as given from Manager"required/>
+                        <input type="text" class="form-control" name="gift_id" id="gift_id"  placeholder="Enter gift ID as given from Manager"required/>
                     </div>
                 </div>
             </div>
@@ -211,12 +213,12 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-usd" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="price" id="price"  placeholder="Enter gift price"required/>
+                        <input type="text" class="form-control" name="gift_price" id="gift_price"  placeholder="Enter gift price"required/>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div id="gender_input" class="form-group">
                 <label for="username" class="cols-sm-2 control-label">Gender</label>
                 <div class="cols-sm-10">
                     <div class="input-group">
@@ -245,37 +247,60 @@
             </div>
 
             <div class="form-group">
-                <label for="username" class="cols-sm-2 control-label">Interests</label>
+                <label for="name" class="cols-sm-2 control-label" >Gift Image URL</label>
                 <div class="cols-sm-10">
-                    <div class="input-group" data-role="rangeslider">
-                        <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
-                        <select class="my-select-box" multiple="multiple">
-                            <optgroup id="add_new_gift_interests" label="All Interests">
-                                <option value="me">Maine</option>
-                                <option value="ny">New York</option>
-                                <option value="nj">New Jersey</option>
-                                <option value="vt">Vermont</option>
-                            </optgroup>
-                            <optgroup id="add_new_gift_interests" label="Interests1">
-                                <option value="me">Maine</option>
-                                <option value="ny">New York</option>
-                                <option value="nj">New Jersey</option>
-                                <option value="vt">Vermont</option>
-                            </optgroup>
-                        </select>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-gift" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="gift_img_url" id="gift_img_url"  placeholder="Enter gift image url"required/>
                     </div>
                 </div>
             </div>
 
-
-
-
-            <div class="form-group ">
-                <button type="submit" onclick="toggleAddNewGiftPopupVisibility(false);" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Interests</label>
+                <div class="cols-sm-10">
+                    <div class="input-group" data-role="rangeslider">
+                        <span class="input-group-addon"><i class="fa fa-connectdevelop" aria-hidden="true"></i></span>
+                        <div class="dual-listbox">
+                            <link href="/dual-listbox/css/dual-listbox.css" rel="stylesheet">
+                            <select id = "interests_dual_list_box" class="select1" multiple>
+                                <% for(var i=0; i<available_interests.length; i++) {%>
+                                <option ><%= available_interests[i].toString() %></option>
+                                <% } %>
+                            </select>
+                            <script>
+                                dlb1 = new DualListbox('.select1',{
+                                    availableTitle: 'Available Interests',
+                                    selectedTitle: 'Selected Interests',
+                                    addButtonText: 'Add Interest',
+                                    removeButtonText: 'Remove Interest',
+                                    addAllButtonText: 'Add All Interests',
+                                    removeAllButtonText: 'Remove All Interests',
+                                    searchPlaceholder: 'Search Interest...'
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="form-group ">
+                <button type="submit" onclick="/*toggleAddNewGiftPopupVisibility(false);*/addNewGift();" class="btn btn-primary btn-lg btn-block login-button" >Add New Gift</button>
+            </div>
+<!--
         </form>
+-->
     </div>
 </div>
+
+<script>
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('popup_add_new_gift')) {
+            toggleAddNewGiftPopupVisibility(false);
+        }
+    }
+</script>
+
+
 
 <script>
     function toggleAddNewGiftPopupVisibility(isToShowPopup) {
@@ -293,6 +318,44 @@
         }
     }
 </script>
+
+<script type="text/javascript">
+    function addNewGift(){
+        console.log("Add new gift.....");
+       // var addNewGiftForm = document.forms.namedItem("addNewGiftForm");
+       // var giftID = addNewGiftForm.elements["gift_id"].value;
+        var giftID = document.getElementById("gift_id").value;
+        var giftName = document.getElementById("gift_name").value;
+        var minAge = document.getElementById("minAge").value;
+        var maxAge = document.getElementById("maxAge").value;
+        var gender = document.getElementById("gender_input").querySelector('input[name="gender"]:checked').value;
+        var price = document.getElementById("gift_price").value;
+        var imgURL = document.getElementById("gift_img_url").value;
+        var selectedInterests = getSelectedInterests();
+
+        post("/stores/addNewGift",{
+            gift_id: giftID,
+            gift_name: giftName,
+            min_age: minAge,
+            max_age: maxAge,
+            gender: gender,
+            price: price,
+            gift_img_url: imgURL,
+            selected_interests: selectedInterests,
+        });
+    }
+
+    function getSelectedInterests() {
+        var results = new Array();
+        var selectedListElements = dlb1.selectedList.childNodes;
+        for(var i=1; i< selectedListElements.length ; i++){
+            results.push(selectedListElements[i].textContent);
+        }
+        return results;
+    }
+</script>
+
+
 
 <script type="text/javascript">
     function ValidationAppForm(){
@@ -389,6 +452,7 @@
     }
 
 </script>
+
 
 <!--<script>
     function updateInterests(){
