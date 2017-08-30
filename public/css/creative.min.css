@@ -219,7 +219,7 @@ span.psw {
         font-size: xx-small;
         text-align: left;
     }
-    .button{
+    .myBtnGifts myBtn{
         font:small-caption;
         margin:0;
     }
@@ -239,3 +239,7 @@ span.psw {
     text-align: left;
 }
 
+.myBtnGifts {
+    font:caption;
+    margin:0;
+}
