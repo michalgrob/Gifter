@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
-
 <style>
 
     .card {
@@ -70,7 +69,8 @@
             <h4>Create your own event<br> And invites your best</h4>
         </div>
     </div>
-
+    <!---->
+    <!---->
     <div style="margin-top:81px;">
         <!--<div style="background-color:#2e2e2e; height:9%">-->
         <form name="Form"  >
@@ -315,15 +315,20 @@
                 type: "GET",
                 url: "/wishlist/checkIfGuestIsRegister/" + guestMail,
                 success: function (user) {
-                    if (user.id != "0") {
+                    if (user!= "0")
+                    {
                         addGuests(user.id,user.username);
                         console.log(user.id);
                     }
-                    else {
+                    else
+                    {
                         alert(guestMail + " isn't register");
                     }
+
                 }
-            })
+
+
+            });
         }
     }
 

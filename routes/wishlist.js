@@ -123,7 +123,7 @@ function createHtmlMsg(guest,eventId,hostUser,title,event_date)
         '<a href="">You are more then welcome to get to our site and see more details about '+hostUser+'</a>' +
         '</h4>' +
         '<h5 class="lead">'
-    '<a class="btn btn-primary btn-sm" href=https://sadna-gifter.herokuapp.com/wishlist/myEvents+ role="button">Continue to event</a>' +
+    '<a class="btn btn-primary btn-sm" href="https://bootstrapcreative.com/" role="button">Continue to event</a>' +
     '</h5>' +
     '</div>'
 
