@@ -248,12 +248,12 @@ span.psw {
 
 
 }
-@media (max-width:780px) {
-    .lebalDesc{
+@media (max-width:180px) {
+    .col-sm-3{
         margin:3px;
         /*margin-left: 80px;*/
     }
-    .textDesc {
+    .textDesc{
         align:right;
         /*margin: -50px;*/
 
@@ -270,13 +270,13 @@ span.psw {
     margin-left: 180px;
     /*width: 80%;*/
 }
-.lebalDesc{
+.lebalDesc {
     align:right;
     /*margin:3px;*/
     /*alignment: left;*/
 
 }
-.textDesc {
+.textDesc{
     align:left;
     /*margin:18px;*/
 }
