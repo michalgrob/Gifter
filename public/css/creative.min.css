@@ -241,7 +241,51 @@ span.psw {
     .eventssidenav2{
         margin-top: -150px;
     }
+    .loginInput{
+        width: 200px;
+    }
+
+
+
 }
+@media (max-width:780px) {
+    .lebalDesc{
+        margin:3px;
+        /*margin-left: 80px;*/
+    }
+    .textDesc {
+        align:right;
+        /*margin: -50px;*/
+
+    }
+    .createEventDiv{
+        align:center;
+        width: 100%;
+    }
+}
+/*----------------------*/
+.createEventDiv{
+
+    width: 80%;
+    margin-left: 180px;
+    /*width: 80%;*/
+}
+.lebalDesc{
+    align:right;
+    /*margin:3px;*/
+    /*alignment: left;*/
+
+}
+.textDesc {
+    align:left;
+    /*margin:18px;*/
+}
+
+.loginInput
+{
+    width: 500px;
+}
+
 .button{
     font:caption
 }
