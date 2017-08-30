@@ -455,9 +455,9 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
             newGift.gender = gender;
             newGift.store_id = store_id;
             newGift.store_name = storeName;
-            newGift.minAge= minAge;
-            newGift.maxAge=maxAge;
-            newGift.ImageUrl=imgURL;
+            newGift.minAge = minAge;
+            newGift.maxAge = maxAge;
+            newGift.ImageUrl = imgURL;
 
             //Add all intrests to the gift:
             // gift intrests: score: 1

@@ -19,15 +19,17 @@
         <!--<div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">-->
         <%for (var i=0;i<products.length;i++){%>
         <li  class="w3-padding-15">
-            <span id='sp<%=products[i].item._id%>' onclick="ajaxRemoveFromCart('<%=products[i].item._id%>')" class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
+            <span id='sp<%=products[i].item._id%>' onclick="ajaxRemoveFromCart('<%=products[i].item._id+","+products[i].item.price%>')" class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
             <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
             <!--<li class="list-group-item">-->
             <span id='qty<%=products[i].item._id%>' class="badge w3-right"><%=products[i].qty%></span>
             <span class="w3-large"><%=products[i].item.name %><br><%=products[i].item.store_name%></span>
 
-
-            <span class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
-
+            <%if(parseInt( products[i].qty)>1){%>
+            <span id='price<%=products[i].item._id%>' class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
+            <%}else{%>
+            <span id='price<%=products[i].item._id%>' class="label label-success"><%= products[i].price+" " %>nis</span>
+            <%}%>
         </li>
         <%}%>
     </ul>
@@ -59,20 +61,24 @@
 
 <script type="text/javascript">
 
-    function ajaxRemoveFromCart(giftId) {
+    function ajaxRemoveFromCart(giftIdAndprice) {
+        var splitedGP = giftIdAndprice.split(',');
+        var giftId = splitedGP[0];
+        var price = splitedGP[1];
         $.ajax({
             type: "POST",
             url: "/shoppingCart/remove-from-cart/"+giftId.toString(),
             //data: "game-name=" + GAME_NAME,
             success: function (status) {
-                decQty(giftId);
+                decQty(giftId,price);
 //onclick="this.parentElement.style.display='none'"
             }
 
         })
     }
 
-    function decQty(giftId) {
+    function decQty(giftId,price) {
+        var priceId = 'price'+giftId;
         var id = 'qty'+ giftId;
        // var spanQty = document.getElementById(id);
         var qty = document.getElementById(id).innerHTML;
@@ -81,11 +87,22 @@
             document.getElementById(spId).parentElement.style.display='none';
         }
         else{
+            var text
             var qty = parseInt(qty)-1;
             document.getElementById(id).textContent = qty.toString();
+            if(qty > 1){
+                text = parseInt(price)+ " * "+ qty +" = "+(parseInt(price)*qty).toString()+" nis";
+
+            }
+            else{//==1
+
+                text = price;
+            }
+
+            document.getElementById(priceId).textContent = text;
         }
-       // var qty = parseInt($("#cartQty").text());
-        $("#cartQty").text(qty);
+        var qty2 = parseInt($("#cartQty").text());
+        $("#cartQty").text(qty2-1);
         alert("gift removed fron cart successfully");
 
 
