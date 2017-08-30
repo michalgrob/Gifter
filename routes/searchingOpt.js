@@ -70,7 +70,7 @@ router.get('/', function(request, response, next) {
             orders5: orders5_json,
             orders6: orders6_json,
             etitle : "present",
-            LogedInUser: req.user ? req.user : '',
+            LogedInUser: request.user ? request.user : '',
             CartQty: request.session.cart ? request.session.cart.totalQty : 0  })
     });
 });

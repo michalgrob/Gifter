@@ -1,14 +1,14 @@
 <% layout('boilerplate') %>
 <div class="jumbotron">
     <div class="container text-center">
-        <h1>Store Manager</h1>
+        <h1 style="color: #067c8d">Store Manager</h1>
         <h4>A list of all the gifts in the store</h4>
 
     </div>
 </div>
 <body style="background-color: #fafafa;">
 
-
+<!---->
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
@@ -17,6 +17,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col col-xs-6">
+                            <!---->
                             <h3 class="panel-title">Gifts List</h3>
                         </div>
                         <div class="col col-xs-6 text-right">
@@ -38,18 +39,21 @@
                     </div>
                     <input type="text" id="searchInput" onkeyup="searchGifts()" placeholder="Search for stores.." title="Type in a name" >
                 </div>
-                <div class="panel-body" style="margin: auto">
+            </div>
+        </div>
 
-                    <div class="container" style="display: inline;">
-                        <div id="gifts_container_row" class="row">
-                        </div>
-                    </div>
+        <div class="panel-body" style="margin: auto">
+
+            <div class="container" style="display: inline;">
+                <div id="gifts_container_row" class="row">
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+</div>
+</div>
+</body>
 
 <script>
     window.onload = loadGifts();

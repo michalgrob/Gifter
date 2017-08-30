@@ -18,28 +18,21 @@
     <ul class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
         <!--<div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">-->
         <%for (var i=0;i<products.length;i++){%>
-        <li class="w3-padding-15">
-            <span onclick="this.parentElement.style.display='none'"class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
+        <li  class="w3-padding-15">
+            <span id='sp<%=products[i].item._id%>' onclick="ajaxRemoveFromCart('<%=products[i].item._id%>')" class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
             <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
             <!--<li class="list-group-item">-->
-            <span class="badge w3-right"><%=products[i].qty%></span>
+            <span id='qty<%=products[i].item._id%>' class="badge w3-right"><%=products[i].qty%></span>
             <span class="w3-large"><%=products[i].item.name %><br><%=products[i].item.store_name%></span>
 
 
             <span class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
-            <div class="btn-group">
-                <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> morea
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Reduce by</a> </li>
-                    <li><a href="#">Remove All</a> </li>
-                </ul>
-            </div>
+
         </li>
         <%}%>
     </ul>
 </div>
-</div>
+
 <div class="row">
     <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"><br>
         <strong>Total: <%=totalPrice%> nis</strong>
@@ -63,4 +56,39 @@
 <%}%>
 
 
-</div>
+
+<script type="text/javascript">
+
+    function ajaxRemoveFromCart(giftId) {
+        $.ajax({
+            type: "POST",
+            url: "/shoppingCart/remove-from-cart/"+giftId.toString(),
+            //data: "game-name=" + GAME_NAME,
+            success: function (status) {
+                decQty(giftId);
+//onclick="this.parentElement.style.display='none'"
+            }
+
+        })
+    }
+
+    function decQty(giftId) {
+        var id = 'qty'+ giftId;
+       // var spanQty = document.getElementById(id);
+        var qty = document.getElementById(id).innerHTML;
+        if(qty == '1'){
+            var spId = 'sp'+ giftId;
+            document.getElementById(spId).parentElement.style.display='none';
+        }
+        else{
+            var qty = parseInt(qty)-1;
+            document.getElementById(id).textContent = qty.toString();
+        }
+       // var qty = parseInt($("#cartQty").text());
+        $("#cartQty").text(qty);
+        alert("gift removed fron cart successfully");
+
+
+    }
+
+</script>
