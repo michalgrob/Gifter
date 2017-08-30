@@ -156,6 +156,16 @@
             </div>
         </form>
     </div>
+    <!-- The Modal -->
+    <div id='myModalErrorGuest' class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="errMail"></span>
+            <span id="errMsg"></span>
+            <button onclick='ajaxInviteNotRegistered()'>invite this email addres to GIFTER</button>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -328,6 +338,9 @@
                     else
                     {
                         alert(guestMail + " isn't register");
+                        document.getElementById("errMail").innerHTML = guestMail ;
+                        modal = document.getElementById('myModalErrorGuest');
+                        modal.style.display = "block";
                     }
 
                 }
@@ -400,5 +413,28 @@
             modal.style.display = "none";
         }
     }
+    function ajaxInviteNotRegistered() {
+            var guestEmail = document.getElementById("errMail").innerHTML;
+            var eventTitle = document.getElementById("eventTitle").value;
+            var eventDescription = document.getElementById("eventDescription").value;
+            var eventDate = document.getElementById("eventDate").value;
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: {
+                    guestEmail: guestEmail,
+                    eventTitle: eventTitle,
+                    eventDescription: eventDescription,
+                    eventDate: eventDate
+                },
+                url: "/wishlist/inviteToGifter",
+                success: function (msg) {
+                    document.getElementById('resultC').style.display='none';
+                }
+            });
+
+    }
+
 </script>
 

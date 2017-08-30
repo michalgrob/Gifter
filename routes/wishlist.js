@@ -22,6 +22,8 @@ var hogan = require('hogan.js');
 
 var template = fs.readFileSync('./views/inviteEmail.ejs','utf-8');
 var compiledTemplate = hogan.compile(template);
+var template2 = fs.readFileSync('./views/inviteEmailForNotRegistered.ejs','utf-8');
+var compiledTemplate2 = hogan.compile(template2);
 
 router.post('/markGift',function (req,res,next) {
     markUserInGiftEvent(req,res);
@@ -31,12 +33,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/myFriendsEvents', function(req, res, next) {
-   if( req.user){
-       findFriendsEventDetails(req,res,1);
-   }
-   else{
-       res.redirect('/users/login');
-   }
+    if( req.user){
+        findFriendsEventDetails(req,res,1);
+    }
+    else{
+        res.redirect('/users/login');
+    }
 
 });
 
@@ -67,7 +69,10 @@ router.get('/refreshMyFriendsEventsGifts', function(req, res, next) {
 });
 
 router.get('/refreshMyEvents', function(req, res, next){
-        findClientEventDetails(req,res,2);
+    findClientEventDetails(req,res,2);
+});
+router.post('/inviteToGifter',function (req,res,next) {
+    sendMailInviteToGifter(req,res)
 });
 module.exports = router;
 
@@ -97,11 +102,11 @@ function sendMailsToGuests(eventId,guests,hostUser,title,event_date,description,
         }
     });
     for (var i = 0; i < guests.length; i++) {
-        var htmlMsg=createHtmlMsg(guests[i],eventId,hostUser,title,event_date);
+
         var mailOptions = {
             from: '"Gifter"<sadna.gifter@gmail.com>',
             to: guests[i].email,//,michalgrob@gmail.com',
-            subject: 'WOW '+hostUser+' invites you to an event!!',
+            subject: hostUser+' invites you to an event!!',
             html: compiledTemplate.render({hostUser: hostUser,etitle: title,eventId: eventId,guest:guests[i].username,event_date: event_date,description:description})//htmlMsg//render template//htmlMsg
         };
         transporter.sendMail(mailOptions, function (error, info) {
@@ -238,7 +243,7 @@ function findFriendsEventDetails(req,res,sign) {
             });
         }
         else{//sign==2
-           res.send(JSON.parse(JSON.stringify(FriendsEvents))) ;
+            res.send(JSON.parse(JSON.stringify(FriendsEvents))) ;
         }
     });
 }
@@ -345,15 +350,15 @@ function  markUserInGiftEvent(req,res){
             path: 'gifts.gift',
         }).exec(function(err,event) {
 
-            for(var i=0;i<event.gifts.length;i++){
-                if(event.gifts[i].gift.id == giftIdToMark){
-                    event.gifts[i]._doc.markedBy = markedByUserId;
-                    event.gifts[i]._doc.isMarked = true;
-                    break;
-                }
+        for(var i=0;i<event.gifts.length;i++){
+            if(event.gifts[i].gift.id == giftIdToMark){
+                event.gifts[i]._doc.markedBy = markedByUserId;
+                event.gifts[i]._doc.isMarked = true;
+                break;
             }
-event.markModified('gifts');
-var x=0;
+        }
+        event.markModified('gifts');
+        var x=0;
         event.save(function (err) {
             if (err){
                 console.log(err);
@@ -363,8 +368,34 @@ var x=0;
         });
 
     });
+}
+function sendMailInviteToGifter(req,res) {
+    var unRegisteredUserMail = req.body.guestEmail;
+    var title=req.body.eventTitle;
+    var description = req.body.eventDescription;
+    var hostUser = req.user.name;
+    var event_date = req.body.eventDate;
 
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'sadna.gifter@gmail.com',
+            pass: 'sadnagifter12'
+        }
+    });
 
-
+    var mailOptions = {
+        from: '"Gifter"<sadna.gifter@gmail.com>',////sapir here its nechshal!!
+        to: unRegisteredUserMail,//,michalgrob@gmail.com',
+        subject: hostUser+' invites you to an event!!',
+        html: compiledTemplate2.render({hostUser: hostUser,etitle: title,eventId: eventId,guest:unRegisteredUserMail,event_date: event_date,description:description})//htmlMsg//render template//htmlMsg
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 
 }
