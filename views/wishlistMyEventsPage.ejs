@@ -58,7 +58,7 @@
                             <th> <%=events[i].description%></th>
                             <th><%=events[i].event_date%></th>
                             <th><%=events[i].guests.length%> guests <br>
-                                <button id="myBtn" onclick="showModal('myModal<%=events[i].id%>')">Show Guests</button>
+                                <button class="btn-xs btn-primary btn-create"id="myBtn" onclick="showModal('myModal<%=events[i].id%>')">Show Guests</button>
 
                                 <!-- The Modal -->
                                 <div id='myModal<%=events[i].id%>' class="modal">
@@ -78,7 +78,7 @@
 
                             </th>
                             <th><%=events[i].gifts.length%> wishlist<br>
-                                <button id="myBtnGifts" onclick="showModal('myModalGifts<%=events[i].id%>')">Show Gifts</button>
+                                <button class="btn-xs btn-primary btn-create" id="myBtnGifts" onclick="showModal('myModalGifts<%=events[i].id%>')">Show Gifts</button>
 
                                 <!-- The Modal -->
                                 <div id='myModalGifts<%=events[i].id%>' class="modal">

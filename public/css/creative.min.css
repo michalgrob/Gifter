@@ -38,7 +38,7 @@ button {
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 65%;
+
 }
 
 button:hover {
@@ -208,7 +208,7 @@ span.psw {
     cursor: pointer;
 }
 
-@media (max-width:760px) {
+@media (max-width:790px) {
     table tr th:nth-child(1),
     .un{
         display:none;
@@ -219,12 +219,21 @@ span.psw {
         font-size: xx-small;
         text-align: left;
     }
-    .myBtnGifts myBtn{
-        font:small-caption;
+    .myBtnGifts {
+        /*font:small-caption;*/
+        margin:0;
+    }
+    .myBtn{
+        text-align: left;
+        /*font:small-caption;*/
         margin:0;
     }
     .events{
+        text-align: left;
         margin-top: 85px;
+    }
+    .jumbotron{
+        margin-top: 50px;
     }
 
 }
@@ -240,6 +249,7 @@ span.psw {
 }
 
 .myBtnGifts {
-    font:caption;
+
+    /*font:caption;*/
     margin:0;
 }
