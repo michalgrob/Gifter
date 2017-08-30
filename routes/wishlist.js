@@ -18,7 +18,10 @@ var passport = require('passport');
 var sendgrid = require('sendgrid')(process.env.SENDGRID_API_KEY);
 var moment = require('moment');
 var nodemailer = require('nodemailer');
+var hogan = require('hogan.js');
 
+var template = fs.readFileSync('./views/inviteEmail.ejs','utf-8');
+var compiledTemplate = hogan.compile(template);
 
 router.post('/markGift',function (req,res,next) {
     markUserInGiftEvent(req,res);
@@ -84,7 +87,7 @@ function createGuestsMailsArray(guests) {
     }
     return array;
 }
-function sendMailsToGuests(eventId,guests,hostUser,title,event_date,res) {
+function sendMailsToGuests(eventId,guests,hostUser,title,event_date,description,res) {
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -98,8 +101,9 @@ function sendMailsToGuests(eventId,guests,hostUser,title,event_date,res) {
         var mailOptions = {
             from: '"Gifter"<sadna.gifter@gmail.com>',
             to: guests[i].email,//,michalgrob@gmail.com',
-            subject: 'WOW '+hostUser+' invites you to his event!!',
-            html: htmlMsg};
+            subject: 'WOW '+hostUser+' invites you to an event!!',
+            html: compiledTemplate.render({hostUser: hostUser,etitle: title,eventId: eventId,guest:guests[i].username,event_date: event_date,description:description})//htmlMsg//render template//htmlMsg
+        };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
@@ -152,7 +156,7 @@ function createNewEvent(req,res) {//todo check gifts array
     newEvent.save(function (err, done) {
         if (err) throw err;
         console.log('Event saved successfully!');
-        sendMailsToGuests(newEvent.id,guests,req.user.username,title,event_date,res);//todo
+        sendMailsToGuests(newEvent.id,guests,req.user.username,title,event_date,newEvent.description,res);//todo
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
 
         // res.redirect('');

@@ -71,6 +71,11 @@
     </div>
     <!---->
     <!---->
+    <div id="resultC" style="display:none; color: #067c8d " >
+        <div class="text-center">
+            <h4>Event created successfully</h4>
+        </div>
+    </div>
     <div style="margin-top:81px;">
         <!--<div style="background-color:#2e2e2e; height:9%">-->
         <form name="Form"  >
@@ -215,7 +220,7 @@
                 },
                 url: "/wishlist/addEvent",
                 success: function (msg) {
-
+                    document.getElementById('resultC').style.display='none';
                 }
             });
         }
