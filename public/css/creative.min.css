@@ -238,48 +238,74 @@ span.psw {
     .eventssidenav1{
         margin-top: -150px;
     }
+    /**/
     .eventssidenav2{
         margin-top: -150px;
     }
     .loginInput{
         width: 200px;
     }
+}
 
+@media(max-width:500px){
+#eventDate {margin-left:20%}
 
 
 }
-@media (max-width:180px) {
-    .col-sm-3{
-        margin:3px;
-        /*margin-left: 80px;*/
-    }
-    .textDesc{
-        align:right;
-        /*margin: -50px;*/
 
-    }
-    .createEventDiv{
-        align:center;
-        width: 100%;
-    }
-}
+
+
+/*@media (max-width:180px) {*/
+    /*.col-sm-3{*/
+        /*margin:3px;*/
+        /*!*margin-left: 80px;*!*/
+    /*}*/
+    /*.textDesc{*/
+        /*align:right;*/
+        /*!*margin: -50px;*!*/
+
+    /*}*/
+    /*.createEventDiv{*/
+        /*align:center;*/
+        /*width: 100%;*/
+    /*}*/
+/*}*/
 /*----------------------*/
-.createEventDiv{
+/*.createEventDiv{*/
 
-    width: 80%;
-    margin-left: 180px;
     /*width: 80%;*/
-}
-.lebalDesc {
-    align:right;
-    /*margin:3px;*/
-    /*alignment: left;*/
+    /*margin-left: 180px;*/
+    /*!*width: 80%;*!*/
+/*}*/
+/*.lebalDesc {*/
+    /*align:right;*/
+    /*!*margin:3px;*!*/
+    /*!*alignment: left;*!*/
 
+/*}*/
+/*.textDesc{*/
+    /*align:left;*/
+    /*!*margin:18px;*!*/
+/*}*/
+
+
+
+/*form create*/
+
+.formInputLbl{
+    margin-top:10px;
 }
-.textDesc{
-    align:left;
-    /*margin:18px;*/
+.giftsbtn{
+    margin-top :10px;
 }
+#add{
+    -webkit-appearance: none !important;
+}
+
+
+
+
+
 
 .loginInput
 {

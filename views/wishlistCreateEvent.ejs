@@ -1,7 +1,8 @@
 
 
-
+<!--<div style=" background-color: #fafafa; height: 300px ; width: 100%; position: absolute; z-index: -10;"></div>-->
 <% layout('boilerplate') %>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -61,12 +62,16 @@
             float: none;
             display: block;
         }
-    }</style>
-<div style=" background-color: #fafafa;">
-    <div style="color: #067c8d"class="jumbotron">
+    }
+</style>
+
+
+    <!--<div class="container">-->
+
+    <div style="color: #067c8d;"class="jumbotron">
         <div class="text-center">
             <h1>CREATE EVENT</h1>
-            <h4>Create your own event<br> And invites your best</h4>
+            <h4>Create your own event<br> And invite your best</h4>
         </div>
     </div>
     <!---->
@@ -76,36 +81,77 @@
             <h4>Event created successfully</h4>
         </div>
     </div>
-    <div style="margin-top:81px;">
+   <!-- < style="margin-top:81px;">
         <!--<div style="background-color:#2e2e2e; height:9%">-->
-        <form name="Form"  >
+
+        <form name="Form"  class=center-block">
             <!--method="post" action="/wishlist/addEvent"-->
-            <div class="createEventDiv" >
-                <div id="eventDetails" class="Info">
-
-                    <label class="lableDesc col-sm-3">Title: </label>
-                    <input class="textDesc form-control"type="text" name="eventTitle" id="eventTitle" value=""required><br>
-
-                    <label class="lableDesc col-sm-3">Description: </label>
-                    <input class="textDesc form-control" type="text" style="margin-top: -120px;"name="eventDescription" id="eventDescription"required ><br>
-
-                    <label class="lableDesc col-sm-3">Date:</label>
-                    <input class="textDesc form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 60%"required><br>
-
-                    <label class="lableDesc col-sm-3">Guests: </label>
+            <div class="" >
+                <div id="eventDetails"  class="Info">
+<!---->
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                    <label class="formInputLbl">Title: </label>
+                        </div>
+                        <div class="col-md-7">
+                    <input class="textDesc form-control"type="text" name="eventTitle" id="eventTitle" value=""required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                    <label class="formInputLbl">Description: </label>
+                        </div>
+                        <div class="col-md-7">
+                    <input class="textDesc form-control" type="text" name="eventDescription" id="eventDescription"required >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                    <label class="formInputLbl">Date:</label>
+                        </div>
+                        <div class="col-md-7">
+                    <input class="textDesc form-control"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 60%"required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                    <label class="formInputLbl">Guests: </label>
+                        </div>
+                        <div class="col-md-7">
                     <input class="textDesc form-control"type="text" name="eventGuests" id="eventGuests" value="">
-                    <input type='button' value='add to list' id='add'onclick="ajaxCheckIfGuestIsRegister()" >
+
+                        </div>
+                        <div class="col-md-1">
+                            <span id='add' type='button' onclick="ajaxCheckIfGuestIsRegister()">
+                            <!--<input type='button' id='add'onclick="ajaxCheckIfGuestIsRegister()" >-->
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                </span>
+                        </div>
+                    </div>
+
+
                     <ul id='list' name="guestsList"></ul>
 
                 </div>
 
             </div>
-            <div>
-                <input id="myBtn" class="btn btn-primary btn-xl page-scroll" type="button" value = 'show gifts that fits you'style="margin-left:41%;text-align: center" name="submit" onclick="ajaxGiftToAdd()" style="margin-right: 5%">
+            <div class="row" style="align: center;">
+                <div class="col-md-4 "></div>
+                <div class="col-md-2 ">
+                <input id="myBtn" class="giftsbtn btn btn-primary btn-xl page-scroll center-block" type="button" value = 'show gifts' name="submit" onclick="ajaxGiftToAdd()" >
             </div>
-            <div>
-                <br>
-                <input onclick="ajaxSaveChanges()" class=" btn btn-primary btn-xl page-scroll" type="submit"style="margin-left:44%;text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
+
+
+
+                    <div class="col-md-2 ">
+                <input onclick="ajaxSaveChanges()" class="giftsbtn btn btn-primary btn-xl page-scroll center-block" type="submit"style="text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
+
+            </div>
+                <div class="col-md-4 "></div>
             </div>
 
             <div id="myModal" class="modal">
@@ -166,7 +212,8 @@
             <button onclick='ajaxInviteNotRegistered()'>invite this email addres to GIFTER</button>
         </div>
     </div>
-</div>
+
+
 
 <script type="text/javascript">
     function ValidationAppForm() {
