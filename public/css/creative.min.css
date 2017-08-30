@@ -207,3 +207,35 @@ span.psw {
     color: red;
     cursor: pointer;
 }
+
+@media (max-width:760px) {
+    table tr th:nth-child(1),
+    .un{
+        display:none;
+    }
+    .table {
+        /*table-layout: fixed;*/
+        /*width: 100%;*/
+        font-size: xx-small;
+        text-align: left;
+    }
+    .button{
+        font:small-caption;
+        margin:0;
+    }
+    .events{
+        margin-top: 85px;
+    }
+
+}
+.button{
+    font:caption
+}
+
+.table {
+
+    table-layout: fixed;
+    width: 100%;
+    text-align: left;
+}
+
