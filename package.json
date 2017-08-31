@@ -43,6 +43,7 @@
     "passport-http": "*",
     "passport-local": "^1.0.0",
     "promise": "^8.0.1",
+    "reinstall": "^2.0.0",
     "sendgrid": "^5.2.2",
     "sendmail": "^1.2.0",
     "serve-favicon": "~2.3.2",
