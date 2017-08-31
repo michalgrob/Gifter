@@ -32,8 +32,18 @@ router.post('/', function(req, res, next) {
     var minPrice=req.body.minPrice;
     var maxPrice = req.body.maxPrice;
     var fromFunction=1;
+    var hobbies = [];
 
-    giftSearch(gender,maxPrice ,minPrice,age, req.body.hobbies,res,req,fromFunction);
+    if(typeof req.body.hobbies === 'string'){
+        hobbies.push(req.body.hobbies);
+    }else{
+
+        req.body.hobbies.forEach(function (element) {
+            hobbies.push(element);
+        })
+    }
+
+    giftSearch(gender,maxPrice ,minPrice,age,hobbies,res,req,fromFunction);
     // res.render('resultPage');
 
 });
@@ -60,8 +70,8 @@ module.exports = router;
 
 
 function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req,fromFunction) {
-//todo change render to next fucntion! michal sapir
-    Gift.find({}).populate('interests').exec(function(err,gifts) {
+
+    Gift.find({}).populate({ path:'interests store'}).exec(function(err,gifts) {
 
         var giftsTotalScore=[];
         for(var i=0;i<gifts.length;i++)// interest for
@@ -81,6 +91,10 @@ function giftSearch(gender,maxPrice ,minPrice,userAge, userInterests ,res,req,fr
             }
             currTotal=ageMatches(gifts[i]._doc.minAge,gifts[i]._doc.maxAge,userAge,currTotal);
             currTotal=genderMatches(gender,gifts[i]._doc.gender,currTotal);
+            //mall promotions
+           if(gifts[i].store.is_promoted){
+               currTotal = currTotal * 1.25;
+           }
             giftsTotalScore.push({name:gifts[i]._doc.name, id: gifts[i]._doc._id,storeName: gifts[i]._doc.store_name,price: gifts[i]._doc.price,ImageUrl:gifts[i]._doc.ImageUrl,tot: currTotal});
         }
 

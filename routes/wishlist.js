@@ -160,6 +160,7 @@ function createNewEvent(req,res) {//todo check gifts array
     });
     newEvent.save(function (err, done) {
         if (err) throw err;
+       // res.redirect('/wishlist/myEvents');
         console.log('Event saved successfully!');
         sendMailsToGuests(newEvent.id,guests,req.user.username,title,event_date,newEvent.description,res);//todo
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
