@@ -18,7 +18,7 @@ var giftSchema = new Schema({
         interestRef: {type: mongoose.Schema.Types.ObjectId, ref: 'interest'}
     }],//[require('./inGiftInter')],//require('./inGiftInter')],
     gender: String,
-    store_id: String,
+    store: {type: mongoose.Schema.Types.ObjectId, ref: 'Store'},
     store_name: String,
     maxAge: Number,
     minAge: Number,

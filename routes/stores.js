@@ -169,7 +169,6 @@ function importGiftsFromCSV(req) {
 function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
 
     //Store Data:
-    var store_id = store.store_id;
     var store_name = store.name;
 
     var csvData = [];
@@ -194,7 +193,7 @@ function readDataFromCSVfileAndInsertToDB(store, csvFilePath) {
             var price = csvData[i][5];
             var imgURL = csvData[i][6];
             var storeInterests = csvData[i][7].toLowerCase().split(";");
-            addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL);
+            addOneGiftToStore(giftName,store_name,minAge,maxAge,gender,price,storeInterests,prodId,store,imgURL);
         }
         deleteFolderRecursive('../gifter/public/upload/temp/');
     });
@@ -325,7 +324,7 @@ function addNewGift(req, next) {
             price,
             selected_interests,
             giftId,
-            storeId,
+            store,
             imgUrl,
             function(){
                 next();
@@ -430,7 +429,9 @@ function addNewStore1(storeName,location,gifts){
     }))
 }
 
-function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store_id,imgURL,next) {
+function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeInterests,prodId,store,imgURL,next) {
+
+    var store_id =store.store_id;
 
     // Make sure all interests are lower case:
     for(var i=0;i<storeInterests.length;i++) {
@@ -453,7 +454,7 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
             newGift.prod_id = prodId;
             newGift.price = price;
             newGift.gender = gender;
-            newGift.store_id = store_id;
+            newGift.store = store;
             newGift.store_name = storeName;
             newGift.minAge = minAge;
             newGift.maxAge = maxAge;
