@@ -311,8 +311,13 @@ margin: auto;
 #add{
     -webkit-appearance: none !important;
 }
+.gift-list{
+    width:100%; margin-left: 3%;
+}
+.my-gift-list {
+    width:100%; margin-left: 20%;
 
-
+}
 
 
 
