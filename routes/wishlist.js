@@ -22,7 +22,7 @@ var hogan = require('hogan.js');
 
 var template = fs.readFileSync('./views/inviteEmail.ejs','utf-8');
 var compiledTemplate = hogan.compile(template);
-var template2 = fs.readFileSync('./views/inviteEmailForNotRegistered.ejs','utf-8');
+var template2 = fs.readFileSync('./views/inviteEmail.ejs','utf-8');//('./views/inviteEmailForNotRegistered.ejs','utf-8');
 var compiledTemplate2 = hogan.compile(template2);
 
 router.post('/markGift',function (req,res,next) {
@@ -376,6 +376,7 @@ function sendMailInviteToGifter(req,res) {
     var description = req.body.eventDescription;
     var hostUser = req.user.name;
     var event_date = req.body.eventDate;
+    var eventId=req.body.eventId;
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -389,7 +390,7 @@ function sendMailInviteToGifter(req,res) {
         from: '"Gifter"<sadna.gifter@gmail.com>',////sapir here its nechshal!!
         to: unRegisteredUserMail,//,michalgrob@gmail.com',
         subject: hostUser+' invites you to an event!!',
-        html: compiledTemplate2.render({hostUser: hostUser,etitle: title,eventId: eventId,guest:unRegisteredUserMail,event_date: event_date,description:description})//htmlMsg//render template//htmlMsg
+        html:compiledTemplate2.render({hostUser: hostUser,etitle: title,eventId: eventId,guest:unRegisteredUserMail,event_date: event_date,description:description})//htmlMsg//render template//htmlMsg
     };
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
