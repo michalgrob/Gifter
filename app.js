@@ -59,7 +59,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     store: new MongoStore ({mongooseConnection: mongoose.connection}),
-    cookie: {maxAge: 180 * 60 * 1000}
+    cookie: {maxAge: 1800 * 600 * 1000}
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
