@@ -479,11 +479,11 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
                 var interestsWithScore0 = interests.filter(function(e){return this.indexOf(e)<0;},interestsWithScore1);
 
                 interestsWithScore1.forEach(function (interest){
-                    newGift.interests.push({interest: interest.name, dynamicScore: 1});
+                    newGift.interests.push({interest: interest.name, dynamicScore: 1,interestRef: interest});
                 });
 
                 interestsWithScore0.forEach(function (interest){
-                    newGift.interests.push({interest: interest.name, dynamicScore: 0});
+                    newGift.interests.push({interest: interest.name, dynamicScore: 0,interestRef: interest});
                 });
 
 

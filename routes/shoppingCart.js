@@ -29,13 +29,13 @@ router.get('/add-to-cart/:id', function(req, res, next) {
         }
         cart.add(gift,gift.id);
         req.session.cart = cart;
-        if (req.user.role == 'client'){
+        if (req.user && req.user.role == 'client'){
             var userId =req.user.id;
             var x=9;
             updateUserShoppingCart(userId,giftId,gift,res)
-
+        }else{
+            res.redirect('/');
         }
-
     });
 });
 
