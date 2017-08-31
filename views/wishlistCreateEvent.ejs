@@ -246,7 +246,13 @@
             var guestList = Array.from(document.querySelectorAll('#list>li'));
 
             for (var i = 0; i < guestList.length; i++) {
-                guestArrayData.push({email: guestList[i].textContent, id: guestList[i].getAttribute("id"),username:guestList[i].getAttribute("name")});
+                if (guestList[i].getAttribute("id") != "") {
+                    guestArrayData.push({
+                        email: guestList[i].textContent,
+                        id: guestList[i].getAttribute("id"),
+                        username: guestList[i].getAttribute("name")
+                    });
+                }
             }
 
             var gifts = [];
@@ -379,15 +385,25 @@
                         addGuests(user.id,user.username);
                         console.log(user.id);
                     }
-                    else
-                    {
-                        alert(guestMail + " isn't register");
-                        document.getElementById("errMail").innerHTML = guestMail ;
-                        modal = document.getElementById('myModalErrorGuest');
-                        modal.style.display = "block";
+                    else {
+                        if (checkIfAlreadyChoose(guestMail)==true) {
+                            alert(guestMail + " already invites to your event");
+                        }
+                        else{
+                            var ans = confirm(guestMail + " isn't register.\n would you like to sed invite anyway?");
+                            if (ans == true) {
+                                ajaxInviteNotRegistered(guestMail);
+                                //  txt = "You pressed OK!";
+                            } else {
+                                // txt = "You pressed Cancel!";
+                            }
+                            // document.getElementById("errMail").innerHTML = guestMail ;
+                            // modal = document.getElementById('myModalErrorGuest');
+                            // modal.style.display = "block";
+                        }
                     }
-
                 }
+
 
 
             });
@@ -457,9 +473,11 @@
             modal.style.display = "none";
         }
     }
-    function ajaxInviteNotRegistered() {
-            var guestEmail = document.getElementById("errMail").innerHTML;
-            var eventTitle = document.getElementById("eventTitle").value;
+    function ajaxInviteNotRegistered(guestEmail) {
+           //var guestEmail = document.getElementById("errMail").innerHTML;
+
+        addGuests("",guestEmail);
+        var eventTitle = document.getElementById("eventTitle").value;
             var eventDescription = document.getElementById("eventDescription").value;
             var eventDate = document.getElementById("eventDate").value;
 
