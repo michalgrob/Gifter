@@ -71,8 +71,11 @@ router.get('/refreshMyFriendsEventsGifts', function(req, res, next) {
 router.get('/refreshMyEvents', function(req, res, next){
     findClientEventDetails(req,res,2);
 });
+var newGuestsMail=[]
 router.post('/inviteToGifter',function (req,res,next) {
-    sendMailInviteToGifter(req,res)
+    var unRegisteredUserMail = req.body.guestEmail;
+    newGuestsMail.push(unRegisteredUserMail);
+    //sendMailInviteToGifter(req,res)
 });
 module.exports = router;
 
@@ -148,7 +151,7 @@ function createNewEvent(req,res) {//todo check gifts array
     var eventGuestsUsers = createGuestsIdsArray(guests);
     var guestsMailsArray=createGuestsMailsArray(guests);
     var event_date = req.body.eventDate;
-
+    var unRegisteredGuesed=newGuestsMail;
 //Create new Event:
     var newEvent = new Event({
         title: title,
@@ -160,9 +163,10 @@ function createNewEvent(req,res) {//todo check gifts array
     });
     newEvent.save(function (err, done) {
         if (err) throw err;
-       // res.redirect('/wishlist/myEvents');
+        // res.redirect('/wishlist/myEvents');
         console.log('Event saved successfully!');
         sendMailsToGuests(newEvent.id,guests,req.user.username,title,event_date,newEvent.description,res);//todo
+        sendMailInviteToGifter(newEvent.id,unRegisteredGuesed,req.user.username,title,event_date,newEvent.description,res)
         updateEventInHost(newEvent.id, hostUser,eventGuestsUsers);
 
         // res.redirect('');
@@ -370,34 +374,43 @@ function  markUserInGiftEvent(req,res){
 
     });
 }
-function sendMailInviteToGifter(req,res) {
-    var unRegisteredUserMail = req.body.guestEmail;
-    var title=req.body.eventTitle;
-    var description = req.body.eventDescription;
-    var hostUser = req.user.name;
-    var event_date = req.body.eventDate;
-    var eventId=req.body.eventId;
+function sendMailInviteToGifter(eventId,unRegisteredUserMailArray,hostUser,title,event_date,description,res) {
+    // var unRegisteredUserMail = req.body.guestEmail;
+    // var title=req.body.eventTitle;
+    // var description = req.body.eventDescription;
+    // var hostUser = req.user.name;
+    // var event_date = req.body.eventDate;
+    // var eventId=req.body.eventId;
+    for(var k=0 ;k<unRegisteredUserMailArray.length;k++) {
+       var unRegisteredUserMail=unRegisteredUserMailArray[k];
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'sadna.gifter@gmail.com',
+                pass: 'sadnagifter12'
+            }
+        });
 
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'sadna.gifter@gmail.com',
-            pass: 'sadnagifter12'
-        }
-    });
-
-    var mailOptions = {
-        from: '"Gifter"<sadna.gifter@gmail.com>',////sapir here its nechshal!!
-        to: unRegisteredUserMail,//,michalgrob@gmail.com',
-        subject: hostUser+' invites you to an event!!',
-        html:compiledTemplate2.render({hostUser: hostUser,etitle: title,eventId: eventId,guest:unRegisteredUserMail,event_date: event_date,description:description})//htmlMsg//render template//htmlMsg
-    };
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
-
+        var mailOptions = {
+            from: '"Gifter"<sadna.gifter@gmail.com>',////sapir here its nechshal!!
+            to: unRegisteredUserMail,//,michalgrob@gmail.com',
+            subject: hostUser + ' invites you to an event!!',
+            html: compiledTemplate2.render({
+                hostUser: hostUser,
+                etitle: title,
+                eventId: eventId,
+                guest: unRegisteredUserMail,
+                event_date: event_date,
+                description: description
+            })//htmlMsg//render template//htmlMsg
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    }
+    newGuestsMail=[];
 }
