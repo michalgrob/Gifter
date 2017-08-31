@@ -247,9 +247,19 @@ span.psw {
     }
 }
 
-@media(max-width:500px){
-#eventDate {margin-left:20%}
+@media(max-width:780px){
+#eventDate {
+margin: auto;
+}
+    #eventGuests{
+        margin-left: 40px;
+        /*width: 80%;*/
+        /*margin: auto;*/
 
+    }
+
+    .textDesc8{
+    }
 
 }
 
