@@ -15,8 +15,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="page-scroll" href="#about">About</a>
+                <li id="wishlists_label">
+                    <a class="page-scroll" href="/#wishlists">Wishlists</a>
                 <li>
                     <a class="page-scroll" href="/searchingOpt">Search Gifts</a>
                 </li>
@@ -65,6 +65,9 @@
                 case "store_manager":
                     //hide shopping chart:
                     document.getElementById("shopping_cart").style.display="none";
+
+                    //hide about:
+                    document.getElementById("wishlists_label").style.display="none";
                     break;
 
                 default:
