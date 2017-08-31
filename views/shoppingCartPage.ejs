@@ -4,83 +4,87 @@
 <!---->
 
 <div class="jumbotron">
-    <div class="text-center">
-        <h1 style="color: #067c8d">SHOPPING CART</h1>
+    <div class="text-center center-block">
+        <h1 style="color: #067c8d">Shopping Cart</h1>
     </div>
 </div>
 
+<div class="container" style="width: 80%">
+    <div style="margin-top:81px;">
+        <%if (products){%>
 
-<div style="margin-top:81px;">
-    <%if (products){%>
+        <!--<div class="row">-->
 
-    <!--<div class="row">-->
+        <ul class="w3-ul w3-card-4"style="border-radius: 10px 10px 10px 10px;">
+            <!--<div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">-->
+            <%for (var i=0;i<products.length;i++){%>
+            <li  class="w3-padding-15"style="padding: 22px 10px ">
+                <span id='sp<%=products[i].item._id%>' onclick="ajaxRemoveFromCart('<%=products[i].item._id+","+products[i].item.price%>')" class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
+                <!--<li class="list-group-item">-->
+                <span id='qty<%=products[i].item._id%>' class="badge w3-right"><%=products[i].qty%></span>
+                <span class="w3-large"><%=products[i].item.name %><br><%=products[i].item.store_name%></span>
 
-    <ul class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
-        <!--<div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">-->
-        <%for (var i=0;i<products.length;i++){%>
-        <li  class="w3-padding-15">
-            <span id='sp<%=products[i].item._id%>' onclick="ajaxRemoveFromCart('<%=products[i].item._id+","+products[i].item.price%>')" class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
-            <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
-            <!--<li class="list-group-item">-->
-            <span id='qty<%=products[i].item._id%>' class="badge w3-right"><%=products[i].qty%></span>
-            <span class="w3-large"><%=products[i].item.name %><br><%=products[i].item.store_name%></span>
-
-            <%if(parseInt( products[i].qty)>1){%>
-            <span id='price<%=products[i].item._id%>' class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
-            <%}else{%>
-            <span id='price<%=products[i].item._id%>' class="label label-success"><%= products[i].price+" " %>nis</span>
+                <%if(parseInt( products[i].qty)>1){%>
+                <span id='price<%=products[i].item._id%>' class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
+                <%}else{%>
+                <span id='price<%=products[i].item._id%>' class="label label-success"><%= products[i].price+" " %>nis</span>
+                <%}%>
+            </li>
             <%}%>
-        </li>
-        <%}%>
-    </ul>
-</div>
-
-<div class="row">
-    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"><br>
-        <strong>Total: <%=totalPrice%> nis</strong>
-
+        </ul>
     </div>
-</div>
-<div class="row">
-    <br>
-    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
-        <button class="btn btn-primary btn-xl page-scroll">CheackOut-will be map</button>
-    </div>
-</div>
-<%}%>
 
-<%if (!products){%>
-<div class="row">
-    <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
-        <h2>No Items In cart</h2>
-    </div>
-</div>
-<%}%>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"><br>
+            <strong>Total: <%=totalPrice%> nis</strong>
 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+            <button class="btn btn-primary btn-l page-scroll">CheackOut-will be map</button>
+        </div>
+    </div>
+    <%}%>
+
+    <%if (!products){%>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
+            <h2>No Items In cart</h2>
+        </div>
+    </div>
+    <%}%>
+</div>
 
 
 <script type="text/javascript">
 
     function ajaxRemoveFromCart(giftIdAndprice) {
-        var splitedGP = giftIdAndprice.split(',');
-        var giftId = splitedGP[0];
-        var price = splitedGP[1];
-        $.ajax({
-            type: "POST",
-            url: "/shoppingCart/remove-from-cart/"+giftId.toString(),
-            //data: "game-name=" + GAME_NAME,
-            success: function (status) {
-                decQty(giftId,price);
-//onclick="this.parentElement.style.display='none'"
-            }
+        var ans = confirm("are you sure you want to remove this item from your shopping cart?")
+        if (ans == true) {
 
-        })
+
+            var splitedGP = giftIdAndprice.split(',');
+            var giftId = splitedGP[0];
+            var price = splitedGP[1];
+            $.ajax({
+                type: "POST",
+                url: "/shoppingCart/remove-from-cart/" + giftId.toString(),
+                //data: "game-name=" + GAME_NAME,
+                success: function (status) {
+                    decQty(giftId, price);
+//onclick="this.parentElement.style.display='none'"
+                }
+
+            })
+        }
     }
 
     function decQty(giftId,price) {
         var priceId = 'price'+giftId;
         var id = 'qty'+ giftId;
-       // var spanQty = document.getElementById(id);
+        // var spanQty = document.getElementById(id);
         var qty = document.getElementById(id).innerHTML;
         if(qty == '1'){
             var spId = 'sp'+ giftId;
@@ -103,7 +107,7 @@
         }
         var qty2 = parseInt($("#cartQty").text());
         $("#cartQty").text(qty2-1);
-        alert("gift removed fron cart successfully");
+        //  alert("gift removed fron cart successfully");
 
 
     }
