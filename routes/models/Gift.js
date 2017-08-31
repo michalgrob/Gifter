@@ -26,7 +26,7 @@ var giftSchema = new Schema({
 
 });
 
-giftSchema.pre('save', function (next) {
+/*giftSchema.pre('save', function (next) {
 
     var length = this.interests.length;
 
@@ -46,7 +46,7 @@ giftSchema.pre('save', function (next) {
     }
 
     next();
-});
+});*/
 
 
 var Gift = mongoose.model('Gift', giftSchema);

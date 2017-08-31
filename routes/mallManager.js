@@ -64,13 +64,17 @@ router.post('/createNewStore', function(req,res,next){
     var mallManagerEmail = req.user.email;
     var storeId = req.body.store_id;
     var storeName = req.body.store_name;
-    var storeLocation = req.body.store_location;
     var storeManagerUserName = req.body.store_manager_username;
     var storeManagerEmail = req.body.store_manager_email;
     var storeManagerPassword = req.body.store_manager_password;
+    var storeImage = req.body.store_img_url;
+    var storeLocationFloor = req.body.store_location_floor;
+    var storeLocationIndex = req.body.store_location_index;
+    var storeLocationImage = req.body.store_location_img_url;
+    var isPromoted = req.body.store_is_promoted == "on" ? true : false;
 
     // Create new store:
-    createSingleStore(mallManagerEmail,storeId,storeName,storeLocation,storeManagerUserName,storeManagerEmail,storeManagerPassword);
+    createSingleStore(mallManagerEmail,storeId,storeName,storeManagerUserName,storeManagerEmail,storeManagerPassword,storeImage, storeLocationFloor, storeLocationIndex, storeLocationImage,isPromoted);
 
     sleep(1000);
     res.redirect("/users/redirect_user_by_role");
@@ -96,7 +100,7 @@ function importStoresFromCSV(req,res) {
         flags: 'r',
         encoding: 'utf8'
     })
-    .pipe(utf8())
+        .pipe(utf8())
         .pipe(csv());
 
     //Read data from CSV file and store it in 'csvData' parameter:
@@ -109,11 +113,15 @@ function importStoresFromCSV(req,res) {
         for (i = 1; i < csvData.length; i++) {
             var storeId = csvData[i][0];
             var storeName = csvData[i][1];
-            var storeLocation = csvData[i][2];
+            var storeImage = csvData[i][2];
             var storeManagerUserName = csvData[i][3];
             var storeManagerEmail = csvData[i][4];
             var storeManagerPassword = csvData[i][5];
-            createSingleStore(mallManagerEmail,storeId,storeName,storeLocation,storeManagerUserName,storeManagerEmail,storeManagerPassword);
+            var storeLocationFloor = csvData[i][6];
+            var storeLocationIndex = csvData[i][7];
+            var storeLocationImage = csvData[i][8];
+            var isPromoted = csvData[i][9].toLowerCase() == "true" ? true : false;
+            createSingleStore(mallManagerEmail,storeId,storeName,storeManagerUserName,storeManagerEmail,storeManagerPassword,storeImage, storeLocationFloor, storeLocationIndex, storeLocationImage,isPromoted);
         }
         deleteFolderRecursive('../gifter/public/upload/temp/');
         res.redirect("/");
@@ -154,13 +162,19 @@ function getStores(req,done){
 
 
 
-function createSingleStore(mallManagerEmail,storeId,storeName,storeLocation,storeManagerUserName,storeManagerEmail,storeManagerPassword){
+function createSingleStore(mallManagerEmail,storeId,storeName,storeManagerUserName,storeManagerEmail,storeManagerPassword,storeImage, storeLocationFloor, storeLocationIndex, storeLocationImage,isPromoted){
 
     //Create new Store:
     var newStore = new Store({
         name: storeName,
         store_id: storeId,
-        location: storeLocation
+        store_image_url: storeImage,
+        location: {
+            floor: storeLocationFloor,
+            index:  storeLocationIndex,
+            img_url: storeLocationImage
+        },
+        is_promoted: isPromoted
     });
 
     //Create Store Manager User:
@@ -336,55 +350,55 @@ function sleep(milliseconds) {
 /*
 
 
-function getStores1(req,done){
-    var currMallManagerUser = req.user;
-    availableStores = [];
-    var mallManagerStoreManagers = currMallManagerUser.mall_stores_manager_users;
-    for(var i=0; i< mallManagerStoreManagers.length; i++){
-        User.findOne(mallManagerStoreManagers[i]).exec(function (err,user) {
-                if(err) throw err;
-                if(user == null){
-                    done();
-                }else{
-                    var storeIDFound = user.store_id;
-                    Store.findOne({store_id:storeIDFound}, function (err,storeFound) {
-                        availableStores.push(storeFound);
-                        if(i == mallManagerStoreManagers.length)
-                            done();
-                    });
-                }
-            }
-        )
-    }
-}
+ function getStores1(req,done){
+ var currMallManagerUser = req.user;
+ availableStores = [];
+ var mallManagerStoreManagers = currMallManagerUser.mall_stores_manager_users;
+ for(var i=0; i< mallManagerStoreManagers.length; i++){
+ User.findOne(mallManagerStoreManagers[i]).exec(function (err,user) {
+ if(err) throw err;
+ if(user == null){
+ done();
+ }else{
+ var storeIDFound = user.store_id;
+ Store.findOne({store_id:storeIDFound}, function (err,storeFound) {
+ availableStores.push(storeFound);
+ if(i == mallManagerStoreManagers.length)
+ done();
+ });
+ }
+ }
+ )
+ }
+ }
 
-function getStores2(req,done){
-    var currMallManagerUserEmail = req.user.email;
-    availableStores = [];
-    var iterations = 0;
-    User.findOne({email:currMallManagerUserEmail})
-        .populate()
-        .exec(function(err, mall_manager_user) {
-            if (err) throw err;
-            var mallManagerStoreManagers = mall_manager_user.mall_stores_manager_users;
-            if(mallManagerStoreManagers.length == 0){
-                done();
-            }else{
-                for (var i = 0; i < mallManagerStoreManagers.length; i++) {
-                    User.findOne(mallManagerStoreManagers[i])
-                        .populate('store')
-                        .exec(function (err,user) {
-                            iterations++;
-                            var currStore = user.store;
-                            availableStores.push(currStore);
-                            if(iterations == mallManagerStoreManagers.length)
-                                done();
-                        });
-                }
-            }
-        });
-}
-*/
+ function getStores2(req,done){
+ var currMallManagerUserEmail = req.user.email;
+ availableStores = [];
+ var iterations = 0;
+ User.findOne({email:currMallManagerUserEmail})
+ .populate()
+ .exec(function(err, mall_manager_user) {
+ if (err) throw err;
+ var mallManagerStoreManagers = mall_manager_user.mall_stores_manager_users;
+ if(mallManagerStoreManagers.length == 0){
+ done();
+ }else{
+ for (var i = 0; i < mallManagerStoreManagers.length; i++) {
+ User.findOne(mallManagerStoreManagers[i])
+ .populate('store')
+ .exec(function (err,user) {
+ iterations++;
+ var currStore = user.store;
+ availableStores.push(currStore);
+ if(iterations == mallManagerStoreManagers.length)
+ done();
+ });
+ }
+ }
+ });
+ }
+ */
 
 /*function insterStoreManagerToMallManagerUsersArray(req, newStoreManagerUser) {
  var mallManagerEmail = req.user.email;

@@ -51,8 +51,11 @@
                         <tr>
                             <th><em class="fa fa-cog" align="center"></em></th>
                             <th class="hidden-xs">Store ID</th>
+                            <th class="hidden-xs">Store Logo</th>
                             <th>Store Name</th>
-                            <th>Store Location</th>
+                            <th>Floor No.</th>
+                            <th>Store No.</th>
+
                         </tr>
                         </thead>
                         <tbody id="stores_table_body">
@@ -92,8 +95,10 @@
             table+= '<button id="delete_button" type="button" onclick="deleteStore(' + r + ')" class="btn btn-danger"><em class="fa fa-trash"></em></button>';
             table+= '</td>';
             table+= '<td class="hidden-xs" id="store_id_field">' + av_stores[r].store_id + '</td>';
+            table+= '<td class="hidden-xs" id="store_img_url_field"><img src="' + av_stores[r].store_image_url + '" alt="" style="width:130px; height:auto;"></img</td>';
             table+= '<td id="store_name_field">' + av_stores[r].name + '</td>';
-            table+= '<td id="store_location_field">' + av_stores[r].location + '</td>';
+            table+= '<td id="store_location_floor_field">' + av_stores[r].location.floor + '</td>';
+            table+= '<td id="store_location_index_field">' + av_stores[r].location.index + '</td>';
 
             table+= '</tr>';
         }
@@ -106,7 +111,7 @@
     function deleteStore(rowNum)
     {
         var rowElement = document.getElementById("row-" + rowNum);
-        var storeName = rowElement.getElementsByTagName("td")[2].textContent;
+        var storeName = rowElement.getElementsByTagName("td")[3].textContent;
 
         var isDeletionConfirmed = showDeleteConfirmationDialog(storeName);
         if(isDeletionConfirmed){
@@ -224,7 +229,7 @@
 
 
             <div class="form-group">
-                <label for="username" class="cols-sm-2 control-label">store Username</label>
+                <label for="username" class="cols-sm-2 control-label">Store Username</label>
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
@@ -254,7 +259,7 @@
             </div>
 
             <div class="form-group">
-                <label for="username" class="cols-sm-2 control-label">Store Id</label>
+                <label for="username" class="cols-sm-2 control-label">Store ID</label>
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
@@ -264,14 +269,58 @@
             </div>
 
             <div class="form-group">
-                <label for="username" class="cols-sm-2 control-label">Store Location</label>
+                <label for="username" class="cols-sm-2 control-label">Store Logo</label>
                 <div class="cols-sm-10">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="store_location" id="store_location"  placeholder="Enter store location inside the mall"required/>
+                        <span class="input-group-addon"><i class="fa fa-picture-o" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_img_url" id="store_img_url"  placeholder="Enter store image URL address"required/>
                     </div>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Location: Floor No.</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location_floor" id="store_location_floor"  placeholder="Enter store's floor inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Location: Store No.</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location_index" id="store_location_index"  placeholder="Enter store index in the floor inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Location: Store Location inside the Map (Image)</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location_img_url" id="store_location_img_url"  placeholder="Enter an image URL address of the store location inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Promote (Yes\No)</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <label style="font-size: 15px;text-align: center; text-indent: 10px;">
+                            <input type="checkbox" class="form-control" name="store_is_promoted" id="store_is_promoted" style="width: 40px;height: 40px;padding: 0;margin:0;" >
+                            </input>
+                            Do you want to promote this store?
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group ">
                 <button type="submit" onclick="toggleCreateNewStorePopupVisibility(false);" class="btn btn-primary btn-lg btn-block login-button" >Add New Store</button>
             </div>
