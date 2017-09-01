@@ -15,10 +15,10 @@
 
         <!--<div class="row">-->
 
-        <ul class="w3-ul w3-card-4"style="border-radius: 10px 10px 10px 10px;">
+        <ul id="gifts-list" class="w3-ul w3-card-4"style="border-radius: 10px 10px 10px 10px;">
             <!--<div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"///>-->
             <%for (var i=0;i<products.length;i++){%>
-            <li  class="w3-padding-15"style="padding: 22px 10px ">
+            <li  class="w3-padding-15"style="padding: 22px 10px " data-storeId="<%= products[i].item.store_id %>" data-storeLoc = "<%=products[i].item.store.location.index%>" data-storeFloor = "<%=products[i].item.store.location.floor%>" >
                 <span id='sp<%=products[i].item._id%>' onclick="ajaxRemoveFromCart('<%=products[i].item._id+","+products[i].item.price%>')" class="w3-button w3-white w3-xlarge w3-right"><i class="fa fa-trash" aria-hidden="true"></i></span>
                 <img style="width:60px;" src='<%=products[i].item.ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
                 <!--<li class="list-group-item">-->
@@ -47,13 +47,13 @@
 
     <div class="row">
         <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"><br>
-            <strong>Total: <%=totalPrice%> nis</strong>
+            <strong>Total: <%=totalPrice%><i class="fa fa-ils" aria-hidden="true"></i></strong>
 
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">
-            <button class="btn btn-primary btn-l page-scroll">CheackOut-will be map</button>
+            <button class="btn btn-primary btn-l page-scroll" onclick="sortResult()">Plan your mall shopping route</button>
         </div>
     </div>
     <%}%>
@@ -105,7 +105,7 @@
             var qty = parseInt(qty)-1;
             document.getElementById(id).textContent = qty.toString();
             if(qty > 1){
-                text = parseInt(price)+ " * "+ qty +" = "+(parseInt(price)*qty).toString()+" nis";
+                text = parseInt(price)+ " * "+ qty +" = "+(parseInt(price)*qty).toString()+"&#8362";
 
             }
             else{//==1
@@ -141,5 +141,28 @@
             modal.style.display = "none";
         }
     }
+
+    function sortResult()
+    {
+
+        var gifts = $("#gifts-list > li");
+        var sortFunction;
+
+                sortFunction = sortByLoc;
+
+        if (typeof sortFunction !== "undefined") {
+            gifts.sort(sortFunction);
+
+            for (var i = 0; i < gifts.length; i++) {
+                gifts[i].parentNode.appendChild(gifts[i]);
+            }
+        }
+
+        alert("Now your gifts are arranged by a convenient shopping route in the mall");
+
+    }
+
+    function sortByLoc(b,a){return a.attributes['data-storeLoc'].value-b.attributes['data-storeLoc'].value}
+   // function sortByStore(b,a){return a.attributes['data-storeId']-b.attributes['data-storeId'].value}
 
 </script>
