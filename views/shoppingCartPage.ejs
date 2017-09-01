@@ -105,12 +105,10 @@
             var qty = parseInt(qty)-1;
             document.getElementById(id).textContent = qty.toString();
             if(qty > 1){
-                text = parseInt(price)+ " * "+ qty +" = "+(parseInt(price)*qty).toString()+"&#8362";
-
+                text = parseInt(price)+ " * "+ qty +" = "+(parseInt(price)*qty).toString()+'₪';
             }
             else{//==1
-
-                text = price;
+                text = price + '₪';
             }
 
             document.getElementById(priceId).textContent = text;
