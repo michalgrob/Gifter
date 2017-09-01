@@ -25,6 +25,10 @@ var compiledTemplate = hogan.compile(template);
 var template2 = fs.readFileSync('./views/inviteEmail.ejs','utf-8');//('./views/inviteEmailForNotRegistered.ejs','utf-8');
 var compiledTemplate2 = hogan.compile(template2);
 
+router.post('/unMarkGift',function (req,res,next) {
+    unMarkUserInGiftEvent(req,res)
+});
+
 router.post('/markGift',function (req,res,next) {
     markUserInGiftEvent(req,res);
 });
@@ -413,4 +417,35 @@ function sendMailInviteToGifter(eventId,unRegisteredUserMailArray,hostUser,title
         });
     }
     newGuestsMail=[];
+}
+
+function  unMarkUserInGiftEvent(req,res){
+    var markedByUserId = req.user.id;
+    var giftIdToMark = req.body.giftId;
+    var eventId = req.body.eventId;
+
+
+    Event.findById(eventId)
+        .populate({
+            path: 'gifts.gift',
+        }).exec(function(err,event) {
+
+        for(var i=0;i<event.gifts.length;i++){
+            if(event.gifts[i].gift.id == giftIdToMark){
+                event.gifts[i]._doc.markedBy = null;
+                event.gifts[i]._doc.isMarked = false;
+                break;
+            }
+        }
+        event.markModified('gifts');
+        var x=0;
+        event.save(function (err) {
+            if (err){
+                console.log(err);
+                throw err;
+            }
+            res.send({s: "s"});
+        });
+
+    });
 }
