@@ -31,65 +31,65 @@ interestSchema.pre('save', function(next) {
 interestSchema.methods.addCategory= function addCategory()  {// =
     switch (this.name)
     {
-        case "Arts":
-        case "Music":
-        case "Movies":
-        case"Technology and Innovation":
-        case "Singing":
-        case "Dance":
-        case "Drawing":
-        case "Science Fiction":
-        case "Filming":
-        case "Religion and Theology":
-        case "Education":
+        case "arts":
+        case "music":
+        case "movies":
+        case"technology and innovation":
+        case "singing":
+        case "dance":
+        case "drawing":
+        case "science fiction":
+        case "filming":
+        case "religion and theology":
+        case "education":
             this.category= 1;//Leisure
             break;
-        case "Travel":
-        case "Cycling":
-        case "Camping & Hiking":
-        case "Extreme":
-        case "Swimming":
-        case "Fishing":
-        case "Basketball":
-        case "Running":
-        case "Fitness & Body Building":
-        case "Skiing & Snowboarding":
-        case "Soccer" :
-        case "Surfing" :
+        case "travel":
+        case "cycling":
+        case "camping & hiking":
+        case "extreme":
+        case "swimming":
+        case "fishing":
+        case "basketball":
+        case "running":
+        case "fitness & body building":
+        case "skiing & snowboarding":
+        case "soccer" :
+        case "surfing" :
             this.category=2; //Sports & Outdoors
             break;
-        case "Jewelleries":
-        case "Clothes":
-        case "Shoes":
-        case "Accessories":
-        case "Optics":
-        case "Makeup":
+        case "jewelleries":
+        case "clothes":
+        case "shoes":
+        case "accessories":
+        case "optics":
+        case "makeup":
             this.category=3; //Fashion
             break;
-        case "Office":
-        case "Do It Yourself":
-        case "Pets":
-        case "Electronics":
-        case "Gadgets":
-        case "Cooking":
+        case "office":
+        case "do it yourself":
+        case "pets":
+        case "electronics":
+        case "gadgets":
+        case "cooking":
             this.category=4;
             break; //Home & Garden
-        case "Reading":
-        case "Collecting":
-        case "Magics":
-        case "Origami":
-        case "Board Games":
-        case "Video Games":
-        case "Toys":
+        case "reading":
+        case "collecting":
+        case "magics":
+        case "origami":
+        case "board games":
+        case "video games":
+        case "toys":
             this.category=5;//Indoor Hobbies
             break;
-        case "Night Life":
-        case "Smoking":
-        case "Cultivation":
-        case "Yoga":
-        case "Automobiles":
-        case "Alcohol":
-        case "Food Culture":
+        case "night life":
+        case "smoking":
+        case "cultivation":
+        case "yoga":
+        case "automobiles":
+        case "alcohol":
+        case "food culture":
             this.category=6;//Life Style
             break;
 
