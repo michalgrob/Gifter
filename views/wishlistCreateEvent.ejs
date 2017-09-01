@@ -375,7 +375,7 @@
         var guestMail = document.getElementById("eventGuests").value;
         guestMail=guestMail.toLowerCase();
         if (checkIfAlreadyChoose(guestMail)==true) {
-            alert(guestMail + " already invites to your event");
+            alert(guestMail + " already invited to your event");
         }
         else {
 
@@ -390,10 +390,10 @@
                     }
                     else {
                         if (checkIfAlreadyChoose(guestMail)==true) {
-                            alert(guestMail + " already invites to your event");
+                            alert(guestMail + " already invited to your event");
                         }
                         else{
-                            var ans = confirm(guestMail + " isn't register.\n would you like to invite anyway?");
+                            var ans = confirm(guestMail + " isn't register.\n would you like to invite him/her anyway?");
                             if (ans == true) {
                                 ajaxInviteNotRegistered(guestMail);
                                 //  txt = "You pressed OK!";

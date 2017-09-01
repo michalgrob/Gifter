@@ -53,7 +53,7 @@
                             <th> <%=events[i].description%></th>
                             <th><%=events[i].event_date%></th>
                             <th><%=events[i].host%></th>
-                            <th><%=events[i].gifts.length%> wishlist<br>
+                            <th><%=events[i].gifts.length%> gifts<br>
                                 <button class ="btn-xs btn-primary btn-create"id="myBtnGifts" onclick="showModal('myModalGifts<%=events[i].id%>')">Show Gifts</button>
 
                                 <!-- The Modal -->
@@ -62,7 +62,7 @@
                                     <!-- Modal content -->
                                     <div class="modal-content">
                                         <span class="close">&times;</span>
-                                        <h4>Your WishList:</h4><br>
+                                        <h4><%=events[i].host%> WishList:</h4><br>
                                         <ul id='giftsList<%=events[i].id%>' class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
                                             <% for (var k=0; k<events[i].gifts.length; k++){%>
                                             <li class="w3-padding-15">
@@ -72,13 +72,19 @@
                                                 <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
                                                 <span> <%= events[i].gifts[k].price %></span><br>
                                                 <%if (events[i].gifts[k].isMarked == true){%>
-                                                <span  class="w3-button w3-white w3-xlarge w3-right"></span><br>
-                                            <i id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' class="fa fa-check-circle-o" aria-hidden="true"> someone bought it already </i>
-
+                                                <%if(events[i].gifts[k].markedBy==LogedInUser.username){%>
+                                                <button id='<%=events[i].id%>' onclick="unMarkAsMine(this)" name='<%=events[i].gifts[k].id%>' style="margin-right: 0px;" type = "button"class="btn-xs fa fa-check-circle-o" aria-hidden="true">
+                                                </button><br>
+                                                <p class="w3-small">  <br>You chose to buy this gift, Click to cancel your selection</p>
                                                 <%}else{%>
-                                                <span  class="w3-button w3-white w3-xlarge w3-right"></span>
-                                                <button  id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" style="margin-right: 0px;" type = "button" class=" btn-xs fa fa-hand-o-up" aria-hidden="true"></button>
-
+                                                <!--<span  class="w3-button w3-white w3-xlarge w3-right"></span><br>-->
+                                                <button id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' style="margin-right: 0px;" type = "button" class="btn-xs fa fa-check-circle-o" aria-hidden="true">  </button><br>
+                                                <p class="w3-small">someone bought it already</p>
+                                                <%}%>
+                                                <%}else{%>
+                                                <!--<span  class="w3-button w3-white w3-xlarge w3-right"></span>-->
+                                                <button  id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" style="margin-right: 0px;" type = "button" class=" btn-xs fa fa-cart-plus" aria-hidden="true"></button><br>
+                                                <p class="w3-small">select this gift and add it to your shopping cart</p>
                                                 <%}%>
 
 
@@ -86,6 +92,7 @@
                                             <%}%>
                                         </ul>
                                     </div>
+
                                 </div>
 
                             </th>
@@ -121,6 +128,8 @@
     }
 
 
+
+
     function markAsMine(element) {
         // element.parentElement.style.display='none'
         var eventId = element.getAttribute("id");
@@ -136,13 +145,10 @@
             },
             url: "/wishlist/markGift",
             success: function (data) {
-                console.log("vv");
-                console.log(data);
                 ajaxUpdateCart(giftId);
             },
             error: function (err) {
                 console.log(err);
-                console.log("xx");
             }
 
 
@@ -217,7 +223,7 @@
             newLi.appendChild(newImg);
 
             var newSpan =  document.createElement("span");
-            newSpan.setAttribute("style","width:60px;");
+//            newSpan.setAttribute("style","width:60px;");
             newSpan.setAttribute("class","w3-large");
             newSpan.textContent = event.gifts[k].name;
             newLi.appendChild(newSpan);
@@ -233,42 +239,95 @@
             var br2 =  document.createElement("br");
             newLi.appendChild(br2);
 
-            var newI =  document.createElement("i");
-            newI.setAttribute("style","margin-right: 0px;");
-            newI.setAttribute("aria-hidden","true");
+            var newB =  document.createElement("button");
+          //  newB.setAttribute("style","margin-right: 0px;");
+            newB.setAttribute("aria-hidden","true");
+            newB.setAttribute("id",eventId);
+            newB.setAttribute("name",event.gifts[k].id);
+            newB.setAttribute("type","button");
 
-            var newSpan2 =  document.createElement("span");
-            newSpan2.setAttribute("id",eventId);
-            newSpan2.setAttribute("name",event.gifts[k].id);
-            newSpan2.setAttribute("class","w3-button w3-white w3-xlarge w3-right");
+            var newP =  document.createElement("p");
+            newP.setAttribute("class","w3-small");
+
+            var logedInUser = <%- JSON.stringify(LogedInUser) %>;
 
             if (event.gifts[k].isMarked == true){
+                if(event.gifts[k].markedBy==logedInUser.username){
+                    newB.setAttribute("onclick","unMarkAsMine(this)");
+                    newP.textContent = "You chose to buy this gift, Click to cancel your selection";
+                    newB.setAttribute("class","btn-xs fa fa-hand-o-up");
 
-                console.log(event.gifts[k].isMarked);
-                newI.setAttribute("class","fa fa-check-circle-o");
-                newI.textContent = "someone bought it already";
-
+                }else{
+                    newP.textContent = "someone bought it already";
+                    newB.setAttribute("class","btn-xs fa fa-check-circle-o");
+                }
             }
             else if(event.gifts[k].isMarked == false){
-                console.log(event.gifts[k].isMarked);
-                newSpan2.setAttribute("onclick","markAsMine(this)");
-                newI.setAttribute("class","fa fa-hand-o-up");
-                newI.textContent = "add gift to your shopping cart";
+
+                newB.setAttribute("class","btn-xs fa fa-cart-plus");
+                newP.textContent = "Click to add gift to your shopping cart";
+                newB.setAttribute("onclick","markAsMine(this)");
+
             }
 
 
-            newSpan2.appendChild(newI);
             var br3 =  document.createElement("br");
-            newSpan2.appendChild(br3);
-            newLi.appendChild(newSpan2);
-
-
+            var br4 =  document.createElement("br");
+            newLi.appendChild(newB);
+            newLi.appendChild(br3);
+            newLi.appendChild(newP);
+            newLi.appendChild(br4);
 
             document.getElementById(giftListId).appendChild(newLi);
 
         }
 
 
+    }
+    function unMarkAsMine(element) {
+        var ans = confirm("are you sure you want to cancel your selection?")
+        if (ans == true) {
+            var eventId = element.getAttribute("id");
+            var giftId = element.getAttribute("name");
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: {
+                    giftId: giftId,
+                    eventId: eventId,
+                },
+                url: "/wishlist/unMarkGift",
+                success: function (data) {
+                    ajaxRemoveFromCart(giftId);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+
+
+            });
+        }
+    }
+
+    function ajaxRemoveFromCart(giftId) {
+
+            $.ajax({
+                type: "POST",
+                url: "/shoppingCart/remove-from-cart/" + giftId.toString(),
+                //data: "game-name=" + GAME_NAME,
+                success: function (status) {
+                    decQty(giftId);
+//onclick="this.parentElement.style.display='none'"
+                }
+
+            })
+
+    }
+
+    function decQty(giftId) {
+        var qty2 = parseInt($("#cartQty").text());
+        $("#cartQty").text(qty2-1);
     }
 
 </script>
