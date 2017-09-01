@@ -28,7 +28,7 @@
                 <%if(parseInt( products[i].qty)>1){%>
                 <span id='price<%=products[i].item._id%>' class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
                 <%}else{%>
-                <span id='price<%=products[i].item._id%>' class="label label-success"><%= products[i].price+" " %>nis</span>
+                <span id='price<%=products[i].item._id%>' class="label label-success"><%= products[i].price+" " %>₪</span>
                 <%}%>
             </li>
             <%}%>
