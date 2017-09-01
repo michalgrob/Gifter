@@ -58,10 +58,15 @@ router.get('/shopping-cart',function(req,res,next){
     }
 });
 
-
 function findUserSoppingCart(userId,req,res) {
 
-    User.findById(userId).populate('shoppingCart').exec(function(err,user) {
+    User
+        .findById(userId)
+        .populate({
+            path: 'shoppingCart',
+            populate:{
+                path: 'store'
+        }}).exec(function(err,user) {
         var gifts=user._doc.shoppingCart;
         var cart = new Cart({});
 

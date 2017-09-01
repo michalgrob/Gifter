@@ -70,7 +70,7 @@
 
                                                 <span class="w3-large">  <%= events[i].gifts[k].name %> </span><br>
                                                 <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
-                                                <span> <%= events[i].gifts[k].price %></span><br>
+                                                <span> <%= events[i].gifts[k].price %><i class="fa fa-ils" aria-hidden="true"></i></span><br>
                                                 <%if (events[i].gifts[k].isMarked == true){%>
                                                 <%if(events[i].gifts[k].markedBy==LogedInUser.username){%>
                                                 <button id='<%=events[i].id%>' onclick="unMarkAsMine(this)" name='<%=events[i].gifts[k].id%>' style="margin-right: 0px;" type = "button"class="btn-xs fa fa-check-circle-o" aria-hidden="true">

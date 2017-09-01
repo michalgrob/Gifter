@@ -24,12 +24,22 @@
                 <!--<li class="list-group-item">-->
                 <span id='qty<%=products[i].item._id%>' class="badge w3-right"><%=products[i].qty%></span>
                 <span class="w3-large"><%=products[i].item.name %><br><%=products[i].item.store_name%></span>
-
+                <br>
                 <%if(parseInt( products[i].qty)>1){%>
-                <span id='price<%=products[i].item._id%>' class="label label-success"><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %>nis</span>
+                <span id='price<%=products[i].item._id%>' class="label label-success "><%= parseInt(products[i].price)/parseInt( products[i].qty)+ " * "+ products[i].qty +" = "+products[i].price+" " %><i class="fa fa-ils" aria-hidden="true"></i></span>
                 <%}else{%>
-                <span id='price<%=products[i].item._id%>' class="label label-success"><%= products[i].price+" " %>nis</span>
+                <span id='price<%=products[i].item._id%>' class="label label-success"><%= products[i].price+" " %><i class="fa fa-ils" aria-hidden="true"></i></span>
                 <%}%>
+                <br>
+                <button class = "btn-xs" onclick="showStoreLocation('<%=products[i].item._id%>')">show store location</button>
+                <br>
+                <div id='storeLocModal<%=products[i].item._id%>' class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <h3 class="section-heading" style=" font-style:italic"> floor number <%=products[i].item.store.location.floor %></h3>
+                        <img id ='storeLocImg<%=products[i].item._id%>' style = "width:538px;height:774px; "  src='<%=products[i].item.store.location.img_url %>' class="w3-left w3-circle w3-margin-right" alt="" >
+                    </div>
+                </div>
             </li>
             <%}%>
         </ul>
@@ -110,6 +120,26 @@
         //  alert("gift removed fron cart successfully");
 
 
+    }
+
+    var modal;
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    function showStoreLocation(giftId) {
+        var storeLocModalId = 'storeLocModal'+giftId;
+        modal = document.getElementById(storeLocModalId);
+        modal.style.display = "block";
+    }
+
+
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
 
 </script>
