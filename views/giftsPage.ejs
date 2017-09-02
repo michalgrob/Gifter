@@ -1,4 +1,4 @@
-<title><%=etitle %></title>
+
 
 <% layout('boilerplate') %>
 
@@ -107,7 +107,7 @@
     </div>
 </div>
 
-<div style="margin-top:81px; text-align:center;background-color: #fafafa;">
+<div class = "container"style="margin-top:81px; text-align:center;background-color: #fafafa;">
 
     <form style="background-color: #fafafa;margin-top:6%" name="AppForm" method="post" action="/searchingResult" >
 
@@ -156,80 +156,96 @@
                 <!--<input type="checkbox" name="age_18_30" value = '1'/>18 - 30<br />-->
                 <!--<input type="text" name="ageText"><br>-->
             </div>
-            <a class="btn btn-primary" href="#category">Choose interests</a>
             <hr>
+            <!--<a class="btn btn-primary" href="#category">Choose interests</a>-->
 
-            <section id="category">
+
+
+
+            <div id="category">
             <div id="hobbis" class="Info">
+
                 <h4>Choose hobbis:</h4>
+                <hr class="btnPC btnForMobile">
+
+                <a class="btnPC btnForMobile btn btn-primary" href="#category1h">Leisure </a><br>
+                <a class="btnPC btnForMobile btn btn-primary" href="#category2h">Sports & Outdoors </a><br>
+                <a class="btnPC btnForMobile btn btn-primary" href="#category3h">Fashion </a><br>
+                <a class="btnPC btnForMobile btn btn-primary" href="#category4h">Home & Garden </a><br>
+                <a class="btnPC btnForMobile btn btn-primary" href="#category5h">Indoor </a><br>
+                <a class="btnPC btnForMobile btn btn-primary" href="#category6h">Life Style </a><br>
+
+                <hr class="btnPC btnForMobile">
 
                 <div id="category1"class="col-md-2">
-                    <h4>Leisure:</h4>
-                    <hr>
+                    <h4 id="category1h">Leisure:</h4>
                     <% for(var i=0; i<orders1.length; i++) {%>
                     <tr>
                         <td></td>
                         <input type="checkbox" value = <%= orders1[i].interest.toString() %> name="hobbies"/>  <%= orders1[i].interest %><br />
                     </tr>
                     <% } %>
+                    <hr class="btnPC btnForMobile">
                 </div>
 
                 <div id="category2"class="col-md-2">
-                    <h4>Sports & Outdoors:</h4>
-                    <hr>
+                    <h4 id="category2h">Sports & Outdoors:</h4>
+
                     <% for(var i=0; i<orders2.length; i++) {%>
                     <tr>
                         <td></td>
                         <input type="checkbox" value = <%= orders2[i].interest.toString() %> name="hobbies"/>  <%= orders2[i].interest %><br />
                     </tr>
                     <% } %>
+                    <hr class="btnPC btnForMobile">
                 </div>
 
                 <div id="category3"class="col-md-2">
-                    <h4>Fashion:</h4>
-                    <hr>
+                    <h4 id="category3h">Fashion:</h4>
                     <% for(var i=0; i<orders3.length; i++) {%>
                     <tr>
                         <td></td>
                         <input type="checkbox" value = <%= orders3[i].interest.toString() %> name="hobbies"/>  <%= orders3[i].interest %><br />
                     </tr>
                     <% } %>
+                    <hr class="btnPC btnForMobile">
                 </div>
 
                 <div id="category4"class="col-md-2">
-                    <h4>Home & Garden:</h4>
-                    <hr>
+                    <h4 id="category4h">Home & Garden:</h4>
+
                     <% for(var i=0; i<orders4.length; i++) {%>
                     <tr>
                         <td></td>
                         <input type="checkbox" value = <%= orders4[i].interest.toString() %> name="hobbies"/>  <%= orders4[i].interest %><br />
                     </tr>
                     <% } %>
+                    <hr class="btnPC btnForMobile">
                 </div>
 
                 <div id="category5"class="col-md-2">
-                    <h4>Indoor Hobbies:</h4>
-                    <hr>
+                    <h4 id="category5h">Indoor Interests:</h4>
                     <% for(var i=0; i<orders5.length; i++) {%>
                     <tr>
                         <td></td>
                         <input type="checkbox" value = <%= orders5[i].interest.toString() %> name="hobbies"/>  <%= orders5[i].interest %><br />
                     </tr>
                     <% } %>
+                    <hr class="btnPC btnForMobile">
                 </div>
                 <div id="category6"class="col-md-2">
-                    <h4>Life Style:</h4>
-                    <hr>
+                    <h4 id="category6h">Life Style:</h4>
                     <% for(var i=0; i<orders6.length; i++) {%>
                     <tr>
                         <td></td>
                         <input type="checkbox" value = <%= orders6[i].interest.toString() %> name="hobbies"/>  <%= orders6[i].interest %><br />
                     </tr>
                     <% } %>
+                    <hr class="btnPC btnForMobile">
                 </div>
 
             </div>
-            </section>
+            </div>
             <div>
             </div>
 

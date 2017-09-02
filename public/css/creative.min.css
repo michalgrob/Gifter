@@ -207,11 +207,16 @@ span.psw {
     color: red;
     cursor: pointer;
 }
-
+.btnPC{
+    display:none;
+}
 @media (max-width:790px) {
     table tr th:nth-child(1),
     .un{
         display:none;
+    }
+    .btnForMobile{
+        display:block;
     }
     .table {
         /*table-layout: fixed;*/
