@@ -418,8 +418,8 @@
         var splitIconName=nameToRemove.split(";");
         var elementName= splitIconName[1];
 //        var guestList = Array.from(document.querySelectorAll('#list>li'));
-        document.getElementsByName(elementName)[0].parentElement.style.display='none';
-
+        document.getElementsByName(elementName)[0].style.display='none';
+        document.getElementsByName(elementName)[0].remove();
 //        var guestList = Array.from(document.querySelectorAll('#list>li'));
 //
 //        for (var i = 0; i < guestList.length; i++) {
