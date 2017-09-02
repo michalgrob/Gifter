@@ -81,136 +81,136 @@
 <!-- < style="margin-top:81px;">
      <!--<div style="background-color:#2e2e2e; height:9%">-->
 <div class="container">
-<form name="Form"  class=center-block">
-    <!--method="post" action="/wishlist/addEvent"-->
-    <div class="" >
-        <div id="eventDetails"  class="Info">
-            <!---->
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-2">
-                    <label class="formInputLbl">Title: </label>
+    <form name="Form"  class=center-block">
+        <!--method="post" action="/wishlist/addEvent"-->
+        <div class="" >
+            <div id="eventDetails"  class="Info">
+                <!---->
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                        <label class="formInputLbl">Title: </label>
+                    </div>
+                    <div class="col-md-7">
+                        <input class="textDesc form-control"type="text" name="eventTitle" id="eventTitle" value=""required>
+                    </div>
                 </div>
-                <div class="col-md-7">
-                    <input class="textDesc form-control"type="text" name="eventTitle" id="eventTitle" value=""required>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                        <label class="formInputLbl">Description: </label>
+                    </div>
+                    <div class="col-md-7">
+                        <input class="textDesc form-control" type="text" name="eventDescription" id="eventDescription"required >
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-2">
-                    <label class="formInputLbl">Description: </label>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                        <label class="formInputLbl">Date:</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input class="form-control textDesc8"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 60%"required>
+                    </div>
                 </div>
-                <div class="col-md-7">
-                    <input class="textDesc form-control" type="text" name="eventDescription" id="eventDescription"required >
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-2">
-                    <label class="formInputLbl">Date:</label>
-                </div>
-                <div class="col-md-7">
-                    <input class="form-control textDesc8"type="datetime-local" name="eventDate" id="eventDate" value="2017-09-04" style="width: 60%"required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-2">
-                    <label class="formInputLbl">Guests: </label>
-                </div>
-                <div class="col-md-7">
-                    <input class="textDesc form-control"type="text" name="eventGuests" id="eventGuests" value="">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                        <label class="formInputLbl">Guests: </label>
+                    </div>
+                    <div class="col-md-7">
+                        <input class="textDesc form-control"type="text" name="eventGuests" id="eventGuests" value="">
 
-                    <!--<div class="col-md-1">-->
-                            <span id='add' type='button' onclick="ajaxCheckIfGuestIsRegister()">
+                        <!--<div class="col-md-1">-->
+                        <span id='add' type='button' onclick="ajaxCheckIfGuestIsRegister()">
                             <!--<input type='button' id='add'onclick="ajaxCheckIfGuestIsRegister()" >-->
                             <i class="fa fa-user-plus" aria-hidden="true"></i>
                                 </span>
-                    <!--</div>-->
+                        <!--</div>-->
+
+                    </div>
 
                 </div>
 
+
+                <ul id='list' name="guestsList" style="text-align: center"></ul>
+            </div>
+
+        </div>
+        <div class="row" style="align: center;">
+            <div class="col-md-4 "></div>
+            <div class="col-md-2 ">
+                <input id="myBtn" class="giftsbtn btn btn-primary btn-xl page-scroll center-block" type="button" value = 'show gifts' name="submit" onclick="ajaxGiftToAdd()" >
             </div>
 
 
-            <ul id='list' name="guestsList" style="text-align: center"></ul>
+
+            <div class="col-md-2 ">
+                <input onclick="ajaxSaveChanges()" class="giftsbtn btn btn-primary btn-xl page-scroll center-block" type="submit"style="text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
+
+            </div>
+            <div class="col-md-4 "></div>
         </div>
 
-    </div>
-    <div class="row" style="align: center;">
-        <div class="col-md-4 "></div>
-        <div class="col-md-2 ">
-            <input id="myBtn" class="giftsbtn btn btn-primary btn-xl page-scroll center-block" type="button" value = 'show gifts' name="submit" onclick="ajaxGiftToAdd()" >
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Create your Wishlist</p>
+
+                <section id="giftsResultSection" style="display:none">
+
+                    <div class="row">
+
+                        <div class="no-padding " id="portfolio">
+                            <!--<label>Sort By: </label>-->
+                            <!--<select id="sort" onchange="sortResult(this)">&ndash;&gt;-->
+                            <!--<option value="">Choose:</option>-->
+                            <!--<option value="sortByResult">best results</option>-->
+                            <!--<option value="sortByPrice">price</option>-->
+                            <!--<option value="sortByStore">store</option>-->
+                            <!--</select>-->
+
+                            <!--<div class="container-fluid">-->
+                            <div id="gifts-list" class="gift-list "
+                                 class="row no-gutter popup-gallery col-sm-1 col-md-1 col-md-offset-1">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+        </div >
+        <div  class="col-md-10 center-block" >
+            <h1 style="margin-left:auto">Your Wishlist</h1>
+
+            <div class="row">
+
+                <div class="row no-gutter popup-gallery col-md-2 col-md-offset-4 my-gift-list">
+
+                    <!--class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"-->
+                    <ul id="list-group" name="chosenGifts" class="list-group "style="width:85%;">
+
+                    </ul>
+                </div>
+            </div>
         </div>
+    </form>
 
 
-
-        <div class="col-md-2 ">
-            <input onclick="ajaxSaveChanges()" class="giftsbtn btn btn-primary btn-xl page-scroll center-block" type="submit"style="text-align: center" value = 'Save Event' name="submit" style="margin-right: 5%">
-
-        </div>
-        <div class="col-md-4 "></div>
-    </div>
-
-    <div id="myModal" class="modal">
+    <!-- The Modal -->
+    <div id='myModalErrorGuest' class="modal">
 
         <!-- Modal content -->
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>Create your Wishlist</p>
-
-            <section id="giftsResultSection" style="display:none">
-
-                <div class="row">
-
-                    <div class="no-padding " id="portfolio">
-                        <!--<label>Sort By: </label>-->
-                        <!--<select id="sort" onchange="sortResult(this)">&ndash;&gt;-->
-                        <!--<option value="">Choose:</option>-->
-                        <!--<option value="sortByResult">best results</option>-->
-                        <!--<option value="sortByPrice">price</option>-->
-                        <!--<option value="sortByStore">store</option>-->
-                        <!--</select>-->
-
-                        <!--<div class="container-fluid">-->
-                        <div id="gifts-list" class="gift-list "
-                             class="row no-gutter popup-gallery col-sm-1 col-md-1 col-md-offset-1">
-
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-        </div>
-
-    </div >
-    <div  class="col-md-10 center-block" >
-        <h1 style="margin-left:auto">Your Wishlist</h1>
-
-        <div class="row">
-
-            <div class="row no-gutter popup-gallery col-md-2 col-md-offset-4 my-gift-list">
-
-                <!--class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3"-->
-                <ul id="list-group" name="chosenGifts" class="list-group "style="width:85%;">
-
-                </ul>
-            </div>
+            <span id="errMail"></span>
+            <span id="errMsg"></span>
+            <button onclick='ajaxInviteNotRegistered()'>invite this email addres to GIFTER</button>
         </div>
     </div>
-</form>
-
-
-<!-- The Modal -->
-<div id='myModalErrorGuest' class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span id="errMail"></span>
-        <span id="errMsg"></span>
-        <button onclick='ajaxInviteNotRegistered()'>invite this email addres to GIFTER</button>
-    </div>
-</div>
 
 </div>
 
@@ -246,6 +246,7 @@
     function ajaxSaveChanges() {
         if (ValidationAppForm()) {
             var guestArrayData = [];
+            var unRegMails=[];
             var guestList = Array.from(document.querySelectorAll('#list>li'));
 
             for (var i = 0; i < guestList.length; i++) {
@@ -255,6 +256,10 @@
                         id: guestList[i].getAttribute("id"),
                         username: guestList[i].getAttribute("name")
                     });
+                }
+                else
+                {
+                    unRegMails.push(guestList[i].textContent);
                 }
             }
 
@@ -275,6 +280,7 @@
                 type: "POST",
                 dataType: "json",
                 data: {
+                    unRegMails:JSON.stringify(unRegMails),
                     guests: JSON.stringify(guestArrayData),
                     gifts: JSON.stringify(gifts),
                     eventTitle: eventTitle,
@@ -385,7 +391,7 @@
                 success: function (user) {
                     if (user!= "0")
                     {
-                        addGuests(user.id,user.username);
+                        addGuests(user.id,user.username,guestMail);
                         console.log(user.id);
                     }
                     else {
@@ -412,14 +418,48 @@
             });
         }
     }
+    function removeFromGuestList(elementToRemove) {
+        var x=90;
+        var nameToRemove=elementToRemove.getAttribute("name");
+        var splitIconName=nameToRemove.split(";");
+        var elementName= splitIconName[1];
+//        var guestList = Array.from(document.querySelectorAll('#list>li'));
+        document.getElementsByName(elementName)[0].style.display='none';
+        document.getElementsByName(elementName)[0].remove();
+//        var guestList = Array.from(document.querySelectorAll('#list>li'));
+//
+//        for (var i = 0; i < guestList.length; i++) {
+//            if (guestList[i].getAttribute("name") ==nameToRemove) {
+//                document.getElementsByName(name).parentElement.style.display='none';
+//
+//            }
+//        }
+//
 
-    function addGuests(id,username) {//validation mail!!todo
+    }
+    function addGuests(id,username,userEmail) {//validation mail!!todo
+        <!--<i class="fa fa-trash" aria-hidden="true">-->
+
+
+        var span=document.createElement("span");
+        span.setAttribute("class",'w3-button w3-white w3-xlarge');
+        var removeIcon=document.createElement("i");
+        removeIcon.setAttribute("class",'fa fa-user-times');
+        removeIcon.setAttribute("onclick",'removeFromGuestList(this)');
+        removeIcon.setAttribute("name","icon;"+userEmail);
+        removeIcon.setAttribute("aria-hidden","true");
         var node = document.createElement("Li");
         node.setAttribute("id",id.toString());
-        node.setAttribute("name",username);
-        var text = document.getElementById("eventGuests").value.toLowerCase();; //.value gets input values
+        node.setAttribute("name",userEmail);
+//        node.setAttribute("class",userEmail);
+        node.setAttribute("style","display:block");
+        var text = document.getElementById("eventGuests").value.toLowerCase(); //.value gets input values
         var textnode = document.createTextNode(text);
         node.appendChild(textnode);
+
+        span.appendChild(removeIcon);
+        node.appendChild(span);
+
         document.getElementById("list").appendChild(node);
         document.getElementById("eventGuests").value="";
     }
@@ -479,7 +519,7 @@
     function ajaxInviteNotRegistered(guestEmail) {
         //var guestEmail = document.getElementById("errMail").innerHTML;
 
-        addGuests("",guestEmail);
+        addGuests("",guestEmail,guestEmail);
         var eventTitle = document.getElementById("eventTitle").value;
         var eventDescription = document.getElementById("eventDescription").value;
         var eventDate = document.getElementById("eventDate").value;

@@ -82,8 +82,8 @@ router.get('/refreshMyEvents', function(req, res, next){
 });
 var newGuestsMail=[]
 router.post('/inviteToGifter',function (req,res,next) {
-    var unRegisteredUserMail = req.body.guestEmail;
-    newGuestsMail.push(unRegisteredUserMail);
+    // var unRegisteredUserMail = req.body.guestEmail;
+    // newGuestsMail.push(unRegisteredUserMail);
     //sendMailInviteToGifter(req,res)
 });
 module.exports = router;
@@ -151,7 +151,8 @@ function createHtmlMsg(guest,eventId,hostUser,title,event_date)
     return msg;
 }
 function createNewEvent(req,res) {//todo check gifts array
-
+    //
+    var unRegMails=JSON.parse(req.body.unRegMails)
     var guests = JSON.parse(req.body.guests);
     var title=req.body.eventTitle;
     var description = req.body.eventDescription;
@@ -160,7 +161,7 @@ function createNewEvent(req,res) {//todo check gifts array
     var eventGuestsUsers = createGuestsIdsArray(guests);
     var guestsMailsArray=createGuestsMailsArray(guests);
     var event_date = req.body.eventDate;
-    var unRegisteredGuesed=newGuestsMail;
+    var unRegisteredGuesed=unRegMails;
 //Create new Event:
     var newEvent = new Event({
         title: title,
