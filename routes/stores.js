@@ -37,16 +37,13 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 
-//var cloudinary = require('cloudinary');
+var cloudinary = require('cloudinary');
 
-/*cloudinary.config({
+cloudinary.config({
     cloud_name: 'gifter-mta',
     api_key: '295691767823962',
     api_secret: 'oQi03-LFvbNzwueYMUDR8pizdR8'
-},function (err) {
-    if(err) throw err;
-    console.log("connected to cloudinary!")
-});*/
+});
 
 // Get/Post Requests:
 router.get('/', function(req, res, next) {
@@ -195,7 +192,6 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
         storeInterests[i] = storeInterests[i].toLowerCase();
     }
 
-
     //If the gift doesn't exist in DB - Save it into the DB:
     Gift.findOne({name:giftName},(function(err,gift){
         if (err) throw err;
@@ -205,72 +201,59 @@ function addOneGiftToStore(giftName,storeName,minAge,maxAge,gender,price,storeIn
             console.log('The Gift: ' + giftName + ' already exists!!!');
         }else {
 
-            //Create gift object:
-            var newGift = new Gift();
-            newGift.name = giftName;
-            newGift.prod_id = prodId;
-            newGift.price = price;
-            newGift.gender = gender;
-            newGift.store = store;
-            newGift.store_name = storeName;
-            newGift.minAge = minAge;
-            newGift.maxAge = maxAge;
-            newGift.ImageUrl = imgURL;
-
-            //Add all intrests to the gift:
-            // gift intrests: score: 1
-            // non gift intrests: score: 0
-
-            interest.find({},function (err,interests) {
+            //Upload Image to cloudnery:
+            cloudinary.uploader.upload(imgURL, function(result,err) {
                 if(err) throw err;
+                imgURL = result.url;
 
-                var interestsWithScore1 = interests.filter(function (element) {
-                        for (var i = 0; i < storeInterests.length; i++) {
-                            if (element.name == storeInterests[i]) {
-                                return true;
+                //Create gift object:
+                var newGift = new Gift();
+                newGift.name = giftName;
+                newGift.prod_id = prodId;
+                newGift.price = price;
+                newGift.gender = gender;
+                newGift.store = store;
+                newGift.store_name = storeName;
+                newGift.minAge = minAge;
+                newGift.maxAge = maxAge;
+                newGift.ImageUrl = imgURL;
+
+                //Add all intrests to the gift:
+                // gift intrests: score: 1
+                // non gift intrests: score: 0
+
+                interest.find({},function (err,interests) {
+                    if(err) throw err;
+
+                    var interestsWithScore1 = interests.filter(function (element) {
+                            for (var i = 0; i < storeInterests.length; i++) {
+                                if (element.name == storeInterests[i]) {
+                                    return true;
+                                }
                             }
+                            return false;
                         }
-                        return false;
-                    }
-                );
+                    );
 
-                var interestsWithScore0 = interests.filter(function(e){return this.indexOf(e)<0;},interestsWithScore1);
+                    var interestsWithScore0 = interests.filter(function(e){return this.indexOf(e)<0;},interestsWithScore1);
 
-                interestsWithScore1.forEach(function (interest){
-                    newGift.interests.push({interest: interest.name, dynamicScore: 1,interestRef: interest});
-                });
+                    interestsWithScore1.forEach(function (interest){
+                        newGift.interests.push({interest: interest.name, dynamicScore: 1,interestRef: interest});
+                    });
 
-                interestsWithScore0.forEach(function (interest){
-                    newGift.interests.push({interest: interest.name, dynamicScore: 0,interestRef: interest});
-                });
+                    interestsWithScore0.forEach(function (interest){
+                        newGift.interests.push({interest: interest.name, dynamicScore: 0,interestRef: interest});
+                    });
 
+                    newGift.save(function(err) {
+                        if (err) throw err;
 
-                /*                for(var i=0;i<storeInterests.length;i++) {
-                 newGift.interests.push({interest: storeInterests[i], dynamicScore: 1});
-                 }
-
-                 interests.forEach(function (interest) {
-                 //var isfound=false;
-                 for(var i=0;i<storeInterests.length;i++) {
-                 if(interest.name==storeInterests[i]) {
-                 //isfound=true;
-                 newGift.interests.push({interest: interest.name, dynamicScore: 1});
-                 break;
-                 }
-                 }
-                 /!*                    if(!isfound){
-                 newGift.interests.push({interest: interest.name, dynamicScore: 0});
-                 }*!/
-                 })*/
-
-                newGift.save(function(err) {
-                    if (err) throw err;
-
-                    console.log('Gift saved successfully!');
-                    var giftMongoId=newGift._id;
-                    relateGiftToStore(giftMongoId,store_id,storeName,next);
-                });
-            })
+                        console.log('Gift saved successfully!');
+                        var giftMongoId=newGift._id;
+                        relateGiftToStore(giftMongoId,store_id,storeName,next);
+                    });
+                })
+            });
         }
     }));
 }
@@ -367,35 +350,75 @@ function editGift(req, next) {
 
             //Update the gift data:
             Gift.findOne(giftMongodbID,function (err,foundGift) {
-                if(err ){ throw err;}
+                if(err) throw err;
 
-                //Update founded Gift:
-                foundGift.name = giftName;
-                foundGift.minAge = minAge;
-                foundGift.maxAge = maxAge;
-                foundGift.gender = gender;
-                foundGift.price = price;
-                foundGift.ImageUrl = imgUrl;
+                //Upload gift to cloudinary if needed:
 
-                for(var i=0; i<foundGift.interests.length; i ++){
-                    var interest = foundGift.interests[i];
-                    if(interest.dynamicScore >= 1){
-                        if(selected_interests.includes(interest.interest) == false){
-                            interest.dynamicScore = 0;
+                if(imgUrl.includes('cloudinary.com/gifter-mta') == false){
+                    cloudinary.uploader.upload(imgUrl, function(result,err) {
+                        if (err) throw err;
+                        imgUrl = result.url;
+
+                        //Update founded Gift:
+                        foundGift.name = giftName;
+                        foundGift.minAge = minAge;
+                        foundGift.maxAge = maxAge;
+                        foundGift.gender = gender;
+                        foundGift.price = price;
+                        foundGift.ImageUrl = imgUrl;
+
+                        for(var i=0; i<foundGift.interests.length; i ++){
+                            var interest = foundGift.interests[i];
+                            if(interest.dynamicScore >= 1){
+                                if(selected_interests.includes(interest.interest) == false){
+                                    interest.dynamicScore = 0;
+                                }
+                            }else{
+                                if(selected_interests.includes(interest.interest)){
+                                    interest.dynamicScore = 1;
+                                }else{
+                                    interest.dynamicScore = 0;
+                                }
+                            }
                         }
-                    }else{
-                        if(selected_interests.includes(interest.interest)){
-                            interest.dynamicScore = 1;
+
+                        foundGift.markModified('interests');
+                        foundGift.save();
+
+                        next();
+
+                    });
+                }else{
+
+                    //Update founded Gift:
+                    foundGift.name = giftName;
+                    foundGift.minAge = minAge;
+                    foundGift.maxAge = maxAge;
+                    foundGift.gender = gender;
+                    foundGift.price = price;
+                    foundGift.ImageUrl = imgUrl;
+
+                    for(var i=0; i<foundGift.interests.length; i ++){
+                        var interest = foundGift.interests[i];
+                        if(interest.dynamicScore >= 1){
+                            if(selected_interests.includes(interest.interest) == false){
+                                interest.dynamicScore = 0;
+                            }
                         }else{
-                            interest.dynamicScore = 0;
+                            if(selected_interests.includes(interest.interest)){
+                                interest.dynamicScore = 1;
+                            }else{
+                                interest.dynamicScore = 0;
+                            }
                         }
                     }
+
+                    foundGift.markModified('interests');
+                    foundGift.save();
+
+                    next();
+
                 }
-
-                foundGift.markModified('interests');
-                foundGift.save();
-
-                next();
             });
         });
 }

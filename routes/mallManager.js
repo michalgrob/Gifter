@@ -44,6 +44,14 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
+var cloudinary = require('cloudinary');
+
+cloudinary.config({
+    cloud_name: 'gifter-mta',
+    api_key: '295691767823962',
+    api_secret: 'oQi03-LFvbNzwueYMUDR8pizdR8'
+});
+
 
 // Get/Post Requests:
 
@@ -163,58 +171,69 @@ function getStores(req,done){
 
 function createSingleStore(mallManagerEmail,storeId,storeName,storeManagerUserName,storeManagerEmail,storeManagerPassword,storeImage, storeLocationFloor, storeLocationIndex, storeLocationImage,isPromoted){
 
-    //Create new Store:
-    var newStore = new Store({
-        name: storeName,
-        store_id: storeId,
-        store_image_url: storeImage,
-        location: {
-            floor: storeLocationFloor,
-            index:  storeLocationIndex,
-            img_url: storeLocationImage
-        },
-        is_promoted: isPromoted
-    });
-
-    //Create Store Manager User:
-    var newStoreManagerUser = new StoreManager();
-    newStoreManagerUser.email = storeManagerEmail;
-    newStoreManagerUser.password = newStoreManagerUser.generateHash(storeManagerPassword);
-    newStoreManagerUser.name = storeName;
-    newStoreManagerUser.username= storeManagerUserName;
-    newStoreManagerUser.admin = true;
-    newStoreManagerUser.store = newStore;
-    newStoreManagerUser.store_id = storeId;
-
-    newStore.store_manager_user = newStoreManagerUser;
-
-    //If the store & user doesn't exist in DB - Save it into the DB:
-    Store.findOne({name:storeName},(function(err,store){
+    //Save images to cloudinary
+    cloudinary.uploader.upload(storeImage, function(result,err) {
         if (err) throw err;
-        if (store) {
-            console.log('The Store: ' + newStore.name + ' already exists!!!');
-        }else{
-            User.findOne({ email:  storeManagerEmail }, function(err1, user) {
-                if (err1) throw err;
-                if (user) {
-                    console.log('User email ' + newStoreManagerUser.name + ' is already in use.!');
-                }else{
-                    // Save new store:
-                    newStore.save(function (err, done) {
-                        if (err) throw err;
-                        console.log('The Store: ' + newStore.name + ' saved successfully!');
-                        connectStoreToMallManager(mallManagerEmail,newStore);
+        storeImage = result.url;
 
-                        // Save new store manager user:
-                        newStoreManagerUser.save(function (err){
-                            if (err)throw err;
-                            console.log('Store Manager User: ' + newStoreManagerUser.name + ' created successfully!');
-                        });
+        cloudinary.uploader.upload(storeLocationImage, function (result, err) {
+            if (err) throw err;
+            storeLocationImage = result.url;
+
+            //Create new Store:
+            var newStore = new Store({
+                name: storeName,
+                store_id: storeId,
+                store_image_url: storeImage,
+                location: {
+                    floor: storeLocationFloor,
+                    index: storeLocationIndex,
+                    img_url: storeLocationImage
+                },
+                is_promoted: isPromoted
+            });
+
+            //Create Store Manager User:
+            var newStoreManagerUser = new StoreManager();
+            newStoreManagerUser.email = storeManagerEmail;
+            newStoreManagerUser.password = newStoreManagerUser.generateHash(storeManagerPassword);
+            newStoreManagerUser.name = storeName;
+            newStoreManagerUser.username = storeManagerUserName;
+            newStoreManagerUser.admin = true;
+            newStoreManagerUser.store = newStore;
+            newStoreManagerUser.store_id = storeId;
+
+            newStore.store_manager_user = newStoreManagerUser;
+
+            //If the store & user doesn't exist in DB - Save it into the DB:
+            Store.findOne({name: storeName}, (function (err, store) {
+                if (err) throw err;
+                if (store) {
+                    console.log('The Store: ' + newStore.name + ' already exists!!!');
+                } else {
+                    User.findOne({email: storeManagerEmail}, function (err1, user) {
+                        if (err1) throw err;
+                        if (user) {
+                            console.log('User email ' + newStoreManagerUser.name + ' is already in use.!');
+                        } else {
+                            // Save new store:
+                            newStore.save(function (err, done) {
+                                if (err) throw err;
+                                console.log('The Store: ' + newStore.name + ' saved successfully!');
+                                connectStoreToMallManager(mallManagerEmail, newStore);
+
+                                // Save new store manager user:
+                                newStoreManagerUser.save(function (err) {
+                                    if (err)throw err;
+                                    console.log('Store Manager User: ' + newStoreManagerUser.name + ' created successfully!');
+                                });
+                            });
+                        }
                     });
                 }
-            });
-        }
-    }));
+            }));
+        });
+    });
 }
 
 function connectStoreToMallManager(mallManagerEmail, newStore) {
@@ -336,6 +355,38 @@ function editStore(req, next) {
     var storeLocationImage = req.body.store_location_img_url;
     var isPromoted = req.body.store_is_promoted == "on" ? true : false;
 
+    //Save images to cloudinary
+
+    if(storeImage.includes('cloudinary.com/gifter-mta') == false){
+        cloudinary.uploader.upload(storeImage, function(result,err) {
+            if (err) throw err;
+            storeImage = result.url;
+
+            if(storeLocationImage.includes('cloudinary.com/gifter-mta') == false){
+                cloudinary.uploader.upload(storeLocationImage, function (result, err) {
+                    if (err) throw err;
+                    storeLocationImage = result.url;
+                    updateStoreInDB(storeID,storeImage,storeLocationFloor,storeLocationIndex,storeLocationImage,isPromoted,next);
+
+                });
+            }else {
+                updateStoreInDB(storeID,storeImage,storeLocationFloor,storeLocationIndex,storeLocationImage,isPromoted,next);
+            }
+
+        });
+    }else{
+        if(storeLocationImage.includes('cloudinary.com/gifter-mta') == false){
+            cloudinary.uploader.upload(storeLocationImage, function(result,err) {
+                if (err) throw err;
+                storeLocationImage = result.url;
+            });
+        }else{
+            updateStoreInDB(storeID,storeImage,storeLocationFloor,storeLocationIndex,storeLocationImage,isPromoted,next);
+        }
+    }
+}
+
+function updateStoreInDB(storeID,storeImage,storeLocationFloor,storeLocationIndex,storeLocationImage,isPromoted,next) {
     //Get Store Data (ID, Name):
     Store.findOne({store_id: storeID})
         .exec(function (err, store) {
@@ -348,7 +399,6 @@ function editStore(req, next) {
             store.is_promoted = isPromoted;
 
             store.save();
-
             next();
         });
 }
