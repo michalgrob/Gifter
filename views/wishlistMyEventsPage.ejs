@@ -52,8 +52,10 @@
                         </thead>
                         <tbody id="stores_table_body">
                         <% for(var i = 0; i< events.length; i++){%>
-                        <tr>
-                            <th></th>
+                        <tr id='tr<%=events[i].id%>'>
+                            <th><button id="edit_button" type="button" onclick="editEvent('<%=events[i].id%>')" class="btn btn-default"><em class="fa fa-pencil"></em></button>
+                                <button id="delete_button" type="button" onclick="deleteEvent('<%=events[i].id+","+events[i].title%>')" class="btn btn-danger"><em class="fa fa-trash"></em></button>
+                            </th>
                             <th><%=events[i].title%></th>
                             <th> <%=events[i].description%></th>
                             <th><%=events[i].event_date%></th>
@@ -241,6 +243,44 @@
 
         }
 
+
+    }
+
+
+    function editEvent(eventId)
+    {
+        alert("edit event , id: " + eventId);
+    }
+
+    function deleteEvent(eventIdAndTitle) {
+        //alert("delete event , id: " + eventId);
+        var splitedIT = eventIdAndTitle.split(',');
+        var eventId = splitedIT[0];
+        var title = splitedIT[1];
+        var ans = confirm("are you sure you delete "+ title+" event?")
+        if (ans == true) {
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: {
+                eventId: eventId
+                },
+                url: "/wishlist/deleteEvent",
+                success: function (msg) {
+                    removeEventRow(eventId,title)
+                }
+            });
+
+
+        }
+
+    }
+
+    function removeEventRow(eventId,title){
+        var trId = 'tr'+eventId;
+        document.getElementById(trId).parentElement.style.display='none';
+        confirm( title+" event deleted successfully")
 
     }
 
