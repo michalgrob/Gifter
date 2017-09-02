@@ -53,7 +53,7 @@
                         <tbody id="stores_table_body">
                         <% for(var i = 0; i< events.length; i++){%>
                         <tr id='tr<%=events[i].id%>'>
-                            <th><button id="edit_button" type="button" onclick="editEvent('<%=events[i].id%>')" class="btn btn-default"><em class="fa fa-pencil"></em></button>
+                            <th>  <!--<button id="edit_button" type="button" onclick="editEvent('<%=events[i].id%>')" class="btn btn-default"><em class="fa fa-pencil"></em></button>-->
                                 <button id="delete_button" type="button" onclick="deleteEvent('<%=events[i].id+","+events[i].title%>')" class="btn btn-danger"><em class="fa fa-trash"></em></button>
                             </th>
                             <th><%=events[i].title%></th>
@@ -96,9 +96,10 @@
 
                                                 <span class="w3-large">  <%= events[i].gifts[k].name %> </span><br>
                                                 <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
-                                                <%= events[i].gifts[k].price %><i class="fa fa-ils" aria-hidden="true"></i>
+                                                <span> <%= events[i].gifts[k].price %><i class="fa fa-ils" aria-hidden="true"></i></span><br>
                                                 <%if (events[i].gifts[k].isMarked == true){%>
-                                                <i class="fa fa-check-circle-o" aria-hidden="true">someone bought it for u :)</i>
+                                                <i class="fa fa-check-circle-o" aria-hidden="true"></i><br>
+                                                <p class=w3-small">someone bought it for u :)</p>
                                                 <%}else{%>
                                                 <i class="fa fa-gift" aria-hidden="true"></i>
                                                 <%}%>
@@ -208,6 +209,23 @@
             newSpan3.textContent = event.gifts[k].store_name;
             newLi.appendChild(newSpan3);
 
+            var br5 =  document.createElement("br");
+            newLi.appendChild(br5);
+
+            var newPriceSpan = document.createElement("span");
+            newPriceSpan.setAttribute("class","w3-large");
+            newPriceSpan.textContent = event.gifts[k].price;
+
+            var newIlsI = document.createElement("i");
+            newIlsI.setAttribute("class","fa fa-ils");
+            newIlsI.setAttribute("aria-hidden","true");
+            newPriceSpan.appendChild(newIlsI);
+
+            newLi.appendChild(newPriceSpan);
+
+            var br6 =  document.createElement("br");
+            newLi.appendChild(br6);
+
             var newI =  document.createElement("i");
             newI.setAttribute("style","margin-right: 0px;");
             newI.setAttribute("aria-hidden","true");
@@ -279,7 +297,7 @@
 
     function removeEventRow(eventId,title){
         var trId = 'tr'+eventId;
-        document.getElementById(trId).parentElement.style.display='none';
+        document.getElementById(trId).remove();
         confirm( title+" event deleted successfully")
 
     }
