@@ -246,6 +246,7 @@
     function ajaxSaveChanges() {
         if (ValidationAppForm()) {
             var guestArrayData = [];
+            var unRegMails=[];
             var guestList = Array.from(document.querySelectorAll('#list>li'));
 
             for (var i = 0; i < guestList.length; i++) {
@@ -255,6 +256,10 @@
                         id: guestList[i].getAttribute("id"),
                         username: guestList[i].getAttribute("name")
                     });
+                }
+                else
+                {
+                    unRegMails.push(guestList[i].textContent);
                 }
             }
 
@@ -275,6 +280,7 @@
                 type: "POST",
                 dataType: "json",
                 data: {
+                    unRegMails:JSON.stringify(unRegMails),
                     guests: JSON.stringify(guestArrayData),
                     gifts: JSON.stringify(gifts),
                     eventTitle: eventTitle,
