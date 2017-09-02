@@ -50,12 +50,20 @@
         </div>
     </div>
 </div>
-</div>
-</div>
 </body>
 
-<script>
+<script type="text/javascript" >
     window.onload = loadGifts();
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('popup_add_new_gift')) {
+            toggleAddNewGiftPopupVisibility(false);
+        }
+
+        if (event.target == document.getElementById('popup_edit_gift')) {
+            toggleEditGiftPopupVisibility(false);
+        }
+    }
 
     function loadGifts() {
         var content = '';
@@ -81,7 +89,7 @@
             content+=       '</p>';
             content+=   '</div>';
             content+=   '<div class="row" style="display: inline;margin-left: auto;margin-right: auto;">';
-            content+=        '<button href="#" class="btn btn-primary a-btn-slide-text">';
+            content+=        '<button href="#" class="btn btn-primary a-btn-slide-text" type="button" onclick="showEditGiftPopup(' + i + ')">';
             content+=           '<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>';
             content+=           '<span>Edit</span>';
             content+=        '</button>';
@@ -122,15 +130,6 @@
             return true;
         else
             return false;
-    }
-</script>
-
-<script type="text/javascript" >
-    function editGift(rowNum)
-    {
-        var rowElement = document.getElementById("row-" + rowNum);
-        var storeName = rowElement.getElementsByTagName("td")[2].textContent;
-        alert("editGift  store: " + storeName + " number: " + rowNum + "!");
     }
 </script>
 
@@ -196,7 +195,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-gift" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="gift_name" id="gift_name"  placeholder="Enter gift name"required/>
+                        <input type="text" class="form-control" name="gift_name" id="add_new_gift_popup_gift_name"  placeholder="Enter gift name"required/>
                     </div>
                 </div>
             </div>
@@ -206,7 +205,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-id-badge" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="gift_id" id="gift_id"  placeholder="Enter gift ID as given from Manager"required/>
+                        <input type="text" class="form-control" name="gift_id" id="add_new_gift_popup_gift_id"  placeholder="Enter gift ID as given from Manager"required/>
                     </div>
                 </div>
             </div>
@@ -216,7 +215,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-usd" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="gift_price" id="gift_price"  placeholder="Enter gift price"required/>
+                        <input type="text" class="form-control" name="gift_price" id="add_new_gift_popup_gift_price"  placeholder="Enter gift price"required/>
                     </div>
                 </div>
             </div>
@@ -226,10 +225,10 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-venus-mars" aria-hidden="true"></i></span>
-                        <div id="gender"  class="Info">
-                            <input type="radio" id="male" name="gender" value = 'male'/>Male <br />
-                            <input type="radio" id="female" name="gender" value = 'female'/>Female  <br />
-                            <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter <br />
+                        <div id="add_new_gift_popup_gender"  class="radio-group">
+                            <input type="radio" id="male" name="gender" value = 'male'/>Male<br>
+                            <input type="radio" id="female" name="gender" value = 'female'/>Female<br>
+                            <input type="radio" id="b" name="gender" value = 'b' checked="checked"/>Dosen't Metter
                         </div>
                     </div>
                 </div>
@@ -242,9 +241,9 @@
                     <div class="input-group" data-role="rangeslider">
                         <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
                         <label for="price-min"> min age: </label>
-                        <input type="text" name="minAge" id="minAge" ><br>
+                        <input type="text" name="minAge" id="add_new_gift_popup_minAge" ><br>
                         <label for="price-max">max age: </label>
-                        <input type="text" name="maxAge" id="maxAge" ><br>
+                        <input type="text" name="maxAge" id="add_new_gift_popup_maxAge" ><br>
                     </div>
                 </div>
             </div>
@@ -254,7 +253,7 @@
                 <div class="cols-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-gift" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" name="gift_img_url" id="gift_img_url"  placeholder="Enter gift image url"required/>
+                        <input type="text" class="form-control" name="gift_img_url" id="add_new_gift_popup_gift_img_url"  placeholder="Enter gift image url"required/>
                     </div>
                 </div>
             </div>
@@ -295,15 +294,6 @@
     </div>
 </div>
 
-<script>
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('popup_add_new_gift')) {
-            toggleAddNewGiftPopupVisibility(false);
-        }
-    }
-</script>
-
-
 
 <script>
     function toggleAddNewGiftPopupVisibility(isToShowPopup) {
@@ -314,12 +304,6 @@
             popupCreateNewStore.style.display = "none";
         }
     }
-
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('popup_add_new_gift')) {
-            toggleAddNewGiftPopupVisibility(false);
-        }
-    }
 </script>
 
 <script type="text/javascript">
@@ -327,14 +311,14 @@
         console.log("Add new gift.....");
        // var addNewGiftForm = document.forms.namedItem("addNewGiftForm");
        // var giftID = addNewGiftForm.elements["gift_id"].value;
-        var giftID = document.getElementById("gift_id").value;
-        var giftName = document.getElementById("gift_name").value;
-        var minAge = document.getElementById("minAge").value;
-        var maxAge = document.getElementById("maxAge").value;
-        var gender = document.getElementById("gender_input").querySelector('input[name="gender"]:checked').value;
-        var price = document.getElementById("gift_price").value;
-        var imgURL = document.getElementById("gift_img_url").value;
-        var selectedInterests = getSelectedInterests();
+        var giftID = document.getElementById("add_new_gift_popup_gift_id").value;
+        var giftName = document.getElementById("add_new_gift_popup_gift_name").value;
+        var minAge = document.getElementById("add_new_gift_popup_minAge").value;
+        var maxAge = document.getElementById("add_new_gift_popup_maxAge").value;
+        var gender = document.getElementById("add_new_gift_popup_gender_input").querySelector('input[name="gender"]:checked').value;
+        var price = document.getElementById("add_new_gift_popup_gift_price").value;
+        var imgURL = document.getElementById("add_new_gift_popup_gift_img_url").value;
+        var selectedInterests = getSelectedInterestsNewGift();
 
         post("/stores/addNewGift",{
             gift_id: giftID,
@@ -348,7 +332,7 @@
         });
     }
 
-    function getSelectedInterests() {
+    function getSelectedInterestsNewGift() {
         var results = new Array();
         var selectedListElements = dlb1.selectedList.childNodes;
         for(var i=1; i< selectedListElements.length ; i++){
@@ -358,7 +342,228 @@
     }
 </script>
 
+<!--------------------------------------------------------Edit Existing Gift Popup--------------------------------------------------------------->
 
+<div id="popup_edit_gift" class="modal">
+    <div class="modal-content animate" >
+        <div class="imgcontainer">
+            <span onclick="toggleEditGiftPopupVisibility(false)" class="close" title="Close Popup">&times;</span>
+            <img class="img-circle" src="img/gifter.jpg" alt="Edit Gift" class="avatar">
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="cols-sm-2 control-label" >Gift Name</label>
+            <div class="cols-sm-10">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-gift" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" name="gift_name" id="edit_gift_popup_gift_name"  placeholder="Enter gift name"required/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="edit_gift_popup_gift_id_form-group">
+            <label for="username" class="cols-sm-2 control-label">Gift Id</label>
+            <div class="cols-sm-10">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-id-badge" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" name="gift_id" id="edit_gift_popup_gift_id"  placeholder="Enter gift ID as given from Manager"required/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="username" class="cols-sm-2 control-label">Price</label>
+            <div class="cols-sm-10">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-usd" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" name="gift_price" id="edit_gift_popup_gift_price"  placeholder="Enter gift price"required/>
+                </div>
+            </div>
+        </div>
+
+        <div id="gender_input" class="form-group">
+            <label for="username" class="cols-sm-2 control-label">Gender</label>
+            <div class="cols-sm-10">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-venus-mars" aria-hidden="true"></i></span>
+                    <div id="edit_gift_popup_gender"  class="radio-group">
+                        <input type="radio" id="male" name="gender" value = 'male'/>Male</input><br>
+                        <input type="radio" id="female" name="gender" value = 'female'/>Female</input><br>
+                        <input type="radio" id="b" name="gender" value = 'b'/>Dosen't Metter</input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="username" class="cols-sm-2 control-label">Age</label>
+            <div class="cols-sm-10">
+                <div class="input-group" data-role="rangeslider">
+                    <span class="input-group-addon"><i class="fa fa-child" aria-hidden="true"></i></span>
+                    <label for="price-min"> min age: </label>
+                    <input type="text" name="minAge" id="edit_gift_popup_minAge" ><br>
+                    <label for="price-max">max age: </label>
+                    <input type="text" name="maxAge" id="edit_gift_popup_maxAge" ><br>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name" class="cols-sm-2 control-label" >Gift Image URL</label>
+            <div class="cols-sm-10">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-gift" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" name="gift_img_url" id="edit_gift_popup_gift_img_url"  placeholder="Enter gift image url"required/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="username" class="cols-sm-2 control-label">Interests</label>
+            <div class="cols-sm-10">
+                <div class="input-group" data-role="rangeslider">
+                    <span class="input-group-addon"><i class="fa fa-connectdevelop" aria-hidden="true"></i></span>
+                    <div class="dual-listbox">
+                        <link href="/dual-listbox/css/dual-listbox.css" rel="stylesheet">
+                        <select id = "interests_dual_list_box" class="select2" multiple>
+                            <% for(var i=0; i<available_interests.length; i++) {%>
+                            <option ><%= available_interests[i].toString() %></option>
+                            <% } %>
+                        </select>
+                        <script>
+                            dlb2 = new DualListbox('.select2',{
+                                availableTitle: 'Available Interests',
+                                selectedTitle: 'Selected Interests',
+                                addButtonText: 'Add Interest',
+                                removeButtonText: 'Remove Interest',
+                                addAllButtonText: 'Add All Interests',
+                                removeAllButtonText: 'Remove All Interests',
+                                searchPlaceholder: 'Search Interest...'
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group ">
+            <button type="submit" onclick="saveEditedGift();" class="btn btn-primary btn-lg btn-block login-button" >Save Gift</button>
+        </div>
+        <!--
+                </form>
+        -->
+    </div>
+</div>
+
+<script type="text/javascript" >
+    function showEditGiftPopup(giftIndex) {
+        var av_gifts = <%- JSON.stringify(available_gifts) %>;
+        var selectedGift = av_gifts[giftIndex];
+
+        //Update Gift Name:
+        var selectedGiftName = selectedGift.name;
+        document.getElementById("edit_gift_popup_gift_name").value = selectedGiftName;
+
+        //Update Gift ID:
+        var selectedGiftID = selectedGift.prod_id;
+        document.getElementById("edit_gift_popup_gift_id").value = selectedGiftID;
+        document.getElementById("edit_gift_popup_gift_id_form-group").style.display="none";
+
+        //Update Gift Price:
+        var selectedGiftPrice = selectedGift.price;
+        document.getElementById("edit_gift_popup_gift_price").value = selectedGiftPrice;
+
+        //Update Gift Gender:
+        var selectedGiftGender = selectedGift.gender;
+        var genderElements = document.getElementById("edit_gift_popup_gender").childNodes;
+        genderElements.forEach(function (element) {
+            if(element.tagName && element.tagName.toLowerCase() == 'input'){
+                if(element.value != '' && element.value == selectedGiftGender.toLowerCase()){
+                    element.checked = true;
+                }
+            }
+        })
+
+        //Update Gift Min Age:
+        var selectedGiftMinAge = selectedGift.minAge;
+        document.getElementById("edit_gift_popup_minAge").value = selectedGiftMinAge;
+
+        //Update Gift Max Age:
+        var selectedGiftMaxAge = selectedGift.maxAge;
+        document.getElementById("edit_gift_popup_maxAge").value = selectedGiftMaxAge;
+
+        //Update Gift Image URL:
+        var selectedGiftImgURL = selectedGift.ImageUrl;
+        document.getElementById("edit_gift_popup_gift_img_url").value = selectedGiftImgURL;
+
+        //Update Gift Interests:
+        var selectedGiftInterests = [];
+        selectedGift.interests.forEach(function(elem){
+            if(elem.dynamicScore >= 1){
+                selectedGiftInterests.push(elem.interest);
+            }
+        });
+        setSelectedInterestsEditGift(selectedGiftInterests);
+
+        //Show Edit popup:
+        toggleEditGiftPopupVisibility(true);
+    }
+
+    function setSelectedInterestsEditGift(selectedInterests) {
+        var availebleListElements = dlb2.availebleList.childNodes;
+        selectedInterests.forEach(function (interest) {
+            for(var i=1; i< availebleListElements.length ; i++){
+                if(availebleListElements[i].textContent == interest){
+                    dlb2.addSelected(availebleListElements[i]);
+                }
+            }
+        })
+    }
+
+    function getSelectedInterestsEditGift() {
+        var results = new Array();
+        var selectedListElements = dlb2.selectedList.childNodes;
+        for(var i=1; i< selectedListElements.length ; i++){
+            results.push(selectedListElements[i].textContent);
+        }
+        return results;
+    }
+
+    function saveEditedGift(){
+        console.log("Save edited gift.....");
+        var giftID = document.getElementById("edit_gift_popup_gift_id").value;
+        var giftName = document.getElementById("edit_gift_popup_gift_name").value;
+        var minAge = document.getElementById("edit_gift_popup_minAge").value;
+        var maxAge = document.getElementById("edit_gift_popup_maxAge").value;
+        var gender = document.getElementById("edit_gift_popup_gender").querySelector('input[name="gender"]:checked').value;
+        var price = document.getElementById("edit_gift_popup_gift_price").value;
+        var imgURL = document.getElementById("edit_gift_popup_gift_img_url").value;
+        var selectedInterests = getSelectedInterestsEditGift();
+
+        post("/stores/editGift",{
+            gift_id: giftID,
+            gift_name: giftName,
+            min_age: minAge,
+            max_age: maxAge,
+            gender: gender,
+            price: price,
+            gift_img_url: imgURL,
+            selected_interests: selectedInterests,
+        });
+    }
+
+</script>
+
+<script>
+    function toggleEditGiftPopupVisibility(isToShowPopup) {
+        var popupCreateNewStore = document.getElementById('popup_edit_gift');
+        if(isToShowPopup){
+            popupCreateNewStore.style.display = "block";
+        }else{
+            popupCreateNewStore.style.display = "none";
+        }
+    }
+</script>
 
 <script type="text/javascript">
     function ValidationAppForm(){
@@ -455,24 +660,3 @@
     }
 
 </script>
-
-
-<!--<script>
-    function updateInterests(){
-        var interestsArray =
-        var interestsSelect = document.getElementById('add_new_gift_interests');
-        var content = '';
-        for(var i=0; i<interestsArray.length; i++){
-            content=+ '<option value="' + interestsArray[i] + '">' + interestsArray[i] + '</option>';
-        }
-        interestsSelect.innerHTML = content;
-    }
-</script>
-
-<script>
-    (function($) {
-        $(function() {
-            $('.my-select-box').fSelect();
-        });
-    })(jQuery);
-</script>-->

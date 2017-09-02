@@ -21,6 +21,7 @@ module.exports = function(passport) {
             passReqToCallback: true
         },
         function(req, email, password, done) {
+            email = email.toLowerCase();
             process.nextTick(function() {
                 User.findOne({ email:  email }, function(err, user) {
                     if (err)
@@ -55,6 +56,7 @@ module.exports = function(passport) {
             passReqToCallback: true
         },
         function(req, email, password, done) {
+            email = email.toLowerCase();
             User.findOne({ 'email':  email }, function(err, user) {
                 if (err)
                     return done(err);
