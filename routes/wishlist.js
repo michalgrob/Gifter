@@ -25,6 +25,11 @@ var compiledTemplate = hogan.compile(template);
 var template2 = fs.readFileSync('./views/inviteEmail.ejs','utf-8');//('./views/inviteEmailForNotRegistered.ejs','utf-8');
 var compiledTemplate2 = hogan.compile(template2);
 
+
+router.post('/deleteEvent',function (req,res,next) {
+    deleteEvent(req,res);
+});
+
 router.post('/unMarkGift',function (req,res,next) {
     unMarkUserInGiftEvent(req,res)
 });
@@ -444,8 +449,66 @@ function  unMarkUserInGiftEvent(req,res){
                 console.log(err);
                 throw err;
             }
+            console.log("event removed successfully")
             res.send({s: "s"});
         });
 
     });
+}
+
+function  deleteEvent(req,res){
+    var eventId = req.body.eventId;
+    var hostId = req.user.id;
+
+    Event.findById(eventId)
+        .populate({
+            path: 'eventGuestsUsers hostUser',
+            populate: {
+                path:'myEvents friendsEvents'
+            }
+        }).exec(function(err,event) {
+
+            //getting host model
+        var hostUserEvents = event.hostUser.myEvents;
+    //finds event in host and remove it from my events list
+
+        for(i=0;i<hostUserEvents.length ; i++) {
+            if(hostUserEvents[i].id == eventId){
+                event.hostUser.myEvents.splice(i,1);
+                break;
+            }
+        }
+
+        event.hostUser.save();
+
+//getting guests models;
+        var eventGuestsUsers = event.eventGuestsUsers;
+
+        for(j=0; j<eventGuestsUsers.length; j++){
+
+//getting friendsEvents for each guest
+            var guestFriendsEvents = eventGuestsUsers[j].friendsEvents;
+
+            for(k = 0; k < guestFriendsEvents.length; k++) {
+                //find event id and delete it
+                if(guestFriendsEvents[k].id == eventId){
+                    event.eventGuestsUsers[i].friendsEvents.splice(k,1);
+                    event.eventGuestsUsers[i].save();
+                    break;
+                }
+            }
+        }
+
+        var x = 0;
+
+        event.remove(function (err) {
+            if (err){
+                console.log(err);
+                throw err;
+            }
+            res.send({s: "s"});
+        });
+
+    });
+
 }
