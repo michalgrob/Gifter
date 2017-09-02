@@ -49,12 +49,14 @@
                     <table id="stores_table" class="table table-striped table-bordered" style="table-layout:fixed">
                         <thead>
                         <tr>
-                            <th><em class="fa fa-cog" align="center"></em></th>
+                            <!--<th><em class="fa fa-cog" align="center"></em></th>-->
+                            <th></th>
                             <th class="hidden-xs">Store ID</th>
                             <th class="hidden-xs">Store Logo</th>
                             <th>Store Name</th>
                             <th>Floor No.</th>
                             <th>Store No.</th>
+                            <th>To Promote?</th>
 
                         </tr>
                         </thead>
@@ -82,16 +84,27 @@
 
     window.onload = loadStores();
 
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('popup_create_new_store')) {
+            toggleCreateNewStorePopupVisibility(false);
+        }
+
+        if (event.target == document.getElementById('popup_edit_store')) {
+            toggleEditStorePopupVisibility(false);
+        }
+    }
+
     function  loadStores() {
         var table = '';
         var av_stores = <%- JSON.stringify(available_stores) %>;
         var rowsNumber = av_stores.length;
         for(var r = 0; r < rowsNumber; r++)
         {
+            var isPromoted = av_stores[r].is_promoted ? 'Yes': 'No';
             table+= '<tr id="row-' + r + '">';
 
             table+= '<td align="center">';
-            table+= '<button id="edit_button" type="button" onclick="editStore(' + r + ')" class="btn btn-default"><em class="fa fa-pencil"></em></button>';
+            table+= '<button id="edit_button" type="button" onclick="showEditStorePopup(' + r + ')" class="btn btn-default"><em class="fa fa-pencil"></em></button>';
             table+= '<button id="delete_button" type="button" onclick="deleteStore(' + r + ')" class="btn btn-danger"><em class="fa fa-trash"></em></button>';
             table+= '</td>';
             table+= '<td class="hidden-xs" id="store_id_field">' + av_stores[r].store_id + '</td>';
@@ -99,6 +112,7 @@
             table+= '<td id="store_name_field">' + av_stores[r].name + '</td>';
             table+= '<td id="store_location_floor_field">' + av_stores[r].location.floor + '</td>';
             table+= '<td id="store_location_index_field">' + av_stores[r].location.index + '</td>';
+            table+= '<td id="store_is_promoted">' + isPromoted + '</td>';
 
             table+= '</tr>';
         }
@@ -118,9 +132,7 @@
             post('/mallManager/deleteStore', {store_name: storeName});
         }
     }
-</script>
 
-<script type="text/javascript" >
     function showDeleteConfirmationDialog(storeName){
         var x = confirm("Are you sure you want to delete the store: " + storeName + "?");
         if (x)
@@ -128,18 +140,7 @@
         else
             return false;
     }
-</script>
 
-<script type="text/javascript" >
-    function editStore(rowNum)
-    {
-        var rowElement = document.getElementById("row-" + rowNum);
-        var storeName = rowElement.getElementsByTagName("td")[2].textContent;
-        alert("editStore  store: " + storeName + " number: " + rowNum + "!");
-    }
-</script>
-
-<script type="text/javascript" >
     function post(path, params, method) {
         method = method || "post"; // Set method to post by default if not specified.
 
@@ -167,34 +168,19 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#stores_table').DataTable();
+        var table = $('#stores_table').DataTable( {
+            "columns": [
+                { "width": "13%" },
+                { "width": "10%" },
+                { "width": "18%" },
+                null,
+                { "width": "10%" },
+                { "width": "10%" },
+                { "width": "10%" }
+            ]
+        } );
     } );
 </script>
-
-<!--<script type="text/javascript">
-    function searchStores() {
-        var input, filter, storesTableBodyElement, trs, tdStoreName, i,table;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        storesTableBodyElement = document.getElementById("stores_table_body");
-        table = document.getElementById("stores_table");
-        trs = storesTableBodyElement.getElementsByTagName("tr");
-        for (i = 0; i < trs.length; i++) {
-            tdStoreName = trs[i].getElementsByTagName("td")[2].textContent;
-            console.log(tdStoreName);
-            if (tdStoreName.toUpperCase().indexOf(filter) > -1) {
-                trs[i].style.display = "";
-            } else {
-                trs[i].style.display = "none";
-            }
-        }
-    }
-</script>-->
-
-
-
-
-
 
 <!--------------------------------------------------------Create New Store Popup--------------------------------------------------------------->
 
@@ -337,10 +323,155 @@
             popupCreateNewStore.style.display = "none";
         }
     }
+</script>
 
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('popup_create_new_store')) {
-            toggleCreateNewStorePopupVisibility(false);
+<!--------------------------------------------------------Edit Store Popup--------------------------------------------------------------->
+
+<div id="popup_edit_store" class="modal">
+    <div class="modal-content animate" >
+        <div class="imgcontainer">
+            <span onclick="toggleEditStorePopupVisibility(false)" class="close" title="Close Popup">&times;</span>
+            <img class="img-circle" src="img/gifter.jpg" alt="Edit Store" class="avatar">
+        </div>
+        <form name="singnupForm" class="form-horizontal" method="post" action="/mallManager/editStore" >
+            <!--onsubmit="return validationUserInput()"-->
+
+            <div class="form-group" id="edit_store_popup_store_id_form-group">
+                <label for="username" class="cols-sm-2 control-label">Store ID</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_id" id="edit_store_popup_store_id"  placeholder="Enter store id as given grom Manager"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Store Logo</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-picture-o" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_img_url" id="edit_store_popup_store_img_url"  placeholder="Enter store image URL address"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Location: Floor No.</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location_floor" id="edit_store_popup_store_location_floor"  placeholder="Enter store's floor inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Location: Store No.</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location_index" id="edit_store_popup_store_location_index"  placeholder="Enter store index in the floor inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Location: Store Location inside the Map (Image)</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" name="store_location_img_url" id="edit_store_popup_store_location_img_url"  placeholder="Enter an image URL address of the store location inside the mall"required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="cols-sm-2 control-label">Promote (Yes\No)</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <label style="font-size: 15px;text-align: center; text-indent: 10px;">
+                            <input type="checkbox" class="form-control" name="store_is_promoted" id="edit_store_popup_store_is_promoted" style="width: 40px;height: 40px;padding: 0;margin:0;" >
+                            </input>
+                            Do you want to promote this store?
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <button type="submit" onclick="toggleEditStorePopupVisibility(false);" class="btn btn-primary btn-lg btn-block login-button" >Save Store</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showEditStorePopup(storeIndex) {
+        var av_stores = <%- JSON.stringify(available_stores) %>;
+        var selectedStore = av_stores[storeIndex];
+
+        //Update Store Image URL:
+        var selectedStoreImageURL = selectedStore.store_image_url;
+        document.getElementById("edit_store_popup_store_img_url").value = selectedStoreImageURL;
+
+        //Update Store Location Floor:
+        var selectedStoreLocationFloor = selectedStore.location.floor;
+        document.getElementById("edit_store_popup_store_location_floor").value = selectedStoreLocationFloor;
+
+        //Update Store Location Index in floor:
+        var selectedStoreLocationIndex = selectedStore.location.index;
+        document.getElementById("edit_store_popup_store_location_index").value = selectedStoreLocationIndex;
+
+        //Update Store Location Image URL:
+        var selectedStoreLocationImageURL = selectedStore.location.img_url;
+        document.getElementById("edit_store_popup_store_location_img_url").value = selectedStoreLocationImageURL;
+
+        //Update Store ID:
+        var selectedStoreID = selectedStore.store_id;
+        document.getElementById("edit_store_popup_store_id").value = selectedStoreID;
+        document.getElementById("edit_store_popup_store_id_form-group").style.display="none";
+
+        //Update Store IsPromoted:
+        var selectedStoreIsPromoted = selectedStore.is_promoted;
+        if(selectedStoreIsPromoted){
+            document.getElementById("edit_store_popup_store_is_promoted").checked = true;
+        }else{
+            document.getElementById("edit_store_popup_store_is_promoted").checked = false;
+        }
+
+        //Show Edit popup:
+        toggleEditStorePopupVisibility(true);
+    }
+
+
+    function toggleEditStorePopupVisibility(isToShowPopup) {
+        var popupCreateNewStore = document.getElementById('popup_edit_store');
+        if(isToShowPopup){
+            popupCreateNewStore.style.display = "block";
+        }else{
+            popupCreateNewStore.style.display = "none";
         }
     }
 </script>
+
+
+<!--<script type="text/javascript">
+    function searchStores() {
+        var input, filter, storesTableBodyElement, trs, tdStoreName, i,table;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        storesTableBodyElement = document.getElementById("stores_table_body");
+        table = document.getElementById("stores_table");
+        trs = storesTableBodyElement.getElementsByTagName("tr");
+        for (i = 0; i < trs.length; i++) {
+            tdStoreName = trs[i].getElementsByTagName("td")[2].textContent;
+            console.log(tdStoreName);
+            if (tdStoreName.toUpperCase().indexOf(filter) > -1) {
+                trs[i].style.display = "";
+            } else {
+                trs[i].style.display = "none";
+            }
+        }
+    }
+</script>-->

@@ -320,6 +320,42 @@ function createMallManager(req){
     });
 }
 
+router.post('/editStore', function(req,res,next){
+    editStore(req,function () {
+        sleep(500);
+        res.redirect("/users/redirect_user_by_role");
+    });
+});
+
+function editStore(req, next) {
+
+    // Get request parameters:
+    var storeID = req.body.store_id;
+    var storeImage = req.body.store_img_url;
+    var storeLocationFloor = req.body.store_location_floor;
+    var storeLocationIndex = req.body.store_location_index;
+    var storeLocationImage = req.body.store_location_img_url;
+    var isPromoted = req.body.store_is_promoted == "on" ? true : false;
+
+    //Get Store Data (ID, Name):
+    Store.findOne({store_id: storeID})
+        .exec(function (err, store) {
+            if (err) throw err;
+
+            store.store_image_url = storeImage;
+            store.location.floor = storeLocationFloor;
+            store.location.index = storeLocationIndex;
+            store.location.img_url = storeLocationImage;
+            store.is_promoted = isPromoted;
+
+            store.save();
+
+            next();
+        });
+}
+
+
+
 router.get('/shopping-cart',function(req,res,next){
     if(!req.session.cart){
         return res.render('shoppingCartPage',{LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: null});
