@@ -15,7 +15,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li>
+                <li id="search_gifts">
                     <a class="page-scroll" href="/searchingOpt">Search Gifts</a>
                 </li>
                 <li id="wishlists_label">
@@ -73,13 +73,14 @@
                     //hide shopping chart:
                     document.getElementById("shopping_cart").style.display="none";
 
+                    //hide search gifts:
+                    document.getElementById("search_gifts").style.display="none";
+
                     //hide about:
                     document.getElementById("wishlists_label").style.display="none";
                     break;
 
                 default:
-                    //show shopping chart:
-                    document.getElementById("shopping_cart").style.display="block";
                     break;
             }
         }
