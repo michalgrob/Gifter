@@ -210,6 +210,9 @@ span.psw {
 .btnPC{
     display:none;
 }
+.hrPC{
+    display:block;
+}
 @media (max-width:790px) {
     table tr th:nth-child(1),
     .un{
