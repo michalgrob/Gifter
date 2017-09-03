@@ -22,21 +22,21 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col col-xs-6">
-                            <h3 class="panel-title">Store List</h3>
+                            <h3 class=" panel-title">Store List</h3>
                         </div>
-                        <div class="col col-xs-6 text-right">
+                        <div class="mall csvbtn col col-xs-6 text-right">
                             <button type="button" onclick="toggleCreateNewStorePopupVisibility(true)" class="btn btn-sm btn-primary btn-create">Create A New Store</button>
                         </div>
-                        <div class="col col-xs-6 text-right">
+                        <div class="mall1 csvbtn col col-xs-6 text-right">
                             <form method="get" action="/mallManager">
-                                <button type="submit" class="btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+                                <button type="submit" class="csvbtn btn btn-sm btn-primary btn-create"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
                             </form>
                         </div>
-                        <div class="col col-xs-6 text-right">
+                        <div class="mall2 csvbtn col col-xs-6 text-right">
                             <form method="post" action="/mallManager/importCSV" enctype="multipart/form-data">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                     <input type="file" id="fileInput" style="display:none;" onchange="this.form.submit()" name="csv_file" />
-                                    <button type="button" class="btn btn-sm btn-primary btn-create" data-provides="fileinput" onclick="document.getElementById('fileInput').click();"><i class="fa fa-upload" aria-hidden="true"></i>Import Stores From CSV</button>
+                                    <button type="button" class="csvbtn btn btn-sm btn-primary btn-create" data-provides="fileinput" onclick="document.getElementById('fileInput').click();"><i class="fa fa-upload" aria-hidden="true"></i>Import Stores From CSV</button>
                                 </div>
                             </form>
                         </div>
@@ -50,7 +50,7 @@
                         <thead>
                         <tr>
                             <!--<th><em class="fa fa-cog" align="center"></em></th>-->
-                            <th></th>
+                            <th class="un"></th>
                             <th class="hidden-xs">Store ID</th>
                             <th class="hidden-xs">Store Logo</th>
                             <th>Store Name</th>
@@ -103,7 +103,7 @@
             var isPromoted = av_stores[r].is_promoted ? 'Yes': 'No';
             table+= '<tr id="row-' + r + '">';
 
-            table+= '<td align="center">';
+            table+= '<td class="un" align="center">';
             table+= '<button id="edit_button" type="button" onclick="showEditStorePopup(' + r + ')" class="btn btn-default"><em class="fa fa-pencil"></em></button>';
             table+= '<button id="delete_button" type="button" onclick="deleteStore(' + r + ')" class="btn btn-danger"><em class="fa fa-trash"></em></button>';
             table+= '</td>';
