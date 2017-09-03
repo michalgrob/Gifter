@@ -161,6 +161,9 @@ span.psw {
     /*top: 140px;*/
     background-color: #9d9d9d;
 }
+.malltbl{
+    margin-top: -120px
+}
 
 /* The Modal (background) */
 .modal {
@@ -289,42 +292,6 @@ margin: auto;
     }
 
 }
-
-
-
-/*@media (max-width:180px) {*/
-    /*.col-sm-3{*/
-        /*margin:3px;*/
-        /*!*margin-left: 80px;*!*/
-    /*}*/
-    /*.textDesc{*/
-        /*align:right;*/
-        /*!*margin: -50px;*!*/
-
-    /*}*/
-    /*.createEventDiv{*/
-        /*align:center;*/
-        /*width: 100%;*/
-    /*}*/
-/*}*/
-/*----------------------*/
-/*.createEventDiv{*/
-
-    /*width: 80%;*/
-    /*margin-left: 180px;*/
-    /*!*width: 80%;*!*/
-/*}*/
-/*.lebalDesc {*/
-    /*align:right;*/
-    /*!*margin:3px;*!*/
-    /*!*alignment: left;*!*/
-
-/*}*/
-/*.textDesc{*/
-    /*align:left;*/
-    /*!*margin:18px;*!*/
-/*}*/
-
 
 
 /*form create*/
