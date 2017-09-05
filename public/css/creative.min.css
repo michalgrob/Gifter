@@ -227,16 +227,16 @@ span.psw {
     .mall {
         margin-top: -150px;
     }.mall1 {
-        margin-top: 0px;
-    }.mall2 {
-        margin-top: -140px;
-    }
+         margin-top: 0px;
+     }.mall2 {
+          margin-top: -140px;
+      }
     .table {
         margin: auto;
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-      /* fallback */
+        /* fallback */
         -webkit-line-clamp: 3; /* number of lines to show */
         -webkit-box-orient: vertical;
         /*text-overflow: ellipsis;*/
@@ -277,23 +277,40 @@ span.psw {
     }
 }
 
-@media(max-width:780px){
-#eventDate {
-margin: auto;
-}
+@media(max-width:790px){
+    #eventDate {
+        margin: auto;
+    }
     #eventGuests{
         margin-left: 40px;
         /*width: 80%;*/
         /*margin: auto;*/
 
     }
+    .smallModal{
+        width:100%;
 
+
+    }
     .textDesc8{
     }
+    .smallImgInMobile{
+        margin:auto;
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+}
+.smallModal{
+    width:60%;
+
 
 }
-
-
+.smallImgInMobile{
+    margin-top: 20px;
+    margin:auto;
+    display: block;
+}
 /*form create*/
 
 .formInputLbl{
