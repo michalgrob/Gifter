@@ -46,7 +46,7 @@ router.get('/shopping-cart',function(req,res,next){
     }
     else{//guest
         if(!req.session.cart){
-            return res.render('shoppingCartPage',{LogedInUser: req.user ? req.user : '',CartQty: req.session.cart ? req.session.cart.totalQty : 0 , products: {}});
+            return res.render('shoppingCartPage',{LogedInUser: req.user ? req.user : '',CartQty:  0 , products: null});
         }
         var cart = new Cart(req.session.cart);
         var gifts = cart.generateArray();
