@@ -216,10 +216,19 @@ span.psw {
 .hrPC{
     display:block;
 }
+.ShowInMobile{
+    display:none;
+
+}
 @media (max-width:790px) {
+
     table tr th:nth-child(1),
     .un{
         display:none;
+    }
+    ShowInMobile{
+        display:block;
+
     }
     .btnForMobile{
         display:block;
@@ -258,9 +267,12 @@ span.psw {
         /*font:small-caption;*/
         margin:0;
     }
+    .pb-phone{
+        padding:0px;
+    }
     .events{
         text-align: left;
-        margin-top: 85px;
+        margin-top: 20px;
     }
     .jumbotron{
         margin-top: 50px;
@@ -278,6 +290,10 @@ span.psw {
 }
 
 @media(max-width:790px){
+    .ShowInMobile{
+        display:block;
+
+    }
     #eventDate {
         margin: auto;
     }

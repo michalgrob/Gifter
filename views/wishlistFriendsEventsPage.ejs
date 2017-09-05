@@ -10,11 +10,18 @@
 
 </div>
 
-<div id="mySidenav" class="sidenav" style="position: fixed">
+<div id="mySidenav" class="sidenav un" style="position: fixed">
     <!--<a href="#" id="about">About</a><br>-->
     <a href="/wishlist/myEvents" id="myEventsSidenav">To My Wishlists</a><br><br><br>
     <!--<a href="/wishlist/myFriendsEvents" id="myEventsSidenav">My Friends Events</a><br>-->
     <!--<a href="#" id="contact">Contact</a>-->
+</div>
+<div class="w3-bar text-center">
+    <!--<button >Button</button>-->
+    <div class="row ShowInMobile">
+        <a class="btn btn-primary bun-xl" type="button" href="/wishlist/myEvents" id="myEventsSidenav">To My Wishlists</a>
+        <br>
+    </div>
 </div>
 <div class="container">
     <div class="row">
@@ -66,28 +73,33 @@
                                         <ul id='giftsList<%=events[i].id%>' class="w3-ul w3-card-4"style="width:70%; margin-left: 15%;">
                                             <% for (var k=0; k<events[i].gifts.length; k++){%>
                                             <li class="w3-padding-15">
-                                                <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
+                                                <div class="row"style="margin-left: 8px">
+                                                    <img style="width:60px;" src='<%=events[i].gifts[k].ImageUrl %>' class="w3-left w3-circle w3-margin-right" alt="">
 
-                                                <span class="w3-large">  <%= events[i].gifts[k].name %> </span><br>
-                                                <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
-                                                <span> <%= events[i].gifts[k].price %><i class="fa fa-ils" aria-hidden="true"></i></span><br>
-                                                <%if (events[i].gifts[k].isMarked == true){%>
-                                                <%if(events[i].gifts[k].markedBy==LogedInUser.username){%>
-                                                <button id='<%=events[i].id%>' onclick="unMarkAsMine(this)" name='<%=events[i].gifts[k].id%>' style="margin-right: 0px;" type = "button"class="btn-xs fa fa-check-circle-o" aria-hidden="true">
-                                                </button><br>
-                                                <p class="w3-small">  <br>You chose to buy this gift, Click to cancel your selection</p>
-                                                <%}else{%>
-                                                <!--<span  class="w3-button w3-white w3-xlarge w3-right"></span><br>-->
-                                                <button id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' style="margin-right: 0px;" type = "button" class="btn-xs fa fa-check-circle-o" aria-hidden="true">  </button><br>
-                                                <p class="w3-small">someone bought it already</p>
-                                                <%}%>
-                                                <%}else{%>
-                                                <!--<span  class="w3-button w3-white w3-xlarge w3-right"></span>-->
-                                                <button  id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" style="margin-right: 0px;" type = "button" class=" btn-xs fa fa-cart-plus" aria-hidden="true"></button><br>
-                                                <p class="w3-small">select this gift and add it to your shopping cart</p>
-                                                <%}%>
+                                                    <span class="w3-large">  <%= events[i].gifts[k].name %> </span><br>
+                                                    <span class="w3-large"><%= events[i].gifts[k].store_name %></span><br>
+                                                    <div class="row"style="margin-left: 8px">
+                                                        <span> <%= events[i].gifts[k].price %><i class="fa fa-ils" aria-hidden="true"></i></span><br>
+                                                    </div>
+                                                </div>
+                                                <div class="row"style="margin-left: 12px">
+                                                    <%if (events[i].gifts[k].isMarked == true){%>
+                                                    <%if(events[i].gifts[k].markedBy==LogedInUser.username){%>
+                                                    <button id='<%=events[i].id%>' onclick="unMarkAsMine(this)" name='<%=events[i].gifts[k].id%>' style="margin-right: 0px;" type = "button"class="btn-xs fa fa-check-circle-o" aria-hidden="true">
+                                                    </button><br>
+                                                    <p class="w3-small">  <br>You chose to buy this gift, Click to cancel your selection</p>
+                                                    <%}else{%>
+                                                    <!--<span  class="w3-button w3-white w3-xlarge w3-right"></span><br>-->
+                                                    <button id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' style="margin-right: 0px;" type = "button" class="btn-xs fa fa-check-circle-o" aria-hidden="true">  </button><br>
+                                                    <p class="w3-small">someone bought it already</p>
+                                                    <%}%>
+                                                    <%}else{%>
+                                                    <!--<span  class="w3-button w3-white w3-xlarge w3-right"></span>-->
+                                                    <button  id='<%=events[i].id%>' name='<%=events[i].gifts[k].id%>' onclick="markAsMine(this)" style="margin-right: 0px;" type = "button" class=" btn-xs fa fa-cart-plus" aria-hidden="true"></button><br>
+                                                    <p class="w3-small">select this gift and add it to your shopping cart</p>
+                                                    <%}%>
 
-
+                                                </div>
                                             </li>
                                             <%}%>
                                         </ul>
@@ -240,7 +252,7 @@
             newLi.appendChild(br2);
 
             var newB =  document.createElement("button");
-          //  newB.setAttribute("style","margin-right: 0px;");
+            //  newB.setAttribute("style","margin-right: 0px;");
             newB.setAttribute("aria-hidden","true");
             newB.setAttribute("id",eventId);
             newB.setAttribute("name",event.gifts[k].id);
@@ -312,16 +324,16 @@
 
     function ajaxRemoveFromCart(giftId) {
 
-            $.ajax({
-                type: "POST",
-                url: "/shoppingCart/remove-from-cart/" + giftId.toString(),
-                //data: "game-name=" + GAME_NAME,
-                success: function (status) {
-                    decQty(giftId);
+        $.ajax({
+            type: "POST",
+            url: "/shoppingCart/remove-from-cart/" + giftId.toString(),
+            //data: "game-name=" + GAME_NAME,
+            success: function (status) {
+                decQty(giftId);
 //onclick="this.parentElement.style.display='none'"
-                }
+            }
 
-            })
+        })
 
     }
 
