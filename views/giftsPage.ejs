@@ -102,8 +102,8 @@
 <body style="background-color: #fafafa;">
 <div class="jumbotron">
     <div class="text-center">
-        <h1 style="color: #067c8d">LET'S FIND THE BEST</h1>
-        <h4>Now please choose according to your friend</h4>
+        <h1 style="color: #067c8d">Let's Find The Perfect Gift</h1>
+        <h4>Help us find the perfect gift by filling the details listed below</h4>
     </div>
 </div>
 
@@ -112,29 +112,29 @@
     <form style="background-color: #fafafa;margin-top:6%" name="AppForm" method="post" action="/searchingResult" >
 
         <div class="form-group" >
-            <div id="gender" class="Info"><h4>Choose gender:</h4>
+            <div id="gender" class="Info"><h4>Select gender:</h4>
                 <div style="margin: 0 auto;display: table;" class="inline-items">
                     <i class="fa fa-mars" aria-hidden="true"style="    color: #067c8d;"></i>
-                    <input type="radio" id="male" name="gender" value="male"><span>Male    </span>
+                    <input type="radio" id="male" name="gender" value="male"><span>Male</span>
                     <i class="fa fa-venus" aria-hidden="true" style="    color: #067c8d;"></i>
 
-                    <input type="radio" id="female" name="gender" value="female"><span>Female    </span>
+                    <input type="radio" id="female" name="gender" value="female"><span>Female</span>
                     <i class="fa fa-venus-mars" aria-hidden="true"style="    color: #067c8d;"></i>
 
-                    <input type="radio" id="b" name="gender" value="b"><span>Dosen't Metter    </span>
+                    <input type="radio" id="b" name="gender" value="b"><span>Both</span>
                 </div>
             </div>
             <hr >
             <div id="Choose price" class="Info">
-                <h4>Choose price limits:</h4>
+                <h4>Choose price range:</h4>
                 <!--min: <input type="text" name="minPricText"><br>-->
 
                 <!--max: <input type="text" name="maxPricText"><br>-->
 
                 <div class="range-slider"  Sdata-role="rangeslider" >
-                    <label for="price-min" >Low Price:</label>
+                    <label for="price-min" >Minimal Price:</label>
                     <input oninput="getVals()" style="width:40%; margin-left: 30%"type="range" name="minPrice" id="minPrice" value="20" min="0" max="1000">
-                    <label for="price-max">High Price:</label>
+                    <label for="price-max">Maximum Price:</label>
                     <input oninput="getVals()" style="width:40%; margin-left: 30%" type="range" name="maxPrice" id="maxPrice" value="20" min="0" max="1000">
                     <br>
                     <span class="rangeValues"></span>
@@ -142,7 +142,7 @@
             </div>
             <hr>
             <div id="age" class="Info">
-                <h4>Choose age:</h4>
+                <h4>Select age:</h4>
 
                 <div class="range-slider-age" data-role="rangeslider">
 
@@ -165,7 +165,7 @@
             <div id="category">
             <div id="hobbis" class="Info row">
 
-                <h4>Choose hobbis:</h4>
+                <h4>Select interests:</h4>
                 <hr class="btnPC btnForMobile">
                 <div id="category1"class="col-md-2">
                     <h4 id="category1h">Leisure:</h4>
@@ -251,7 +251,7 @@
         <div class="col-sm-12">
 
 
-        <input class="btn btn-primary btn-xl page-scroll"type="submit" value = 'GO GO GO' name="submit"onclick="return ValidationAppForm()">
+        <input class="btn btn-primary btn-xl page-scroll"type="submit" value = 'Search' name="submit"onclick="return ValidationAppForm()">
        <br>
         </div>
     </form>
