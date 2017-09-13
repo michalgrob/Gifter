@@ -23,7 +23,9 @@ router.post('/remove-from-cart/:id',function (req,res,next) {
 router.get('/add-to-cart/:id', function(req, res, next) {
     var giftId = req.params.id;
     var cart = new Cart(req.session.cart ? req.session.cart : {});
-    Gift.findById(giftId, function(err,gift){
+    Gift.findById(giftId)
+        .populate({
+        path: 'store'}).exec(function(err,gift){
         if(err){
             return err;
         }

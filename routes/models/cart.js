@@ -45,5 +45,10 @@ module.exports = function Cart (oldCart) {
 
     };
 
+    this.replaceItemToItemWithStore = function (id,itemWithStore) {
+        this.items[id] = itemWithStore;
+    };
+
+
 
 };
